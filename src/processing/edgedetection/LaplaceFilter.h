@@ -11,9 +11,9 @@ public:
     LaplaceFilter() {
         m_name = "Laplace Filter";
 
-        static const int data[] = { 0, 1, 0,
-                                    1,-4, 1,
-                                    0, 1, 0 };
+        static const int data[] = { 0,-1, 0,
+                                   -1, 4,-1,
+                                    0,-1, 0 };
         m_laplaceKernel = std::vector<int>(data, data + 9);
     };
     ~LaplaceFilter() {};

@@ -16,6 +16,7 @@ add_definitions(-DDEPENDENCIES_PATH="${EXTERNAL_PATH}")
 
 # find dependencies
 find_package(GLFW3 REQUIRED)
+find_package(GLM REQUIRED)
 
 # set includes
 include_directories(

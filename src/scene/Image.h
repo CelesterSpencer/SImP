@@ -6,7 +6,6 @@
 #define SRCCMAKE_IMAGE_H
 
 #include <GL/gl3w.h>
-#include <glm.hpp>
 #include <vector>
 #include <iostream>
 

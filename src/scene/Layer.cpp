@@ -73,6 +73,7 @@ void Layer::render(ShaderProgram* shaderProgram)
         if (m_image->hasBeenModified()) uploadData();
         shaderProgram->update("transparency", m_opacity);
         shaderProgram->update("isGrayScale", m_image->getChannelNumber() == 1);
+        shaderProgram->update("aspectRatio", (float)m_image->getWidth()/m_image->getHeight());
         shaderProgram->bindTextureOnUse("tex", m_gpuImageHandle);
         shaderProgram->use();
         glBindVertexArray(m_vao);
