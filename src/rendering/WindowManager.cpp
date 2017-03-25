@@ -82,7 +82,7 @@ void WindowManager::init(int width, int height)
 
     style.FrameRounding                     = 0.0f;
     style.WindowRounding                    = 5.0f;
-    style.ScrollbarSize                     = 15.0f;
+    style.ScrollbarSize                     = 5.0f;
     style.WindowFillAlphaDefault            = 1.0f;
     style.GrabMinSize                       = 15.0f;
     style.GrabRounding                      = 3.0f;
@@ -97,6 +97,8 @@ void WindowManager::init(int width, int height)
     style.Colors[ImGuiCol_WindowBg]         = WINDOW_CONTENT_COLOR;
     style.Colors[ImGuiCol_MenuBarBg]        = WINDOW_CONTENT_COLOR;
     style.Colors[ImGuiCol_FrameBg]          = WINDOW_CONTENT_COLOR;
+
+    style.Colors[ImGuiCol_ScrollbarBg]      = INVISIBLE_COLOR;
 
     // controls
     style.Colors[ImGuiCol_Button]           = CONTROLS_NORMAL_COLOR;

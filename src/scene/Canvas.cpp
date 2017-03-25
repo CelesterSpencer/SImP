@@ -65,8 +65,7 @@ void Canvas::drawLayersMenu()
         Layer* currentLayer = m_layers[i];
 
         // draw background for selected element
-        float scrollY = ImGui::GetScrollY();
-        ImVec2 start = ImVec2(ImGui::GetWindowPos().x,ImGui::GetWindowPos().y + 24 + i*27 - scrollY);
+        ImVec2 start = ImVec2(ImGui::GetWindowPos().x,ImGui::GetWindowPos().y + 24 + i*27 - ImGui::GetScrollY());
         ImVec2 end = ImVec2(start.x + ImGui::GetWindowWidth(), start.y + 26);
         auto layerColor = LAYER_COLOR;
         if (ImGui::GetMousePos().x >= start.x &&
@@ -113,7 +112,7 @@ void Canvas::drawLayersMenu()
             ImGui::Image((ImTextureID*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,1), ImVec2(1,0));
         else
         {
-            ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y);
+            ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y - ImGui::GetScrollY());
             ImVec2 imageEnd   = ImVec2(imageStart.x+19, imageStart.y+19);
             ImGui::GetWindowDrawList()->AddRectFilled(imageStart, imageEnd, NO_IMAGE_COLOR);
         }
@@ -138,7 +137,6 @@ void Canvas::drawLayersMenu()
         ImGui::PopID();
 
         ImGui::EndGroup();
-
         ImGui::Separator();
     }
     ImGui::Spacing();
@@ -174,7 +172,9 @@ void Canvas::drawLayersMenu()
 
     if(shouldDeleteLayer)
     {
+        bool shouldDecreaseActiveLayerId = m_activeLayer == m_layers.size()-1;
         deleteLayer(m_activeLayer);
+        if(shouldDecreaseActiveLayerId) m_activeLayer--;
     }
 }
 
