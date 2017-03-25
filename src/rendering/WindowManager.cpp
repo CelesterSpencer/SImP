@@ -15,6 +15,7 @@ void WindowManager::resizeCallback(GLFWwindow* window, int width, int height) {
     m_viewportWidth = width;
     m_viewportHeight = height;
     glViewport(0,0, width, height);
+    m_hasBeenResized = true;
 }
 
 void WindowManager::init(int width, int height)
@@ -76,34 +77,39 @@ void WindowManager::init(int width, int height)
 
     //_____________________INIT_IMG_UI________________________//
     ImGui_ImplGlfwGL3_Init(m_window, true);
+
     auto& style = ImGui::GetStyle();
-    style.FrameRounding = 0.0f;
-    style.WindowRounding = 5.0f;
-    style.ScrollbarSize = 15.0f;
-    style.WindowFillAlphaDefault = 1.0f;
-    style.GrabMinSize = 15.0f;
-    style.GrabRounding = 3.0f;
-    style.ItemInnerSpacing = ImVec2(8, 6);
 
-    auto controlsColor = ImVec4(0.4f, 0.5f, 0.8f, 1.00f);
-    auto controlsColorBright = ImVec4(0.6f, 0.7f, 0.9f, 1.00f);
-    auto controlsColorDark = ImVec4(0.4f, 0.5f, 0.8f, 1.00f);
+    style.FrameRounding                     = 0.0f;
+    style.WindowRounding                    = 5.0f;
+    style.ScrollbarSize                     = 15.0f;
+    style.WindowFillAlphaDefault            = 1.0f;
+    style.GrabMinSize                       = 15.0f;
+    style.GrabRounding                      = 3.0f;
+    style.ItemInnerSpacing                  = ImVec2(8, 6);
 
-    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-    style.Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-    style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-    style.Colors[ImGuiCol_Button] = controlsColor;
-    style.Colors[ImGuiCol_ButtonHovered] = controlsColorBright;
-    style.Colors[ImGuiCol_ButtonActive] = controlsColorDark;
-    style.Colors[ImGuiCol_SliderGrab] = controlsColor;
-    style.Colors[ImGuiCol_SliderGrabActive] = controlsColorBright;
+    // window header
+    style.Colors[ImGuiCol_TitleBg]          = HEADER_COLOR;
+    style.Colors[ImGuiCol_TitleBgActive]    = HEADER_ACTIVE_COLOR;
+    style.Colors[ImGuiCol_HeaderHovered]    = HEADER_ACTIVE_COLOR;
+
+    // window body
+    style.Colors[ImGuiCol_WindowBg]         = WINDOW_CONTENT_COLOR;
+    style.Colors[ImGuiCol_MenuBarBg]        = WINDOW_CONTENT_COLOR;
+    style.Colors[ImGuiCol_FrameBg]          = WINDOW_CONTENT_COLOR;
+
+    // controls
+    style.Colors[ImGuiCol_Button]           = CONTROLS_NORMAL_COLOR;
+    style.Colors[ImGuiCol_ButtonHovered]    = CONTROLS_HOVER_COLOR;
+    style.Colors[ImGuiCol_ButtonActive]     = CONTROLS_ACTIVE_COLOR;
+    style.Colors[ImGuiCol_SliderGrab]       = CONTROLS_NORMAL_COLOR;
+    style.Colors[ImGuiCol_SliderGrabActive] = CONTROLS_ACTIVE_COLOR;
+
+    style.Colors[ImGuiCol_Text]             = TEXT_COLOR;
 }
 
 void WindowManager::exit()
 {
-    ImGui_ImplGlfwGL3_Shutdown();
     glfwSetWindowShouldClose(m_window, true);
 }
 
@@ -129,6 +135,7 @@ void WindowManager::render(std::function<void()> renderCallback)
     }
 
     // destroy window after render function has been exited
+    ImGui_ImplGlfwGL3_Shutdown();
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }

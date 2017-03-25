@@ -8,6 +8,7 @@
 #include <GL/gl3w.h>
 
 #include "rendering/ShaderProgram.h"
+#include "rendering/WindowManager.h"
 #include "scene/Image.h"
 
 class Layer {
@@ -25,6 +26,7 @@ public:
     float getOpacity();
 
     void uploadData();
+    GLuint getGpuImageHandle();
 
     void render(ShaderProgram* shaderProgram);
 

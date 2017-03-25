@@ -9,6 +9,8 @@ class MeanFilter: public ImageFilter
 public:
     MeanFilter() {
         m_name = "Mean Filter";
+        m_filterGroup = "linear";
+
         m_filterRadius = 5;
         m_userDataCollection.addUserData(
                 UserData("Filter radius",

@@ -48,6 +48,6 @@ int FileHandler::openFilePathDialog(std::string& filePath)
             default                    : std::cout << "You cancelled.\n";
         }
         filePath = "";
-        return -1;
+        return 0;
     }
 }

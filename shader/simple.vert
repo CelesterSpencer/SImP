@@ -10,15 +10,13 @@ in vec3 pos;
 in vec2 uv;
 
 //!< out-variables
-out vec3 passPosition;
 out vec2 passUV;
 
-uniform float aspectRatio;
+uniform float widthScale;
+uniform float heightScale;
 
 void main() {
-    vec2 offset = vec2(0.5,0.5);
-    vec2 ppos = (pos.xy - offset) * vec2(1, aspectRatio) + offset;
-	passPosition = vec3(ppos.xy,pos.z);
+    vec2 fixedPos = pos.xy * vec2(widthScale, heightScale);
+	gl_Position = vec4(fixedPos.xy, pos.z, 1);
 	passUV = uv;
-	gl_Position = vec4(pos.xy, pos.z, 1);
 }

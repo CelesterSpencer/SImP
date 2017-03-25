@@ -11,6 +11,8 @@ class ConvertToGrayscale : public ImageFilter
 public:
     ConvertToGrayscale() {
         m_name = "Convert to grayscale";
+        m_filterGroup = "color adjustment";
+
         m_options = {"Lightness", "Average", "Luminocity"};
         m_selectedOption = 0;
 

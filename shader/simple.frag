@@ -5,7 +5,6 @@
 */
 
 //!< in-variable
-in vec3 passPosition;
 in vec2 passUV;
 
 //!< uniforms

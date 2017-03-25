@@ -10,6 +10,7 @@ class LaplaceFilter : public ImageFilter
 public:
     LaplaceFilter() {
         m_name = "Laplace Filter";
+        m_filterGroup = "edge detection";
 
         static const int data[] = { 0,-1, 0,
                                    -1, 4,-1,

@@ -11,12 +11,9 @@
 #include "io/FileHandler.h"
 #include "scene/Layer.h"
 
-class Canvas {
-private:
-    ShaderProgram*               m_shaderProgram;
-    std::vector<Layer*>          m_layers;
-    int                          m_activeLayer;
+#include "rendering/ColorStyles.h"
 
+class Canvas {
 public:
     Canvas();
     ~Canvas();
@@ -26,9 +23,21 @@ public:
     void drawFiltersMenu();
 
     void addLayer();
+    void deleteLayer(int index);
     void setName(std::string name, int layer);
     void setImage(Image* image, int layer);
     void setOpacity(float opacity, int layer = -1);
+
+private:
+    ShaderProgram*      m_shaderProgram;
+    std::vector<Layer*> m_layers;
+    int                 m_activeLayer;
+
+    GLuint              m_imageHandleDelete;
+    GLuint              m_imageHandleOpen;
+
+    void loadSystemImages();
+    void uploadImage(Image* image, GLuint* imageHandle);
 };
 
 

@@ -7,6 +7,17 @@
 void FilterManager::registerImageFilter(ImageFilter* imageFilter)
 {
     m_imageFilters.push_back(imageFilter);
+    auto filterGroupIt = m_imageGroupFilterIdsMap.find(imageFilter->getFilterGroup());
+    if (filterGroupIt == m_imageGroupFilterIdsMap.end())
+    {
+        std::vector<int> filterIdVector;
+        filterIdVector.push_back(m_imageFilters.size()-1);
+        m_imageGroupFilterIdsMap[imageFilter->getFilterGroup()] = filterIdVector;
+    }
+    else
+    {
+        filterGroupIt->second.push_back(m_imageFilters.size()-1);
+    }
 }
 
 Image* FilterManager::applyFilter(Image* in)
@@ -22,27 +33,42 @@ Image* FilterManager::applyFilter(Image* in)
 
 int FilterManager::drawFilterMenu(bool validActiveLayer)
 {
+    int mainWindowWidth = WindowManager::getInstance().getWidth();
+    int mainWindowHeight = WindowManager::getInstance().getHeight();
+
     if (ImGui::BeginMenu("Filter"))
     {
-        for(int i = 0; i < m_imageFilters.size(); i++)
+        for(auto filterGroupIt = m_imageGroupFilterIdsMap.begin(); filterGroupIt != m_imageGroupFilterIdsMap.end(); ++filterGroupIt)
         {
-            ImageFilter* imageFilter = m_imageFilters[i];
-            if (ImGui::MenuItem(imageFilter->getName().c_str(), NULL, false, validActiveLayer)) {
-                m_selectedFilter = i;
+            ImGui::TextColored(TEXT_HIGHLIGHTED_COLOR, filterGroupIt->first.c_str());
+            ImGui::Indent();
+            for(auto filterIdsIt = filterGroupIt->second.begin(); filterIdsIt != filterGroupIt->second.end(); ++filterIdsIt)
+            {
+                int filterIndex = *filterIdsIt;
+                auto imageFilter = m_imageFilters[filterIndex];
+                if (ImGui::MenuItem(imageFilter->getName().c_str(), NULL, false, validActiveLayer)) {
+                    m_selectedFilter = filterIndex;
+                }
             }
+            ImGui::Unindent();
         }
-
         ImGui::EndMenu();
     }
 
     int selectionStatus = 0;
     if(m_selectedFilter >= 0)
     {
+        ImGui::SetWindowSize("Filter settings", ImVec2(std::min(ImGui::GetWindowWidth()/2, 400.f), -1));
+
         ImageFilter* imageFilter = m_imageFilters[m_selectedFilter];
         int numberOfUserDataElements = imageFilter->getUserDataCollection()->getNumberOfElements();
         if (numberOfUserDataElements > 0)
         {
             ImGui::Begin("Filter settings", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+            ImGui::SetWindowPos(  "Filter settings",
+                                  ImVec2(mainWindowWidth/2 - ImGui::GetWindowWidth()/2,
+                                         mainWindowHeight/2 - ImGui::GetWindowHeight()/2));
+
             ImGui::Text((imageFilter->getName()+":").c_str());
             ImGui::Separator();
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();

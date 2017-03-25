@@ -10,6 +10,7 @@ class MedianFilter : public ImageFilter
 public:
     MedianFilter() {
         m_name = "Median Filter";
+        m_filterGroup = "non linear";
 
         m_filterRadius = 5;
         m_userDataCollection.addUserData(

@@ -22,7 +22,7 @@ Layer::~Layer()
         glDeleteTextures(1, &m_gpuImageHandle);
         m_gpuImageHandle = 0;
     }
-    m_image = nullptr;
+    if(m_image != nullptr) delete m_image;
     glDeleteVertexArrays(1, &m_vao);
 }
 
@@ -70,10 +70,28 @@ void Layer::render(ShaderProgram* shaderProgram)
 {
     if (hasImage())
     {
+        // upload data if image had been modified
         if (m_image->hasBeenModified()) uploadData();
+
+        // calculate scale to fit images aspect ratio
+        float widthScale = 1;
+        float heightScale = 1;
+        if(m_image->getWidth() > m_image->getHeight())
+        {
+            heightScale = (float)WindowManager::getInstance().getWidth()*m_image->getHeight()
+                          / (WindowManager::getInstance().getHeight()*m_image->getWidth());
+        }
+        else
+        {
+            widthScale = (float)WindowManager::getInstance().getHeight()*m_image->getWidth()
+                         / (WindowManager::getInstance().getWidth()*m_image->getHeight());
+        }
+
+        // upload uniforms and render
         shaderProgram->update("transparency", m_opacity);
         shaderProgram->update("isGrayScale", m_image->getChannelNumber() == 1);
-        shaderProgram->update("aspectRatio", (float)m_image->getWidth()/m_image->getHeight());
+        shaderProgram->update("widthScale", widthScale);
+        shaderProgram->update("heightScale", heightScale);
         shaderProgram->bindTextureOnUse("tex", m_gpuImageHandle);
         shaderProgram->use();
         glBindVertexArray(m_vao);
@@ -209,4 +227,9 @@ void Layer::uploadData()
         glBindTexture(GL_TEXTURE_2D, 0);
         m_image->resetImageStatus();
     }
+}
+
+GLuint Layer::getGpuImageHandle()
+{
+    return m_gpuImageHandle;
 }

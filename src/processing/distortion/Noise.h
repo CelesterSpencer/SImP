@@ -13,6 +13,8 @@ public:
     Noise()
     {
         m_name = "Noise";
+        m_filterGroup = "distortion";
+
         m_noiseMin = -125;
         m_noiseMax = 125;
         m_options = {"Normal", "Salt n Pepper"};
