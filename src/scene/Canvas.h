@@ -12,6 +12,9 @@
 #include "scene/Layer.h"
 
 #include "rendering/ColorStyles.h"
+#include "util/Types.h"
+
+#include <thread.h>
 
 class Canvas {
 public:
@@ -32,9 +35,11 @@ private:
     ShaderProgram*      m_shaderProgram;
     std::vector<Layer*> m_layers;
     int                 m_activeLayer;
+    std::thread*        m_imageProcessingThread;
 
     GLuint              m_imageHandleDelete;
     GLuint              m_imageHandleOpen;
+    GLuint              m_imageHandleSpinner;
 
     void loadSystemImages();
     void uploadImage(Image* image, GLuint* imageHandle);

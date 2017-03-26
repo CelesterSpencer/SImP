@@ -26,6 +26,7 @@ include_directories(
         ${EXTERNAL_DIR}/gl3w/include
         ${EXTERNAL_DIR}/imgui
         ${EXTERNAL_DIR}/stb
+        ${EXTERNAL_DIR}/mingw_thread
 )
 
 # copy dlls

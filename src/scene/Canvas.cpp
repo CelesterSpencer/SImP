@@ -2,6 +2,7 @@
 // Created by Windrian on 11.03.2017.
 //
 
+#include <gtx/rotate_vector.hpp>
 #include "Canvas.h"
 
 Canvas::Canvas()
@@ -109,7 +110,7 @@ void Canvas::drawLayersMenu()
         // image
         ImGui::SameLine(140);
         if (currentLayer->hasImage())
-            ImGui::Image((ImTextureID*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,1), ImVec2(1,0));
+            ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,1), ImVec2(1,0));
         else
         {
             ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y - ImGui::GetScrollY());
@@ -120,7 +121,7 @@ void Canvas::drawLayersMenu()
         // load image button
         ImGui::SameLine(170);
         ImGui::PushID(("imageBtn"+std::to_string(i)).c_str());
-        if(ImGui::ImageButton((ImTextureID*)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0))
+        if(ImGui::ImageButton((GLuint*)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0))
         {
             m_activeLayer = i;
             shouldLoadImage = true;
@@ -180,7 +181,20 @@ void Canvas::drawLayersMenu()
 
 void Canvas::drawFiltersMenu()
 {
-    if (ImGui::BeginMainMenuBar()) {
+    int mainWindowWidth = WindowManager::getInstance().getWidth();
+    int mainWindowHeight = WindowManager::getInstance().getHeight();
+
+    bool validActiveLayer = false;
+    static bool spinnerActive = false;
+    static bool processingActive = false;
+    int status = -1;
+
+
+    //_______________________________________________DRAW_MENU_BAR____________________________________________________//
+
+    if (ImGui::BeginMainMenuBar())
+    {
+        // draw main settings
         if (ImGui::BeginMenu("File"))
         {
             // Disabled item
@@ -194,20 +208,79 @@ void Canvas::drawFiltersMenu()
             {
                 WindowManager::getInstance().exit();
             }
+
             ImGui::EndMenu();
         }
-        bool validActiveLayer = m_activeLayer >= 0 && m_layers[m_activeLayer]->hasImage();
-        int status = FilterManager::getInstance().drawFilterMenu(validActiveLayer);
-        if (status == 1) // user selected Apply
-        {
-            if (validActiveLayer)
-            {
-                Image* in = m_layers[m_activeLayer]->getImage();
-                Image* out = FilterManager::getInstance().applyFilter(in);
-                if (out != nullptr) m_layers[m_activeLayer]->setImage(out);
-            }
-        }
+
+        // draw filters
+        validActiveLayer = m_activeLayer >= 0 && m_layers[m_activeLayer]->hasImage();
+        status = FilterManager::getInstance().drawFilterMenu(validActiveLayer, processingActive);
+
         ImGui::EndMainMenuBar();
+    }
+
+
+    //__________________________________________APPLY_SELECTED_FILTER_________________________________________________//
+
+    if (status == 1 && !processingActive) // user selected Apply
+    {
+        processingActive = true;
+        if (validActiveLayer)
+        {
+            spinnerActive = true;
+            m_imageProcessingThread = new std::thread([](
+                    std::vector<Layer*>& layers,
+                    int activeLayer,
+                    bool* p_spinnerActive,
+                    bool* p_processingActive)
+            {
+                Image* in = layers[activeLayer]->getImage();
+                Image* out = FilterManager::getInstance().applyFilter(in);
+                if (out != nullptr) layers[activeLayer]->setImage(out);
+                *p_spinnerActive = false;
+                *p_processingActive = false;
+            },m_layers, m_activeLayer, &spinnerActive, &processingActive
+            );
+        } else {
+            processingActive = false;
+        }
+    }
+
+
+    //_____________________________________________DRAW_SPINNER___________________________________________________//
+
+    if(spinnerActive)
+    {
+        float windowWidth = 100;
+        float windowHeight= 100;
+        ImGui::SetNextWindowPos(ImVec2(mainWindowWidth/2.0-windowWidth/2.0f,
+                                       mainWindowHeight/2.0-windowHeight/2.0f));
+        ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
+        ImGui::Begin("LoadingSpinner", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+
+        static float angle = 0;
+        auto draw_list = ImGui::GetWindowDrawList();
+        glm::vec2 offset = glm::vec2(ImGui::GetWindowPos().x+windowWidth/2,
+                                     ImGui::GetWindowPos().y+windowHeight/2);
+        float radius = 50;
+        glm::vec2 v1 = glm::vec2(radius*cos(angle),       radius*sin(angle))        + offset;
+        glm::vec2 v2 = glm::vec2(radius*cos(angle+PI/2),  radius*sin(angle+PI/2))   + offset;
+        glm::vec2 v3 = glm::vec2(radius*cos(angle+PI),    radius*sin(angle+PI))     + offset;
+        glm::vec2 v4 = glm::vec2(radius*cos(angle+3*PI/2),radius*sin(angle+3*PI/2)) + offset;
+        draw_list->PushTextureID((GLuint*)m_imageHandleSpinner);
+        draw_list->PrimReserve(6, 6);
+        draw_list->PrimVtx(ImVec2(v1.x,v1.y),ImVec2(1,0),0xFFFFFFFF);
+        draw_list->PrimVtx(ImVec2(v2.x,v2.y),ImVec2(0,0),0xFFFFFFFF);
+        draw_list->PrimVtx(ImVec2(v3.x,v3.y),ImVec2(0,1),0xFFFFFFFF);
+        draw_list->PrimVtx(ImVec2(v4.x,v4.y),ImVec2(1,1),0xFFFFFFFF);
+        draw_list->PrimVtx(ImVec2(v1.x,v1.y),ImVec2(1,0),0xFFFFFFFF);
+        draw_list->PrimVtx(ImVec2(v3.x,v3.y),ImVec2(0,1),0xFFFFFFFF);
+        draw_list->PopTextureID();
+        float T = 2*PI;
+        angle += T / 2 / ImGui::GetIO().Framerate;
+        if(angle >= T) angle = angle-T;
+
+        ImGui::End();
     }
 }
 
@@ -251,14 +324,17 @@ void Canvas::loadSystemImages()
 {
     Image openImage;
     Image deleteImage;
+    Image spinnerImage;
 
     std::string systemPath = RESOURCES_PATH"/system/";
 
-    openImage.load(systemPath+"open4.png");
-    deleteImage.load(systemPath+"cross3.png");
+    openImage.load(systemPath+"open.png");
+    deleteImage.load(systemPath+"cross.png");
+    spinnerImage.load(systemPath+"spinner.png");
 
     uploadImage(&openImage, &m_imageHandleOpen);
     uploadImage(&deleteImage, &m_imageHandleDelete);
+    uploadImage(&spinnerImage, &m_imageHandleSpinner);
 }
 
 void Canvas::uploadImage(Image* image, GLuint* imageHandle)

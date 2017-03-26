@@ -31,7 +31,7 @@ Image* FilterManager::applyFilter(Image* in)
     return nullptr;
 }
 
-int FilterManager::drawFilterMenu(bool validActiveLayer)
+int FilterManager::drawFilterMenu(bool validActiveLayer, bool processingActive)
 {
     int mainWindowWidth = WindowManager::getInstance().getWidth();
     int mainWindowHeight = WindowManager::getInstance().getHeight();
@@ -46,8 +46,9 @@ int FilterManager::drawFilterMenu(bool validActiveLayer)
             {
                 int filterIndex = *filterIdsIt;
                 auto imageFilter = m_imageFilters[filterIndex];
-                if (ImGui::MenuItem(imageFilter->getName().c_str(), NULL, false, validActiveLayer)) {
+                if (ImGui::MenuItem(imageFilter->getName().c_str(), NULL, false, validActiveLayer && !processingActive)) {
                     m_selectedFilter = filterIndex;
+                    m_isFilterMenuOpen = true;
                 }
             }
             ImGui::Unindent();
@@ -55,8 +56,19 @@ int FilterManager::drawFilterMenu(bool validActiveLayer)
         ImGui::EndMenu();
     }
 
-    int selectionStatus = 0;
-    if(m_selectedFilter >= 0)
+    // call the dialog
+    if(!processingActive) drawFilterSettingsDialog();
+
+    return m_selectionStatus;
+}
+
+void FilterManager::drawFilterSettingsDialog()
+{
+    int mainWindowWidth = WindowManager::getInstance().getWidth();
+    int mainWindowHeight = WindowManager::getInstance().getHeight();
+
+    m_selectionStatus = 0;
+    if(m_isFilterMenuOpen)
     {
         ImGui::SetWindowSize("Filter settings", ImVec2(std::min(ImGui::GetWindowWidth()/2, 400.f), -1));
 
@@ -102,9 +114,9 @@ int FilterManager::drawFilterMenu(bool validActiveLayer)
                         ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
                         ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
                         ImGui::Combo(("##"+std::to_string(i)).c_str(),
-                                       static_cast<int*>(userData->mp_min),
-                                       p_options,
-                                       *static_cast<int*>(userData->mp_max));
+                                     static_cast<int*>(userData->mp_min),
+                                     p_options,
+                                     *static_cast<int*>(userData->mp_max));
                         delete[] p_options;
                         break;
                 }
@@ -115,21 +127,22 @@ int FilterManager::drawFilterMenu(bool validActiveLayer)
             ImGui::SameLine(5);
             if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)))
             {
-                selectionStatus = 1;
+                m_selectionStatus = 1;
+                m_isFilterMenuOpen = false;
             }
             ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
             if(ImGui::Button("Cancel", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)))
             {
                 m_selectedFilter = -1;
-                selectionStatus = -1;
+                m_selectionStatus = -1;
+                m_isFilterMenuOpen = false;
             }
             ImGui::End();
         }
         else {
             // If no user data elements are specify just return Apply status
-            selectionStatus = 1;
+            m_selectionStatus = 1;
+            m_isFilterMenuOpen = false;
         }
     }
-
-    return selectionStatus;
 }
