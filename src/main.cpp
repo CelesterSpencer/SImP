@@ -12,6 +12,8 @@
 #include "processing/nonlinear/MedianFilter.h"
 #include "processing/edgedetection/LaplaceFilter.h"
 #include "processing/coloradjustment/ConvertToGrayscale.h"
+#include "processing/coloradjustment/LinearSpread.h"
+#include "processing/fft/FastFourierTransform.h"
 #include "processing/distortion/Noise.h"
 
 
@@ -37,6 +39,8 @@ int main() {
     FilterManager::getInstance().registerImageFilter(new MedianFilter);
     FilterManager::getInstance().registerImageFilter(new LaplaceFilter);
     FilterManager::getInstance().registerImageFilter(new ConvertToGrayscale);
+    FilterManager::getInstance().registerImageFilter(new LinearSpread);
+    FilterManager::getInstance().registerImageFilter(new FastFourierTransform);
     FilterManager::getInstance().registerImageFilter(new Noise);
 
     // create canvas

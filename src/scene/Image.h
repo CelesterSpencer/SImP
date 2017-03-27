@@ -31,6 +31,7 @@ public:
 
     int load(std::string filePath);
     void copyData(Image* in);
+    void reserve(int width, int height, int numberOfChannels);
     unsigned char* getRawData();
 
     int get(int x, int y, int channel = Channel::RED);

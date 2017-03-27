@@ -1,8 +1,8 @@
 #ifndef SRCCMAKE_FASTFOURIERTRANSFORM_H
 #define SRCCMAKE_FASTFOURIERTRANSFORM_H
 
-#include "util/Types.h"
 #include "processing/ImageFilter.h"
+#include "util/Types.h"
 
 class FastFourierTransform : public ImageFilter
 {
@@ -16,13 +16,8 @@ public:
     Image* process(Image* in);
 
 private:
-    Image* fft(Image* in, int row, int col);
-    /**
-     * reverses the bits that usually would
-     * be reverted by the recursive fft
-     */
-    uint reverseBits(uint i);
-    bool getNextPowerOfTwo(int number);
+    std::vector<comp> fft(std::vector<comp> in);
+    int getNextPowerOfTwo(int number);
 };
 
 

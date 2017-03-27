@@ -93,6 +93,18 @@ void Image::copyData(Image* in)
     m_hasBeenModified = true;
 }
 
+void Image::reserve(int width, int height, int numberOfChannels)
+{
+    m_width = width;
+    m_height = height;
+    m_bytesPerPixel = numberOfChannels;
+
+    m_data = std::vector<unsigned char>(width*height*numberOfChannels);
+
+    m_hasBeenModified = true;
+    m_hasBeenResized = true;
+}
+
 int Image::get(int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
