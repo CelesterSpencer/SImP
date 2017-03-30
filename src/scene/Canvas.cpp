@@ -128,6 +128,30 @@ void Canvas::drawLayersMenu()
         }
         ImGui::PopID();
 
+        if (currentLayer->hasImage())
+        {
+
+            std::string channelInfo = "";
+            switch(currentLayer->getImage()->getChannelNumber())
+            {
+                case 1:
+                    channelInfo = "G";
+                    break;
+                case 3:
+                    channelInfo = "RGB";
+                    break;
+                case 4:
+                    channelInfo = "RGBa";
+                    break;
+                default:
+                    channelInfo = "N/A";
+                    break;
+            }
+            float charWidth = 5.0;
+            ImGui::SameLine(203-channelInfo.size()/2.0*charWidth);
+            ImGui::Text(channelInfo.c_str());
+        }
+
         // delete layer button
         ImGui::SameLine(ImGui::GetWindowWidth()-28);
         ImGui::PushID(("deleteLayerBtn"+std::to_string(i)).c_str());
@@ -241,7 +265,8 @@ void Canvas::drawFiltersMenu()
                 *p_processingActive = false;
             },m_layers, m_activeLayer, &spinnerActive, &processingActive
             );
-        } else {
+        } else
+        {
             processingActive = false;
         }
     }

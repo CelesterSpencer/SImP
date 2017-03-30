@@ -70,6 +70,13 @@ int Image::load(std::string filePath)
         return -1;
     }
 
+    std::cout << "__________________________IMAGE__________________________" << std::endl;
+    std::cout << filePath << std::endl;
+    std::cout << std::to_string(m_width) << ", " << std::to_string(m_height) << std::endl;
+    std::cout << std::to_string(m_bytesPerPixel) << std::endl;
+    std::cout << "_________________________________________________________" << std::endl;
+
+    m_data.clear();
     m_data.insert(m_data.end(), data, data+m_width*m_height*m_bytesPerPixel);
     stbi_image_free(data);
 

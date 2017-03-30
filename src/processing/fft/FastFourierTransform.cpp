@@ -1,59 +1,82 @@
-//
-// Created by Windrian on 25.03.2017.
-//
-
 #include "FastFourierTransform.h"
 
 Image* FastFourierTransform::process(Image* in)
 {
-    Image* frequencyImage = new Image;
-    frequencyImage->reserve(in->getWidth(), in->getHeight(), 1); // gray scale image
-
-    // create two vectors that are power of two
+    // get power of two for the image dimensions
     int sizeX = getNextPowerOfTwo(in->getWidth());
     int sizeY = getNextPowerOfTwo(in->getHeight());
 
+
+
+    // fit image into vector with power of two sizes
+    std::vector<comp> input(sizeX*sizeY, 0);
+
+    // matrix holding the results of the first 1D fft
     std::vector<comp> complexMat(sizeX*sizeY, 0);
 
-    // execute fft for all rows
+    // init the result image
+    Image*MagnitudeImage = new Image;
+    MagnitudeImage->reserve(sizeX, sizeY, 1); // gray scale image
+    Image*PhaseImage = new Image;
+    PhaseImage->reserve(sizeX, sizeY, 1); // gray scale image
+
+
+    // fill input image
     for(int y = 0; y < in->getHeight(); y++)
+    {
+        for(int x = 0; x < in->getWidth(); x++)
+        {
+            input[y*sizeX+x] = comp(in->get(x,y,Image::Channel::RED), 0);
+        }
+    }
+
+
+
+    // execute fft for all rows
+    for(int y = 0; y < sizeY; y++)
     {
         // fill row
         std::vector<comp> row(sizeX, 0);
-        for(int x = 0; x < in->getWidth(); x++)
+        for(int x = 0; x < sizeX; x++)
         {
-            row[x] = in->get(x,y,Image::Channel::RED);
+            row[x] = input[y*sizeX+x];
         }
 
         // calculate fft for the rows
         row = fft(row);
+        if(m_isInverse) scaleCoefficients(row);
 
-        // write data in temporary vector
-        complexMat.insert(std::end(complexMat), std::begin(row), std::end(row));
+        // write data in a temporary vector
+        complexMat.insert(complexMat.begin()+y*sizeX, row.begin(), row.end());
     }
 
+
+
     // execute fft for all columns
-    for(int x = 0; x < in->getWidth(); x++)
+    for(int x = 0; x < sizeX; x++)
     {
         // fill column
-        std::vector<comp> column(sizeY);
-        for(int y = 0; y < in->getHeight(); y++)
+        std::vector<comp> column(sizeY, 0);
+        for(int y = 0; y < sizeY; y++)
         {
             column[y] = complexMat[y*sizeX+x];
         }
 
         // fft for columns
         column = fft(column);
+        if(m_isInverse) scaleCoefficients(column);
 
-        // write results in two images
-        for(int y = 0; y < in->getHeight(); y++)
+        for(int y = 0; y < sizeY; y++)
         {
-            frequencyImage->set(std::norm(column[y]),x,y,Image::Channel::RED);
+            MagnitudeImage->set(std::norm(column[y]),x,y,Image::Channel::RED);
+            PhaseImage->set(255*(std::atan2(column[y].imag(), column[y].real())+PI) / (2*PI),x,y,Image::Channel::RED);
         }
     }
 
+
+
     // return images
-    return frequencyImage;
+    return PhaseImage;
 }
 
 std::vector<comp> FastFourierTransform::fft(std::vector<comp> in)
@@ -81,10 +104,11 @@ std::vector<comp> FastFourierTransform::fft(std::vector<comp> in)
         odd = fft(odd);
 
         // merge results
+        float sign = (m_isInverse) ? 1.0 : -1.0;
         for (int k = 0; k < n/2; k++)
         {
-            result[k]     = even[k] + odd[k] * exp(I*comp(-2*PI*k/n,0));
-            result[k+n/2] = even[k] - odd[k] * exp(I*comp(-2*PI*k/n,0));
+            result[k]     = even[k] + odd[k] * exp(I*comp(sign*2*PI*k/n,0));
+            result[k+n/2] = even[k] - odd[k] * exp(I*comp(sign*2*PI*k/n,0));
         }
 
         return result;
@@ -99,4 +123,13 @@ int FastFourierTransform::getNextPowerOfTwo(int number)
         powerOfTwo *= 2;
     }
     return powerOfTwo;
+}
+
+void FastFourierTransform::scaleCoefficients(std::vector<comp>& coefficients)
+{
+    float N = coefficients.size();
+    for (int i = 0; i < coefficients.size(); i++)
+    {
+        coefficients[i] / N;
+    }
 }
