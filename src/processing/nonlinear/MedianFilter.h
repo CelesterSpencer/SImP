@@ -23,7 +23,7 @@ public:
     };
     ~MedianFilter() {};
 
-    Image* process(Image* in);
+    void process();
 
 private:
     int m_filterRadius;

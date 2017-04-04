@@ -4,8 +4,9 @@
 
 #include "LinearSpread.h"
 
-Image* LinearSpread::process(Image* in)
+void LinearSpread::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -46,5 +47,5 @@ Image* LinearSpread::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }

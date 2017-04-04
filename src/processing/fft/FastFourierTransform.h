@@ -23,7 +23,7 @@ public:
     };
     ~FastFourierTransform() {};
 
-    Image* process(Image* in);
+    void process();
 
 private:
     std::vector<comp> fft(std::vector<comp> in);

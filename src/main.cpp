@@ -15,6 +15,8 @@
 #include "processing/coloradjustment/LinearSpread.h"
 #include "processing/fft/FastFourierTransform.h"
 #include "processing/distortion/Noise.h"
+#include "processing/restructure/SplitChannels.h"
+#include "processing/test/TestFilter.h"
 
 
 
@@ -42,6 +44,8 @@ int main() {
     FilterManager::getInstance().registerImageFilter(new LinearSpread);
     FilterManager::getInstance().registerImageFilter(new FastFourierTransform);
     FilterManager::getInstance().registerImageFilter(new Noise);
+    FilterManager::getInstance().registerImageFilter(new SplitChannels);
+    FilterManager::getInstance().registerImageFilter(new TestFilter);
 
     // create canvas
     Canvas canvas;

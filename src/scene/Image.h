@@ -16,12 +16,12 @@ public:
 
     enum Channel
     {
-        RED,
-        GREEN,
-        BLUE,
-        ALPHA,
-        RGB,
-        RGBA
+        RED   = 0,
+        GREEN = 1,
+        BLUE  = 2,
+        ALPHA = 3,
+        RGB   = 4,
+        RGBA  = 5
     };
 
     std::string getFileName();
@@ -39,6 +39,8 @@ public:
 
     int getWidth();
     int getHeight();
+    int getMin();
+    int getMax();
     int getChannelNumber();
 
 private:

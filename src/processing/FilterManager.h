@@ -13,14 +13,22 @@ class FilterManager : public Singleton<FilterManager>
     friend class Singleton<FilterManager>;
 public:
     void registerImageFilter(ImageFilter*);
-    Image* applyFilter(Image* in);
+    void addImage(Image* in);
+    std::vector<Image*> getOutputImages();
+    void resetFilter();
+    void applyFilter();
+
     int drawFilterMenu(bool validActiveLayer, bool processingActive);
 private:
     int m_selectionStatus = -1;
     int m_selectedFilter = -1;
     bool m_isFilterMenuOpen = false;
+
     std::vector<ImageFilter*> m_imageFilters;
     std::map<std::string,std::vector<int> > m_imageGroupFilterIdsMap;
+
+    std::vector<Image*> m_inputImages;
+    std::vector<Image*> m_outputImages;
 
     void drawFilterSettingsDialog();
 };

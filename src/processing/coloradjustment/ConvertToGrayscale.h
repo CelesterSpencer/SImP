@@ -26,7 +26,7 @@ public:
     };
     ~ConvertToGrayscale() {};
 
-    Image* process(Image* in);
+    void process();
 
 private:
     std::vector<std::string> m_options;

@@ -4,8 +4,9 @@
 
 #include "MeanFilter.h"
 
-Image* MeanFilter::process(Image* in)
+void MeanFilter::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -69,5 +70,5 @@ Image* MeanFilter::process(Image* in)
     // delete temporary images else they will leak the memory
     delete temp;
 
-    return out;
+    returnImage(out);
 }

@@ -4,8 +4,9 @@
 
 #include "MedianFilter.h"
 
-Image* MedianFilter::process(Image* in)
+void MedianFilter::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -49,5 +50,5 @@ Image* MedianFilter::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }

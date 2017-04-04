@@ -4,8 +4,9 @@
 
 #include "ConvertToGrayscale.h"
 
-Image* ConvertToGrayscale::process(Image* in)
+void ConvertToGrayscale::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -34,5 +35,5 @@ Image* ConvertToGrayscale::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }

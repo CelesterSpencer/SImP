@@ -21,5 +21,6 @@
 #define TEXT_HIGHLIGHTED_COLOR  ImVec4(0.086f, 0.627f, 0.480f, 1.0)
 
 #define INVISIBLE_COLOR         ImVec4(0.0, 0.0, 0.0, 0.0)
+#define INACTIVE_COLOR          ImVec4(0.6, 0.6, 0.6, 1.0)
 
 #endif //SRCCMAKE_COLORSTYLES_H

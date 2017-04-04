@@ -12,7 +12,7 @@ public:
     };
     ~LinearSpread() {};
 
-    Image* process(Image* in);
+    void process();
 };
 
 

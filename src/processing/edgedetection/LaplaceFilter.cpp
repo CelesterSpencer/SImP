@@ -4,8 +4,9 @@
 
 #include "LaplaceFilter.h"
 
-Image* LaplaceFilter::process(Image* in)
+void LaplaceFilter::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -37,5 +38,5 @@ Image* LaplaceFilter::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }

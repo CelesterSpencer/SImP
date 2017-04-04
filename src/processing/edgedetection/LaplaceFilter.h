@@ -19,7 +19,7 @@ public:
     };
     ~LaplaceFilter() {};
 
-    Image* process(Image* in);
+    void process();
 
 private:
     std::vector<int> m_laplaceKernel;

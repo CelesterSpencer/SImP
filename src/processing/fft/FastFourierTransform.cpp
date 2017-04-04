@@ -1,7 +1,9 @@
 #include "FastFourierTransform.h"
 
-Image* FastFourierTransform::process(Image* in)
+void FastFourierTransform::process()
 {
+    Image* in = getInputImage(0);
+
     // get power of two for the image dimensions
     int sizeX = getNextPowerOfTwo(in->getWidth());
     int sizeY = getNextPowerOfTwo(in->getHeight());
@@ -76,7 +78,8 @@ Image* FastFourierTransform::process(Image* in)
 
 
     // return images
-    return PhaseImage;
+    returnImage(MagnitudeImage);
+    returnImage(PhaseImage);
 }
 
 std::vector<comp> FastFourierTransform::fft(std::vector<comp> in)

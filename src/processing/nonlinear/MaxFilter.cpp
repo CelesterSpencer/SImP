@@ -4,8 +4,9 @@
 
 #include "MaxFilter.h"
 
-Image* MaxFilter::process(Image* in)
+void MaxFilter::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -36,5 +37,5 @@ Image* MaxFilter::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }

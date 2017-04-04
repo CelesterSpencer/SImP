@@ -32,6 +32,7 @@ void Canvas::draw()
 
     for(int i = 0; i < m_layers.size(); i++)
     {
+        std::cout << "layer " << std::to_string(i) << std::endl; std::cout << std::flush;
         m_layers[i]->render(m_shaderProgram);
     }
 
@@ -121,16 +122,24 @@ void Canvas::drawLayersMenu()
         // load image button
         ImGui::SameLine(170);
         ImGui::PushID(("imageBtn"+std::to_string(i)).c_str());
-        if(ImGui::ImageButton((GLuint*)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0))
+        // color button gray when inactive
+        if (m_isProcessingActive)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Button, INACTIVE_COLOR);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
+        }
+        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0)
+           && !m_isProcessingActive)
         {
             m_activeLayer = i;
             shouldLoadImage = true;
         }
+        if (m_isProcessingActive) ImGui::PopStyleColor(3);
         ImGui::PopID();
 
         if (currentLayer->hasImage())
         {
-
             std::string channelInfo = "";
             switch(currentLayer->getImage()->getChannelNumber())
             {
@@ -155,10 +164,18 @@ void Canvas::drawLayersMenu()
         // delete layer button
         ImGui::SameLine(ImGui::GetWindowWidth()-28);
         ImGui::PushID(("deleteLayerBtn"+std::to_string(i)).c_str());
-        if(ImGui::ImageButton((GLuint*)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0))
+        if (m_isProcessingActive)
+        {
+            ImGui::PushStyleColor(ImGuiCol_Button, INACTIVE_COLOR);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
+        }
+        if(ImGui::ImageButton((GLuint*)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0)
+           && !m_isProcessingActive)
         {
             shouldDeleteLayer = true;
         }
+        if (m_isProcessingActive) ImGui::PopStyleColor(3);
         ImGui::PopID();
 
         ImGui::EndGroup();
@@ -166,7 +183,17 @@ void Canvas::drawLayersMenu()
     }
     ImGui::Spacing();
     ImGui::SameLine(ImGui::GetWindowWidth()/2.0 - 35);
-    makeNewLayer = ImGui::Button("New Layer");
+    if (m_isProcessingActive)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, INACTIVE_COLOR);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
+    }
+    if(ImGui::Button("New Layer") && !m_isProcessingActive)
+    {
+        makeNewLayer = true;
+    }
+    if (m_isProcessingActive) ImGui::PopStyleColor(3);
     ImGui::End();
 
     if(shouldLoadImage)
@@ -210,7 +237,6 @@ void Canvas::drawFiltersMenu()
 
     bool validActiveLayer = false;
     static bool spinnerActive = false;
-    static bool processingActive = false;
     int status = -1;
 
 
@@ -238,7 +264,7 @@ void Canvas::drawFiltersMenu()
 
         // draw filters
         validActiveLayer = m_activeLayer >= 0 && m_layers[m_activeLayer]->hasImage();
-        status = FilterManager::getInstance().drawFilterMenu(validActiveLayer, processingActive);
+        status = FilterManager::getInstance().drawFilterMenu(validActiveLayer, m_isProcessingActive);
 
         ImGui::EndMainMenuBar();
     }
@@ -246,29 +272,55 @@ void Canvas::drawFiltersMenu()
 
     //__________________________________________APPLY_SELECTED_FILTER_________________________________________________//
 
-    if (status == 1 && !processingActive) // user selected Apply
+    if (status == 1 && !m_isProcessingActive) // user selected Apply
     {
-        processingActive = true;
+        m_isProcessingActive = true;
+        m_isImageTransactionDone = false;
         if (validActiveLayer)
         {
             spinnerActive = true;
             m_imageProcessingThread = new std::thread([](
-                    std::vector<Layer*>& layers,
-                    int activeLayer,
+                    std::vector<Image*>* outputImages,
+                    Image* p_in,
                     bool* p_spinnerActive,
                     bool* p_processingActive)
             {
-                Image* in = layers[activeLayer]->getImage();
-                Image* out = FilterManager::getInstance().applyFilter(in);
-                if (out != nullptr) layers[activeLayer]->setImage(out);
+                // apply filter for the selected image
+                FilterManager::getInstance().addImage(p_in);
+                FilterManager::getInstance().applyFilter();
+                *outputImages = FilterManager::getInstance().getOutputImages();
+
+                // reset input and output images
+                FilterManager::getInstance().resetFilter();
+
+                // reset variables to allow further filter applications
                 *p_spinnerActive = false;
                 *p_processingActive = false;
-            },m_layers, m_activeLayer, &spinnerActive, &processingActive
+            },&m_tempOutputImages, m_layers[m_activeLayer]->getImage(), &spinnerActive, &m_isProcessingActive
             );
         } else
         {
-            processingActive = false;
+            m_isProcessingActive = false;
         }
+    }
+
+    // copy the result data to the layers
+    if (!m_isProcessingActive && !m_isImageTransactionDone)
+    {
+        Image* out = m_tempOutputImages[0];
+        if (out != nullptr) setImage(out, m_activeLayer);
+
+        // create new layers for every other image
+        for (int i = 1; i < m_tempOutputImages.size(); i++)
+        {
+            addLayer();
+            setImage(m_tempOutputImages[i], m_layers.size()-1);
+        }
+
+        // reset temp images
+        m_tempOutputImages.clear();
+
+        m_isImageTransactionDone = true;
     }
 
 
@@ -281,7 +333,10 @@ void Canvas::drawFiltersMenu()
         ImGui::SetNextWindowPos(ImVec2(mainWindowWidth/2.0-windowWidth/2.0f,
                                        mainWindowHeight/2.0-windowHeight/2.0f));
         ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
-        ImGui::Begin("LoadingSpinner", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+        ImGui::Begin("LoadingSpinner", NULL,
+                     ImGuiWindowFlags_NoTitleBar |
+                     ImGuiWindowFlags_NoResize |
+                     ImGuiWindowFlags_NoMove);
 
         static float angle = 0;
         auto draw_list = ImGui::GetWindowDrawList();
@@ -332,7 +387,6 @@ void Canvas::setImage(Image* image, int layer)
 {
     if (layer >= 0 && layer < m_layers.size())
     {
-        //delete m_layers[layer];
         m_layers[layer]->setImage(image);
     }
 }

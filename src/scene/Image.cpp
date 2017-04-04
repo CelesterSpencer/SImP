@@ -18,7 +18,7 @@ Image::Image()
 
 Image::~Image()
 {
-
+    std::cout << "Delete image" << std::endl;
 }
 
 std::string Image::getFileName()
@@ -69,12 +69,6 @@ int Image::load(std::string filePath)
         std::cerr << "Loaded data is empty" << std::endl;
         return -1;
     }
-
-    std::cout << "__________________________IMAGE__________________________" << std::endl;
-    std::cout << filePath << std::endl;
-    std::cout << std::to_string(m_width) << ", " << std::to_string(m_height) << std::endl;
-    std::cout << std::to_string(m_bytesPerPixel) << std::endl;
-    std::cout << "_________________________________________________________" << std::endl;
 
     m_data.clear();
     m_data.insert(m_data.end(), data, data+m_width*m_height*m_bytesPerPixel);
@@ -167,6 +161,7 @@ void Image::set(int value, int x, int y, int channel)
 
 unsigned char* Image::getRawData()
 {
+    std::cout << "data size is " << std::to_string(m_data.size()) << std::endl;
     return m_data.data();
 }
 
@@ -178,6 +173,26 @@ int Image::getWidth()
 int Image::getHeight()
 {
     return m_height;
+}
+
+int Image::getMin()
+{
+    int min = INT_MAX;
+    for (int i = 0; i < m_data.size(); i++)
+    {
+        min = (m_data[i] < min) ? m_data[i] : min;
+    }
+    return min;
+}
+
+int Image::getMax()
+{
+    int max = INT_MIN;
+    for (int i = 0; i < m_data.size(); i++)
+    {
+        max = (m_data[i] > max) ? m_data[i] : max;
+    }
+    return max;
 }
 
 int Image::calculateIndex(int x, int y, int channel)

@@ -11,6 +11,7 @@ Layer::Layer(int pos)
     m_opacity = 1.0;
     m_image = nullptr;
     m_gpuImageHandle = 0;
+    m_vao = 0;
 
     makeBuffer(pos / 10);
 }
@@ -148,11 +149,13 @@ void Layer::uploadData()
     //________________________________________________REPLACE_IMAGE___________________________________________________//
     if (m_gpuImageHandle == 0 || m_image->hasBeenResized())
     {
+        std::cout << "upload new iamge" << std::endl;
         /*
          * delete old data
          */
         if (m_gpuImageHandle != 0)
         {
+            std::cout << "delete handle" << std::endl;
             glDeleteTextures(1, &m_gpuImageHandle);
             m_gpuImageHandle = 0;
         }
@@ -193,8 +196,9 @@ void Layer::uploadData()
         glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
 
         /*
          * unbind texture

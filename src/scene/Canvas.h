@@ -36,6 +36,9 @@ private:
     std::vector<Layer*> m_layers;
     int                 m_activeLayer;
     std::thread*        m_imageProcessingThread;
+    std::vector<Image*> m_tempOutputImages;
+    bool                m_isProcessingActive = false;
+    bool                m_isImageTransactionDone = true;
 
     GLuint              m_imageHandleDelete;
     GLuint              m_imageHandleOpen;

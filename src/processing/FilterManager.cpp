@@ -20,15 +20,37 @@ void FilterManager::registerImageFilter(ImageFilter* imageFilter)
     }
 }
 
-Image* FilterManager::applyFilter(Image* in)
+void FilterManager::addImage(Image* in)
+{
+    m_inputImages.push_back(in);
+}
+
+std::vector<Image*> FilterManager::getOutputImages()
+{
+    return m_outputImages;
+}
+
+void FilterManager::resetFilter()
+{
+    m_inputImages.clear();
+    m_outputImages.clear();
+    if(m_selectedFilter >= 0) m_imageFilters[m_selectedFilter]->clearImages();
+    m_selectedFilter = -1;
+}
+
+void FilterManager::applyFilter()
 {
     if(m_selectedFilter >= 0)
     {
-        Image* out = m_imageFilters[m_selectedFilter]->process(in);
-        m_selectedFilter = -1;
-        return out;
+        ImageFilter* filter = m_imageFilters[m_selectedFilter];
+        for (int i = 0; i < m_inputImages.size(); i++)
+        {
+            filter->addInputImage(m_inputImages[i]);
+        }
+
+        filter->process();
+        m_outputImages = filter->getOutputImages();
     }
-    return nullptr;
 }
 
 int FilterManager::drawFilterMenu(bool validActiveLayer, bool processingActive)

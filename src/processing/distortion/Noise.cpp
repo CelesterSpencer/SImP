@@ -4,13 +4,14 @@
 
 #include "Noise.h"
 
-Image* Noise::process(Image* in)
+void Noise::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
     switch(m_selectedOption) {
-        case 0:
+        case 0: // normal noise
             for (int x = 0; x < in->getWidth(); x++) {
                 for (int y = 0; y < in->getHeight(); y++) {
                     int random = rand() % m_noiseMax + 1 + m_noiseMin;
@@ -25,8 +26,7 @@ Image* Noise::process(Image* in)
                 }
             }
             break;
-        case 1:
-        std::cout << "Salt n pepper" << std::endl;
+        case 1: // salt and pepper noise
             for (int x = 0; x < in->getWidth(); x++) {
                 for (int y = 0; y < in->getHeight(); y++) {
                     float random = (float) rand() / (RAND_MAX);
@@ -43,5 +43,5 @@ Image* Noise::process(Image* in)
             break;
     }
 
-    return out;
+    returnImage(out);
 }

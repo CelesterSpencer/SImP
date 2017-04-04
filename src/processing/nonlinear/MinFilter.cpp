@@ -4,8 +4,9 @@
 
 #include "MinFilter.h"
 
-Image* MinFilter::process(Image* in)
+void MinFilter::process()
 {
+    Image* in = getInputImage(0);
     Image* out = new Image;
     out->copyData(in);
 
@@ -36,5 +37,5 @@ Image* MinFilter::process(Image* in)
         }
     }
 
-    return out;
+    returnImage(out);
 }
