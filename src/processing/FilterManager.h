@@ -21,6 +21,7 @@ public:
 
     int drawFilterMenu(bool validActiveLayer, bool processingActive);
 private:
+
     int m_selectionStatus = -1;
     int m_selectedFilter = -1;
     bool m_isFilterMenuOpen = false;

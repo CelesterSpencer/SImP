@@ -4,7 +4,9 @@
 
 #include "Image.h"
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image.h"
+#include "stb_image_write.h"
 
 Image::Image()
 {
@@ -60,7 +62,7 @@ int Image::load(std::string filePath)
     /*
      * actually loading the data
      */
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(false);
     unsigned char* data = stbi_load(filePath.c_str(), &m_width, &m_height, &m_bytesPerPixel, 0);
 
     if(data == NULL)
@@ -76,6 +78,11 @@ int Image::load(std::string filePath)
 
     m_hasBeenModified = true;
     m_hasBeenResized = true;
+}
+
+void Image::save()
+{
+    stbi_write_png((RESOURCES_PATH"/output/modified_"+m_fileName).c_str(), m_width, m_height, m_bytesPerPixel, m_data.data(), 0);
 }
 
 void Image::copyData(Image* in)
@@ -108,6 +115,44 @@ void Image::reserve(int width, int height, int numberOfChannels)
 
 int Image::get(int x, int y, int channel)
 {
+    switch(channel)
+    {
+        case Channel::RGBA:
+            return m_data[calculateIndex(x,y,Channel::RED)];
+            break;
+        case Channel::RGB:
+            return m_data[calculateIndex(x,y,Channel::RED)];
+            break;
+        default:
+            return m_data[calculateIndex(x,y,channel)];
+            break;
+    }
+}
+
+void Image::set(int value, int x, int y, int channel)
+{
+    switch(channel)
+    {
+        case Channel::RGBA:
+            m_data[calculateIndex(x,y,Channel::RED)]   = value;
+            m_data[calculateIndex(x,y,Channel::GREEN)] = value;
+            m_data[calculateIndex(x,y,Channel::BLUE)]  = value;
+            m_data[calculateIndex(x,y,Channel::ALPHA)] = value;
+            break;
+        case Channel::RGB:
+            m_data[calculateIndex(x,y,Channel::RED)]   = value;
+            m_data[calculateIndex(x,y,Channel::GREEN)] = value;
+            m_data[calculateIndex(x,y,Channel::BLUE)]  = value;
+            break;
+        default:
+            m_data[calculateIndex(x,y,channel)] = value;
+            break;
+    }
+    m_hasBeenModified = true;
+}
+
+int Image::getDbg(int x, int y, int channel)
+{
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
     {
         switch(channel)
@@ -130,7 +175,7 @@ int Image::get(int x, int y, int channel)
     }
 }
 
-void Image::set(int value, int x, int y, int channel)
+void Image::setDbg(int value, int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
     {
@@ -161,7 +206,6 @@ void Image::set(int value, int x, int y, int channel)
 
 unsigned char* Image::getRawData()
 {
-    std::cout << "data size is " << std::to_string(m_data.size()) << std::endl;
     return m_data.data();
 }
 

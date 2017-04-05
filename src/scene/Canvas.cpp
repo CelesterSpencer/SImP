@@ -110,7 +110,7 @@ void Canvas::drawLayersMenu()
         // image
         ImGui::SameLine(140);
         if (currentLayer->hasImage())
-            ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,1), ImVec2(1,0));
+            ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
         else
         {
             ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y - ImGui::GetScrollY());
@@ -128,7 +128,7 @@ void Canvas::drawLayersMenu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
         }
-        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0)
+        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
            && !m_isProcessingActive)
         {
             m_activeLayer = i;
@@ -169,7 +169,7 @@ void Canvas::drawLayersMenu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
         }
-        if(ImGui::ImageButton((GLuint*)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0)
+        if(ImGui::ImageButton((GLuint*)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
            && !m_isProcessingActive)
         {
             shouldDeleteLayer = true;
@@ -248,10 +248,11 @@ void Canvas::drawFiltersMenu()
         if (ImGui::BeginMenu("File"))
         {
             // Disabled item
-            if (ImGui::MenuItem("Save", "CTRL+S", false, false))
+            bool validImage = m_activeLayer >= 0 && m_layers[m_activeLayer]->hasImage();
+            if (ImGui::MenuItem("Save", "CTRL+S", false, validImage))
             {
                 std::cout << "Called Save" << std::endl;
-                std::cout << "But it's not implemented yet" << std::endl;
+                m_layers[m_activeLayer]->getImage()->save();
             }
             ImGui::Separator();
             if(ImGui::MenuItem("Exit"))

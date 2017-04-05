@@ -30,12 +30,15 @@ public:
     void resetImageStatus();
 
     int load(std::string filePath);
+    void save();
     void copyData(Image* in);
     void reserve(int width, int height, int numberOfChannels);
     unsigned char* getRawData();
 
     int get(int x, int y, int channel = Channel::RED);
     void set(int value, int x, int y, int channel = Channel::RGB);
+    int getDbg(int x, int y, int channel = Channel::RED);
+    void setDbg(int value, int x, int y, int channel = Channel::RGB);
 
     int getWidth();
     int getHeight();

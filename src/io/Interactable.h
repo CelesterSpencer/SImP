@@ -176,7 +176,7 @@ public:
 
         // show image
         if (m_isImageLoaded)
-            ImGui::Image((GLuint*)m_imageHandle, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0));
+            ImGui::Image((GLuint*)m_imageHandle, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
         else
         {
             ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y - ImGui::GetScrollY());

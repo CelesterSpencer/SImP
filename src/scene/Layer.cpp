@@ -128,13 +128,13 @@ void Layer::makeBuffer(float zPos)
 
     GLfloat uvCoordinates[] = {
             // Front face
-            0,1,
             0,0,
-            1,0,
-
             0,1,
-            1,0,
-            1,1
+            1,1,
+
+            0,0,
+            1,1,
+            1,0
     };
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferHandles[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(uvCoordinates), uvCoordinates, GL_STATIC_DRAW);
