@@ -149,13 +149,11 @@ void Layer::uploadData()
     //________________________________________________REPLACE_IMAGE___________________________________________________//
     if (m_gpuImageHandle == 0 || m_image->hasBeenResized())
     {
-        std::cout << "upload new iamge" << std::endl;
         /*
          * delete old data
          */
         if (m_gpuImageHandle != 0)
         {
-            std::cout << "delete handle" << std::endl;
             glDeleteTextures(1, &m_gpuImageHandle);
             m_gpuImageHandle = 0;
         }
@@ -169,6 +167,14 @@ void Layer::uploadData()
          * bind the texture for uploading data
          */
         glBindTexture(GL_TEXTURE_2D, m_gpuImageHandle);
+
+        /*
+         * this should prevent images with odd dimensions from crashing
+         */
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+        glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+        glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
         /*
          * send image data to the new texture

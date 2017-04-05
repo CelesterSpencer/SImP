@@ -32,7 +32,6 @@ void Canvas::draw()
 
     for(int i = 0; i < m_layers.size(); i++)
     {
-        std::cout << "layer " << std::to_string(i) << std::endl; std::cout << std::flush;
         m_layers[i]->render(m_shaderProgram);
     }
 
@@ -242,6 +241,7 @@ void Canvas::drawFiltersMenu()
 
     //_______________________________________________DRAW_MENU_BAR____________________________________________________//
 
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, WINDOW_CONTENT_COLOR_O);
     if (ImGui::BeginMainMenuBar())
     {
         // draw main settings
@@ -268,6 +268,7 @@ void Canvas::drawFiltersMenu()
 
         ImGui::EndMainMenuBar();
     }
+    ImGui::PopStyleColor(1);
 
 
     //__________________________________________APPLY_SELECTED_FILTER_________________________________________________//

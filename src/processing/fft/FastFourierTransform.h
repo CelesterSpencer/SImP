@@ -14,11 +14,11 @@ public:
         m_name = "Fast Fourier Transform";
         m_filterGroup = "fft";
 
-        m_userDataCollection.addUserData(
-                UserData(
-                        "Inverse",
-                        UserData::DataType::DT_BOOL,
-                        &m_isInverse)
+        m_interactableCollection.addInteractable(
+                new Checkbox("Inverse", &m_isInverse)
+        );
+        m_interactableCollection.addInteractable(
+                new ImageSelector("Phase image")
         );
     };
     ~FastFourierTransform() {};

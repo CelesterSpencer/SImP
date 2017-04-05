@@ -17,35 +17,19 @@ public:
 
         m_noiseMin = -125;
         m_noiseMax = 125;
+        m_minFixed = -255;
+        m_maxFixed = 255;
         m_options = {"Normal", "Salt n Pepper"};
         m_selectedOption = 0;
 
-        m_userDataCollection.addUserData(
-                UserData(
-                        "Noise min",
-                        UserData::DataType::DT_INT,
-                        &m_noiseMin,
-                        new int(-255),
-                        &m_noiseMax
-                )
+        m_interactableCollection.addInteractable(
+                new ISlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
         );
-        m_userDataCollection.addUserData(
-                UserData(
-                        "Noise max",
-                        UserData::DataType::DT_INT,
-                        &m_noiseMax,
-                        &m_noiseMin,
-                        new int(255)
-                )
+        m_interactableCollection.addInteractable(
+                new ISlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
         );
-        m_userDataCollection.addUserData(
-                UserData(
-                        "Type",
-                        UserData::DataType::DT_OPTIONS,
-                        &m_options,
-                        &m_selectedOption,
-                        new int(m_options.size())
-                )
+        m_interactableCollection.addInteractable(
+                new SelectBox("Type", &m_selectedOption, &m_options)
         );
     };
     ~Noise() {}
@@ -55,6 +39,8 @@ public:
 private:
     int m_noiseMin;
     int m_noiseMax;
+    int m_minFixed;
+    int m_maxFixed;
     std::vector<std::string> m_options;
     int m_selectedOption;
 };

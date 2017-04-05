@@ -4,7 +4,7 @@
 #include <string>
 
 #include "scene/Image.h"
-#include "io/UserData.h"
+#include "io/Interactable.h"
 
 class ImageFilter
 {
@@ -18,7 +18,7 @@ public:
     std::vector<Image*> getOutputImages() { return m_outputImages; };
 
     // Parameters that can be specified by the user
-    UserDataCollection* getUserDataCollection() { return &m_userDataCollection; };
+    InteractableCollection* getInteractableCollection() { return &m_interactableCollection; };
 
     // clear input and output images
     void clearImages() { m_inputImages.clear(); m_outputImages.clear(); }
@@ -29,7 +29,7 @@ public:
 protected:
     std::string m_name = "unnamed";
     std::string m_filterGroup = "default";
-    UserDataCollection m_userDataCollection;
+    InteractableCollection m_interactableCollection;
 
     int getNumberOfInputImages() { return m_inputImages.size(); }
     Image* getInputImage(int index) { return m_inputImages[index]; }

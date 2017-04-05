@@ -96,7 +96,6 @@ void WindowManager::init(int width, int height)
     // window body
     style.Colors[ImGuiCol_WindowBg]         = WINDOW_CONTENT_COLOR;
     style.Colors[ImGuiCol_MenuBarBg]        = WINDOW_CONTENT_COLOR;
-    style.Colors[ImGuiCol_FrameBg]          = WINDOW_CONTENT_COLOR;
 
     style.Colors[ImGuiCol_ScrollbarBg]      = INVISIBLE_COLOR;
 
@@ -106,6 +105,9 @@ void WindowManager::init(int width, int height)
     style.Colors[ImGuiCol_ButtonActive]     = CONTROLS_ACTIVE_COLOR;
     style.Colors[ImGuiCol_SliderGrab]       = CONTROLS_NORMAL_COLOR;
     style.Colors[ImGuiCol_SliderGrabActive] = CONTROLS_ACTIVE_COLOR;
+    style.Colors[ImGuiCol_FrameBg]          = INACTIVE_COLOR;
+    style.Colors[ImGuiCol_FrameBgActive]    = INACTIVE_COLOR;
+    style.Colors[ImGuiCol_CheckMark]        = CONTROLS_ACTIVE_COLOR;
 
     style.Colors[ImGuiCol_Text]             = TEXT_COLOR;
 }

@@ -16,12 +16,8 @@ public:
         m_options = {"Lightness", "Average", "Luminocity"};
         m_selectedOption = 0;
 
-        m_userDataCollection.addUserData(
-                UserData("Convert to gray",
-                         UserData::DataType::DT_OPTIONS,
-                         &m_options,
-                         &m_selectedOption,
-                         new int(3))
+        m_interactableCollection.addInteractable(
+                new SelectBox("Convert to gray",&m_selectedOption, &m_options)
         );
     };
     ~ConvertToGrayscale() {};

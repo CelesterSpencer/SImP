@@ -58,6 +58,7 @@ int FilterManager::drawFilterMenu(bool validActiveLayer, bool processingActive)
     int mainWindowWidth = WindowManager::getInstance().getWidth();
     int mainWindowHeight = WindowManager::getInstance().getHeight();
 
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, WINDOW_CONTENT_COLOR_O);
     if (ImGui::BeginMenu("Filter"))
     {
         for(auto filterGroupIt = m_imageGroupFilterIdsMap.begin(); filterGroupIt != m_imageGroupFilterIdsMap.end(); ++filterGroupIt)
@@ -77,6 +78,7 @@ int FilterManager::drawFilterMenu(bool validActiveLayer, bool processingActive)
         }
         ImGui::EndMenu();
     }
+    ImGui::PopStyleColor(1);
 
     // call the dialog
     if(!processingActive) drawFilterSettingsDialog();
@@ -95,54 +97,35 @@ void FilterManager::drawFilterSettingsDialog()
         ImGui::SetWindowSize("Filter settings", ImVec2(std::min(ImGui::GetWindowWidth()/2, 400.f), -1));
 
         ImageFilter* imageFilter = m_imageFilters[m_selectedFilter];
-        int numberOfUserDataElements = imageFilter->getUserDataCollection()->getNumberOfElements();
-        if (numberOfUserDataElements > 0)
+        int numberOfInteractableElements = imageFilter->getInteractableCollection()->getNumberOfElements();
+        if (numberOfInteractableElements > 0)
         {
+            // show filter dialog
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, WINDOW_CONTENT_COLOR_O);
             ImGui::Begin("Filter settings", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
             ImGui::SetWindowPos(  "Filter settings",
                                   ImVec2(mainWindowWidth/2 - ImGui::GetWindowWidth()/2,
                                          mainWindowHeight/2 - ImGui::GetWindowHeight()/2));
 
+            // image filter name
             ImGui::Text((imageFilter->getName()+":").c_str());
             ImGui::Separator();
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
-            for(int i = 0; i < numberOfUserDataElements; i++)
-            {
-                UserData* userData = imageFilter->getUserDataCollection()->getUserDataAt(i);
-                ImGui::Text(userData->m_name.c_str());
-                switch (userData->m_dataType)
-                {
-                    case UserData::DT_INT:
-                        ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
-                        ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
-                        ImGui::SliderInt(("##"+std::to_string(i)).c_str(), static_cast<int*>(userData->mp_data), *static_cast<int*>(userData->mp_min), *static_cast<int*>(userData->mp_max));
-                        break;
-                    case UserData::DT_FLOAT:
-                        ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
-                        ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
-                        ImGui::SliderFloat(("##"+std::to_string(i)).c_str(), static_cast<float*>(userData->mp_data), *static_cast<float*>(userData->mp_min), *static_cast<float*>(userData->mp_max));
-                        break;
-                    case UserData::DT_BOOL:
-                        ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
-                        ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
-                        ImGui::Checkbox(("##"+std::to_string(i)).c_str(), static_cast<bool*>(userData->mp_data));
-                        break;
-                    case UserData::DT_OPTIONS:
-                        std::vector<std::string> options = *(static_cast<std::vector<std::string>*>(userData->mp_data));
-                        const char** p_options = new const char*[options.size()];
-                        for(int optionsIdx = 0; optionsIdx < options.size(); optionsIdx++)
-                            p_options[optionsIdx] = options[optionsIdx].c_str();
 
-                        ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
-                        ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
-                        ImGui::Combo(("##"+std::to_string(i)).c_str(),
-                                     static_cast<int*>(userData->mp_min),
-                                     p_options,
-                                     *static_cast<int*>(userData->mp_max));
-                        delete[] p_options;
-                        break;
-                }
+            // render all image filter options
+            for(int i = 0; i < numberOfInteractableElements; i++)
+            {
+                // interactable name
+                Interactable*interactable = imageFilter->getInteractableCollection()->getInteractableAt(i);
+                ImGui::Text(interactable->m_name.c_str());
+
+                // interactable content
+                ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
+                ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
+                interactable->render(i);
             }
+
+            // apply button
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
             ImGui::Separator();
             ImGui::Spacing();
@@ -152,6 +135,8 @@ void FilterManager::drawFilterSettingsDialog()
                 m_selectionStatus = 1;
                 m_isFilterMenuOpen = false;
             }
+
+            // cancel button
             ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
             if(ImGui::Button("Cancel", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)))
             {
@@ -160,6 +145,7 @@ void FilterManager::drawFilterSettingsDialog()
                 m_isFilterMenuOpen = false;
             }
             ImGui::End();
+            ImGui::PopStyleColor(1);
         }
         else {
             // If no user data elements are specify just return Apply status

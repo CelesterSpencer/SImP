@@ -12,12 +12,10 @@ public:
         m_filterGroup = "linear";
 
         m_filterRadius = 5;
-        m_userDataCollection.addUserData(
-                UserData("Filter radius",
-                         UserData::DataType::DT_INT,
-                         &m_filterRadius,
-                         new int(0),
-                         new int(10))
+        m_minRadius = 0;
+        m_maxRadius = 10;
+        m_interactableCollection.addInteractable(
+                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius)
         );
     };
     ~MeanFilter() {};
@@ -26,6 +24,8 @@ public:
 
 private:
     int m_filterRadius;
+    int m_minRadius;
+    int m_maxRadius;
 };
 
 

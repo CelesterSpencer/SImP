@@ -2,6 +2,7 @@
 #define SRCCMAKE_FILTERMANAGER_H
 
 #include <imgui.h>
+#include <map>
 
 #include "util/Singleton.h"
 #include "rendering/WindowManager.h"
