@@ -13,7 +13,9 @@ Canvas::Canvas()
 
     //__________________LOAD_SYSTEM_IMAGES____________________//
 
-    loadSystemImages();
+    m_imageHandleDelete     = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_DELETE);
+    m_imageHandleOpen       = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_OPEN);
+    m_imageHandleSpinner    = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_SPINNER);
 
     //_____________________SETUP_SHADER_______________________//
 
@@ -65,7 +67,9 @@ void Canvas::drawLayersMenu()
         ImGui::BeginGroup();
         Layer* currentLayer = m_layers[i];
 
-        // draw background for selected element
+        /*
+         * draw background for selected element
+         */
         ImVec2 start = ImVec2(ImGui::GetWindowPos().x,ImGui::GetWindowPos().y + 24 + i*27 - ImGui::GetScrollY());
         ImVec2 end = ImVec2(start.x + ImGui::GetWindowWidth(), start.y + 26);
         auto layerColor = LAYER_COLOR;
@@ -96,18 +100,24 @@ void Canvas::drawLayersMenu()
         if(i == m_activeLayer) layerColor = LAYER_ACTIVE_COLOR;
         ImGui::GetWindowDrawList()->AddRectFilled(start, end, layerColor);
 
-        // layer name
+        /*
+         * layer name
+         */
         ImGui::AlignFirstTextHeightToWidgets();
         ImGui::Text(("Layer " + std::to_string(i)).c_str());
 
-        // layer opacity
+        /*
+         * layer opacity
+         */
         ImGui::SameLine(70);
         float layerOpacity = currentLayer->getOpacity();
         ImGui::PushItemWidth(50);
         ImGui::SliderFloat(("##" + std::to_string(i)).c_str(), &layerOpacity, 0.0, 1.0);
         currentLayer->setOpacity(layerOpacity);
 
-        // image
+        /*
+         * image
+         */
         ImGui::SameLine(140);
         if (currentLayer->hasImage())
             ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
@@ -118,7 +128,9 @@ void Canvas::drawLayersMenu()
             ImGui::GetWindowDrawList()->AddRectFilled(imageStart, imageEnd, NO_IMAGE_COLOR);
         }
 
-        // load image button
+        /*
+         * load-image button
+         */
         ImGui::SameLine(170);
         ImGui::PushID(("imageBtn"+std::to_string(i)).c_str());
         // color button gray when inactive
@@ -160,7 +172,9 @@ void Canvas::drawLayersMenu()
             ImGui::Text(channelInfo.c_str());
         }
 
-        // delete layer button
+        /*
+         * delete layer button
+         */
         ImGui::SameLine(ImGui::GetWindowWidth()-28);
         ImGui::PushID(("deleteLayerBtn"+std::to_string(i)).c_str());
         if (m_isProcessingActive)
@@ -169,7 +183,7 @@ void Canvas::drawLayersMenu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
         }
-        if(ImGui::ImageButton((GLuint*)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
+        if(ImGui::ImageButton((ImTextureID)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
            && !m_isProcessingActive)
         {
             shouldDeleteLayer = true;
@@ -399,68 +413,4 @@ void Canvas::setOpacity(float opacity, int layer)
     {
         m_layers.at(layer)->setOpacity(opacity);
     }
-}
-
-void Canvas::loadSystemImages()
-{
-    Image openImage;
-    Image deleteImage;
-    Image spinnerImage;
-
-    std::string systemPath = RESOURCES_PATH"/system/";
-
-    openImage.load(systemPath+"open.png");
-    deleteImage.load(systemPath+"cross.png");
-    spinnerImage.load(systemPath+"spinner.png");
-
-    uploadImage(&openImage, &m_imageHandleOpen);
-    uploadImage(&deleteImage, &m_imageHandleDelete);
-    uploadImage(&spinnerImage, &m_imageHandleSpinner);
-}
-
-void Canvas::uploadImage(Image* image, GLuint* imageHandle)
-{
-    /*
-         * create new texture
-         */
-    glGenTextures(1, imageHandle);
-
-    /*
-     * bind the texture for uploading data
-     */
-    glBindTexture(GL_TEXTURE_2D, *imageHandle);
-
-    /*
-     * send image data to the new texture
-     */
-    switch(image->getChannelNumber())
-    {
-        case 1:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, image->getWidth(), image->getHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, image->getRawData());
-            break;
-        case 3:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, image->getWidth(), image->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->getRawData());
-            break;
-        case 4:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, image->getWidth(), image->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getRawData());
-            break;
-        default:
-            std::cerr << "Unknown format for bytes per pixel... Changed to \"4\"" << std::endl;
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, image->getWidth(), image->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getRawData());
-            break;
-    }
-
-    /*
-     * texture settings
-     */
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    /*
-     * unbind texture
-     */
-    glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -1,12 +1,10 @@
-//
-// Created by Windrian on 18.03.2017.
-//
-
 #ifndef SRCCMAKE_LAYER_H
 #define SRCCMAKE_LAYER_H
 
+// lib
 #include <GL/gl3w.h>
 
+// project
 #include "rendering/ShaderProgram.h"
 #include "rendering/WindowManager.h"
 #include "scene/Image.h"

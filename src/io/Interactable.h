@@ -1,15 +1,22 @@
 #ifndef SRCCMAKE_INTERACTABLE_H
 #define SRCCMAKE_INTERACTABLE_H
 
+// std
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
+
+// lib
 #include "imgui.h"
 
+// project
 #include "scene/Image.h"
 #include "io/FileHandler.h"
+#include "io/ImageHandler.h"
+#include "scene/SystemFiles.h"
 
+// style
 #include "rendering/ColorStyles.h"
 
 class Interactable
@@ -152,9 +159,7 @@ public:
         m_imageHandleOpen = 0;
 
         // load open image
-        Image openImage;
-        openImage.load(RESOURCES_PATH"/system/open.png");
-        uploadImage(&openImage, &m_imageHandleOpen);
+        m_imageHandleOpen = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_OPEN);
     }
     ~ImageSelector()
     {
@@ -174,7 +179,9 @@ public:
     {
         bool shouldLoadImage = false;
 
-        // show image
+        /*
+         * show image
+         */
         if (m_isImageLoaded)
             ImGui::Image((GLuint*)m_imageHandle, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
         else
@@ -184,24 +191,26 @@ public:
             ImGui::GetWindowDrawList()->AddRectFilled(imageStart, imageEnd, NO_IMAGE_COLOR);
         }
 
-        // load image button
+        /*
+         * load image button
+         */
         ImGui::SameLine(ImGui::GetWindowWidth()/2+5+19+10);
         ImGui::PushID(("filterImageBtn"+std::to_string(num)).c_str());
-        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,1), ImVec2(1,0), 0))
+        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0))
         {
             shouldLoadImage = true;
         }
         ImGui::PopID();
 
-
+        /*
+         * open file dialog and load image icon
+         */
         if(shouldLoadImage)
         {
             std::string filePath = "";
             if(FileHandler::getInstance().openFilePathDialog(filePath))
             {
-                Image image;
-                image.load(filePath);
-                uploadImage(&image, &m_imageHandle);
+                m_imageHandle = ImageHandler::getInstance().getImageHandleFromFilePath(filePath);
                 m_isImageLoaded = true;
             }
         }
@@ -210,61 +219,6 @@ private:
     GLuint m_imageHandle;
     GLuint m_imageHandleOpen;
     bool m_isImageLoaded;
-
-    void uploadImage(Image* image, GLuint* imageHandle)
-    {
-        /*
-         * create new texture
-         */
-        glGenTextures(1, imageHandle);
-
-        /*
-         * bind the texture for uploading data
-         */
-        glBindTexture(GL_TEXTURE_2D, *imageHandle);
-
-        /*
-         * this should prevent images with odd dimensions from crashing
-         */
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-        glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-        glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-
-        /*
-         * send image data to the new texture
-         */
-        switch(image->getChannelNumber())
-        {
-            case 1:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, image->getWidth(), image->getHeight(), 0, GL_RED, GL_UNSIGNED_BYTE, image->getRawData());
-                break;
-            case 3:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, image->getWidth(), image->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->getRawData());
-                break;
-            case 4:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, image->getWidth(), image->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getRawData());
-                break;
-            default:
-                std::cerr << "Unknown format for bytes per pixel... Changed to \"4\"" << std::endl;
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, image->getWidth(), image->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->getRawData());
-                break;
-        }
-
-        /*
-         * texture settings
-         */
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        /*
-         * unbind texture
-         */
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
 };
 
 #endif //SRCCMAKE_INTERACTABLE_H

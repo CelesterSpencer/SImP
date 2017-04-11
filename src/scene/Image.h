@@ -1,13 +1,11 @@
-//
-// Created by Windrian on 18.03.2017.
-//
-
 #ifndef SRCCMAKE_IMAGE_H
 #define SRCCMAKE_IMAGE_H
 
 #include <GL/gl3w.h>
 #include <vector>
 #include <iostream>
+
+#include "io/ImageHandler.h"
 
 class Image {
 public:

@@ -1,11 +1,5 @@
-//
-// Created by Windrian on 18.03.2017.
-//
-
 #include "Image.h"
-#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image.h"
 #include "stb_image_write.h"
 
 Image::Image()
@@ -62,19 +56,7 @@ int Image::load(std::string filePath)
     /*
      * actually loading the data
      */
-    stbi_set_flip_vertically_on_load(false);
-    unsigned char* data = stbi_load(filePath.c_str(), &m_width, &m_height, &m_bytesPerPixel, 0);
-
-    if(data == NULL)
-    {
-        std::cerr << "ERROR : Unable to open image " << fileString << std::endl;
-        std::cerr << "Loaded data is empty" << std::endl;
-        return -1;
-    }
-
-    m_data.clear();
-    m_data.insert(m_data.end(), data, data+m_width*m_height*m_bytesPerPixel);
-    stbi_image_free(data);
+    ImageHandler::getInstance().loadImage(filePath, &m_data, m_width, m_height, m_bytesPerPixel);
 
     m_hasBeenModified = true;
     m_hasBeenResized = true;

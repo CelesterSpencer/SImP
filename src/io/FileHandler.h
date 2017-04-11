@@ -14,7 +14,8 @@
 
 #include "util/Singleton.h"
 
-class FileHandler: public Singleton<FileHandler> {
+class FileHandler : public Singleton<FileHandler>
+{
     friend class Singleton<FileHandler>;
 public:
     int openFilePathDialog(std::string& filePath);

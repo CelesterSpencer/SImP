@@ -5,12 +5,15 @@
 #ifndef SRCCMAKE_CANVAS_H
 #define SRCCMAKE_CANVAS_H
 
+// project
 #include "rendering/WindowManager.h"
 #include "rendering/ShaderProgram.h"
 #include "processing/FilterManager.h"
 #include "io/FileHandler.h"
 #include "scene/Layer.h"
+#include "scene/SystemFiles.h"
 
+// type
 #include "rendering/ColorStyles.h"
 #include "util/Types.h"
 
@@ -43,9 +46,6 @@ private:
     GLuint              m_imageHandleDelete;
     GLuint              m_imageHandleOpen;
     GLuint              m_imageHandleSpinner;
-
-    void loadSystemImages();
-    void uploadImage(Image* image, GLuint* imageHandle);
 };
 
 
