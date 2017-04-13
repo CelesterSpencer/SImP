@@ -9,7 +9,11 @@ using uint = unsigned int;
 using comp = std::complex<float>;
 
 // variables
-#define PI 3.141592653589
-#define I comp(0,1)
+namespace CONSTS
+{
+    #define PI 3.141592653589
+    #define Im comp(0,1)
+}
+
 
 #endif //SRCCMAKE_TYPES_H

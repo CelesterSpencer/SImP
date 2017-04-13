@@ -1,6 +1,4 @@
 #include "Image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
 
 Image::Image()
 {
@@ -64,7 +62,7 @@ int Image::load(std::string filePath)
 
 void Image::save()
 {
-    stbi_write_png((RESOURCES_PATH"/output/modified_"+m_fileName).c_str(), m_width, m_height, m_bytesPerPixel, m_data.data(), 0);
+    ImageHandler::getInstance().saveImage(RESOURCES_PATH"/output/modified_"+m_fileName, m_data.data(), m_width, m_height, m_bytesPerPixel);
 }
 
 void Image::copyData(Image* in)

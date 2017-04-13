@@ -110,8 +110,8 @@ std::vector<comp> FastFourierTransform::fft(std::vector<comp> in)
         float sign = (m_isInverse) ? 1.0 : -1.0;
         for (int k = 0; k < n/2; k++)
         {
-            result[k]     = even[k] + odd[k] * exp(I*comp(sign*2*PI*k/n,0));
-            result[k+n/2] = even[k] - odd[k] * exp(I*comp(sign*2*PI*k/n,0));
+            result[k]     = even[k] + odd[k] * exp(Im*comp(sign*2*PI*k/n,0));
+            result[k+n/2] = even[k] - odd[k] * exp(Im*comp(sign*2*PI*k/n,0));
         }
 
         return result;

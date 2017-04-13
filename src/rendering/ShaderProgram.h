@@ -1,12 +1,16 @@
 #ifndef SHADER_PROGRAM_H
 #define SHADER_PROGRAM_H
 
+// std
 #include <map>
 #include <vector>
 #include <string>
+
+// lib
 #include <glm.hpp>
 #include <GL/gl3w.h>
 
+// project
 #include "Shader.h"
 
 class ShaderProgram

@@ -19,6 +19,7 @@ class ImageHandler : public Singleton<ImageHandler>
 public:
     GLuint getImageHandleFromFilePath(std::string filePath);
     bool loadImage(std::string filePath, std::vector<uchar>* data, int& width, int& height, int& channelNumber);
+    bool saveImage(std::string filePath, uchar* data, int width, int height, int channelNumber);
     void replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, uchar* data, int width, int height, int channelNumber);
     void replaceImageWithChangeOnGpu(GLuint* imageHandleGpu, uchar* data, int width, int height, int channelNumber);
 private:

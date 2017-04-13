@@ -1,6 +1,8 @@
 #include "ImageHandler.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 GLuint ImageHandler::getImageHandleFromFilePath(std::string filePath)
 {
@@ -34,6 +36,11 @@ bool ImageHandler::loadImage(std::string filePath, std::vector<uchar>* data, int
     stbi_image_free(stbData);
 
     return true;
+}
+
+bool ImageHandler::saveImage(std::string filePath, uchar* data, int width, int height, int channelNumber)
+{
+    stbi_write_png(filePath.c_str(), width, height, channelNumber, data, 0);
 }
 
 void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, uchar* data, int width, int height, int channelNumber)
