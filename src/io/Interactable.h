@@ -15,16 +15,18 @@
 #include "io/FileHandler.h"
 #include "io/ImageHandler.h"
 #include "scene/SystemFiles.h"
+#include "scene/LayerManager.h"
 
 // style
 #include "rendering/ColorStyles.h"
-
-class LayerManager;
 
 class Interactable
 {
 public:
     std::string m_name;
+    bool m_isSatisfied = true;
+    bool m_hasImage = false;
+    Image* m_image = nullptr;
 
     virtual void render(int num) = 0;
 };
@@ -101,8 +103,8 @@ public:
 private:
     GLuint m_imageHandle;
     GLuint m_imageHandleOpen;
-    Image* m_image;
     bool m_isImageLoaded;
+    bool m_shouldLoadImage;
 };
 
 #endif //SRCCMAKE_INTERACTABLE_H

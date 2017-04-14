@@ -25,6 +25,23 @@ void FilterManager::addImage(Image* in)
     m_inputImages.push_back(in);
 }
 
+void FilterManager::addRequiredImages()
+{
+    /*
+     * collect all images from the interactables
+     */
+    ImageFilter* imageFilter = m_imageFilters[m_selectedFilter];
+    int numberOfInteractableElements = imageFilter->getInteractableCollection()->getNumberOfElements();
+    for(int i = 0; i < numberOfInteractableElements; i++)
+    {
+        Interactable* interactable = imageFilter->getInteractableCollection()->getInteractableAt(i);
+        if(interactable->m_hasImage)
+        {
+            m_inputImages.push_back(interactable->m_image);
+        }
+    }
+}
+
 std::vector<Image*> FilterManager::getOutputImages()
 {
     return m_outputImages;
@@ -113,6 +130,7 @@ void FilterManager::drawFilterSettingsDialog()
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
 
             // render all image filter options
+            bool isSatisfied = true;
             for(int i = 0; i < numberOfInteractableElements; i++)
             {
                 // interactable name
@@ -123,18 +141,29 @@ void FilterManager::drawFilterSettingsDialog()
                 ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
                 ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
                 interactable->render(i);
+
+                // collect if interactable's requirements are satisfied
+                isSatisfied = isSatisfied && interactable->m_isSatisfied;
             }
 
             // apply button
+            if(!isSatisfied)
+            {
+                ImGui::PushStyleColor(ImGuiCol_Button, INACTIVE_COLOR);
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
+            }
             ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
             ImGui::Separator();
             ImGui::Spacing();
             ImGui::SameLine(5);
-            if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)))
+            if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)) && isSatisfied)
             {
+                // change state to
                 m_selectionStatus = 1;
                 m_isFilterMenuOpen = false;
             }
+            if(!isSatisfied) ImGui::PopStyleColor(3);
 
             // cancel button
             ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);

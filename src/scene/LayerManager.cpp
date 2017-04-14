@@ -85,7 +85,7 @@ void LayerManager::drawMenu()
          */
         ImGui::SameLine(140);
         if (currentLayer->hasImage())
-            ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
+            ImGui::Image((GLuint*)(intptr_t)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
         else
         {
             ImVec2 imageStart = ImVec2(ImGui::GetCursorPos().x+ImGui::GetWindowPos().x, ImGui::GetCursorPos().y+ImGui::GetWindowPos().y - ImGui::GetScrollY());
@@ -105,7 +105,7 @@ void LayerManager::drawMenu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
         }
-        if(ImGui::ImageButton((ImTextureID)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
+        if(ImGui::ImageButton((GLuint*)(intptr_t)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
            && !m_isInteractionBlocked)
         {
             m_activeLayer = i;
@@ -148,7 +148,7 @@ void LayerManager::drawMenu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
         }
-        if(ImGui::ImageButton((ImTextureID)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
+        if(ImGui::ImageButton((GLuint*)(intptr_t)m_imageHandleDelete, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0)
            && !m_isInteractionBlocked)
         {
             shouldDeleteLayer = true;
@@ -210,28 +210,45 @@ void LayerManager::drawMenu()
 
 void LayerManager::drawLayerImageSelectionMenu()
 {
+    /*
+     * set window properties
+     */
     int mainWindowWidth = WindowManager::getInstance().getWidth();
     int mainWindowHeight = WindowManager::getInstance().getHeight();
-
-    ImGui::SetWindowSize("Select image", ImVec2(std::min(ImGui::GetWindowWidth()/2, 400.f), -1));
+    ImGui::SetWindowSize("Select image", ImVec2(std::max(ImGui::GetWindowWidth()/2, 400.f), -1));
     ImGui::PushStyleColor(ImGuiCol_WindowBg, WINDOW_CONTENT_COLOR_O);
-    ImGui::Begin("Filter settings", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-    ImGui::SetWindowPos(  "Filter settings",
+    ImGui::SetWindowPos(  "Select image",
                           ImVec2(mainWindowWidth/2 - ImGui::GetWindowWidth()/2,
-                                 mainWindowHeight/2 - ImGui::GetWindowHeight()/2));
+                                 mainWindowHeight/2 - ImGui::GetWindowHeight()/2 - (400)/2));
 
+    /*
+     * select image window
+     */
+    ImGui::Begin("Select image", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+
+    /*
+     * draw selected background rect and the corresponding image
+     */
+    int imageWidth = 100;
+    int imageHeight = 100;
+    int childWindowHeight = 400;
+
+    ImGui::BeginChild("imagesSelection", ImVec2(ImGui::GetWindowWidth(), childWindowHeight), false);
     for(int i = 0; i < m_layers.size(); i++)
     {
         /*
          * draw background for selected element
          */
-        ImVec2 start = ImVec2(ImGui::GetWindowPos().x,ImGui::GetWindowPos().y + 24 + i*27 - ImGui::GetScrollY());
-        ImVec2 end = ImVec2(start.x + ImGui::GetWindowWidth(), start.y + 26);
+        int layersStartY = ImGui::GetWindowPos().y;
+        ImVec2 start = ImVec2(ImGui::GetWindowPos().x, layersStartY + i*(imageHeight+4) - ImGui::GetScrollY());
+        ImVec2 end = ImVec2(start.x + ImGui::GetWindowWidth(), start.y + imageHeight);
         auto layerColor = LAYER_COLOR;
         if (ImGui::GetMousePos().x >= start.x &&
             ImGui::GetMousePos().x < end.x &&
             ImGui::GetMousePos().y > start.y &&
-            ImGui::GetMousePos().y < end.y)
+            ImGui::GetMousePos().y < end.y &&
+            ImGui::GetMousePos().y > layersStartY &&
+            ImGui::GetMousePos().y < layersStartY+childWindowHeight)
         {
             layerColor = LAYER_HOVER_COLOR;
             if(ImGui::IsMouseClicked(0, false)) m_selectedLayerImageIndex = i;
@@ -240,25 +257,42 @@ void LayerManager::drawLayerImageSelectionMenu()
         ImGui::GetWindowDrawList()->AddRectFilled(start, end, layerColor);
 
         /*
-         * draw the images
+         * name of the image
+         */
+        ImGui::Text(("Image " + std::to_string(i)).c_str());
+
+        /*
+         * draw the image
          */
         Layer* currentLayer = m_layers[i];
         if (currentLayer->hasImage())
         {
             ImGui::SameLine(140);
-            ImGui::Image((GLuint*)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
+            ImGui::Image((GLuint*)(intptr_t)currentLayer->getGpuImageHandle(), ImVec2(imageWidth,imageHeight), ImVec2(0,0), ImVec2(1,1));
         }
     }
+    ImGui::EndChild();
+
+    // set image selection status as not selected
+    m_layerImageSelectionStatus = 0;
+    bool validImageSelected = m_selectedLayerImageIndex >= 0;
 
     // apply button
+    if (!validImageSelected)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Button, INACTIVE_COLOR);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, INACTIVE_COLOR);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, INACTIVE_COLOR);
+    }
     ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
     ImGui::Separator();
     ImGui::Spacing();
     ImGui::SameLine(5);
-    if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)))
+    if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)) && validImageSelected)
     {
         m_layerImageSelectionStatus = 1;
     }
+    if (!validImageSelected) ImGui::PopStyleColor(3);
 
     // cancel button
     ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
@@ -354,7 +388,6 @@ Image* LayerManager::getImage(int layerIndex)
 
 void LayerManager::resetLayerImageSelectionMenu()
 {
-    m_layerImageSelectionStatus = 0;
     m_selectedLayerImageIndex = -1;
 }
 

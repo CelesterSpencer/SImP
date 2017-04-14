@@ -16,7 +16,7 @@ int FileHandler::openFilePathDialog(std::string& filePath)
     ofn.lpstrFilter  = "Image Files\0*.png;*.jpg;*.tga;*.bmp;*.gif;*.psd;*.ppm;*.pgm\0";
     ofn.lpstrFile    = filename;
     ofn.nMaxFile     = MAX_PATH;
-    ofn.lpstrTitle   = "Select an image!";
+    ofn.lpstrTitle   = "Select an image";
     ofn.Flags        = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
 
     if (GetOpenFileNameA( &ofn ))

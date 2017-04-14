@@ -13,6 +13,7 @@
 #include "rendering/ColorStyles.h"
 #include "util/Types.h"
 
+// lib
 #include <thread.h>
 
 class Canvas {

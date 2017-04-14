@@ -15,6 +15,7 @@ class FilterManager : public Singleton<FilterManager>
 public:
     void registerImageFilter(ImageFilter*);
     void addImage(Image* in);
+    void addRequiredImages();
     std::vector<Image*> getOutputImages();
     void resetFilter();
     void applyFilter();

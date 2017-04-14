@@ -311,7 +311,7 @@ protected:
 	 * @param interface GL_UNIFORM, GL_PROGRAM_INPUT or GL_PROGRAM_OUTPUT
 	 * @param map target to write retrieved information to
 	 */
-	void mapShaderProperties(GLenum interface, std::map<std::string, Info>* map);
+	void mapShaderProperties(GLenum glinterface, std::map<std::string, Info>* map);
 
 	/**
 	 * @brief Method to attach a shader to the shader program

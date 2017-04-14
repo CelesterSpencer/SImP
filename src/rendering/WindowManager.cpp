@@ -47,7 +47,8 @@ void WindowManager::init(int width, int height)
 
     // set glfw context and relevant callbacks
     glfwMakeContextCurrent(m_window);
-    glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
+    glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+    {
         WindowManager::getInstance().resizeCallback(window, width, height);
     });
 

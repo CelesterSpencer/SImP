@@ -1,10 +1,4 @@
-//
-// Created by Windrian on 13.04.2017.
-//
-
 #include "Interactable.h"
-
-#include "scene/LayerManager.h"
 
 //_________________________________________INTERACTABLE_COLLECTION____________________________________________________//
 
@@ -118,10 +112,13 @@ void SelectBox::render(int num)
 ImageSelector::ImageSelector(std::string name)
 {
     m_name = name;
+    m_isSatisfied = false;
+    m_hasImage = true;
     m_isImageLoaded = false;
     m_image = nullptr;
     m_imageHandle = 0;
     m_imageHandleOpen = 0;
+    m_shouldLoadImage = false;
 
     // load open image
     m_imageHandleOpen = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_OPEN);
@@ -143,7 +140,7 @@ ImageSelector::~ImageSelector()
 
 void ImageSelector::render(int num)
 {
-    bool shouldLoadImage = false;
+    m_isSatisfied = false;
 
     /*
      * show image
@@ -164,7 +161,7 @@ void ImageSelector::render(int num)
     ImGui::PushID(("filterImageBtn"+std::to_string(num)).c_str());
     if(ImGui::ImageButton((GLuint*)(intptr_t)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0))
     {
-        shouldLoadImage = true;
+        m_shouldLoadImage = true;
         LayerManager::getInstance().resetLayerImageSelectionMenu();
     }
     ImGui::PopID();
@@ -172,20 +169,22 @@ void ImageSelector::render(int num)
     /*
      * open file dialog and load image icon
      */
-    if(shouldLoadImage)
+    if(m_shouldLoadImage)
     {
         LayerManager::getInstance().drawLayerImageSelectionMenu();
         if(LayerManager::getInstance().getLayerImageSelectionStatus() == 1)
         {
-            m_imageHandle = LayerManager::getInstance().getLayer(
-                    LayerManager::getInstance().getLayerImageSelectionIndex())->getGpuImageHandle();
-            m_image = LayerManager::getInstance().getImage(LayerManager::getInstance().getLayerImageSelectionIndex());
-            m_isImageLoaded = true;
-            shouldLoadImage = false;
+            int selectedIndex   = LayerManager::getInstance().getLayerImageSelectionIndex();
+            m_imageHandle       = LayerManager::getInstance().getLayer(selectedIndex)->getGpuImageHandle();
+            m_image             = LayerManager::getInstance().getLayer(selectedIndex)->getImage();
+            m_isImageLoaded     = true;
+            m_shouldLoadImage   = false;
         }
         else if (LayerManager::getInstance().getLayerImageSelectionStatus() == -1)
         {
-            shouldLoadImage = false;
+            m_shouldLoadImage = false;
         }
     }
+
+    m_isSatisfied = m_isImageLoaded;
 }

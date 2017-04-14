@@ -7,9 +7,9 @@
 // project
 #include "util/Singleton.h"
 
-#include "scene/Layer.h"
 #include "io/FileHandler.h"
 #include "scene/SystemFiles.h"
+#include "scene/Layer.h"
 
 class LayerManager : public Singleton<LayerManager>
 {
@@ -76,6 +76,5 @@ private:
     };
     ~LayerManager() {};
 };
-
 
 #endif //SRCCMAKE_LAYERMANAGER_H

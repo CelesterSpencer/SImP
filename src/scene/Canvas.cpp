@@ -2,14 +2,40 @@
 // Created by Windrian on 11.03.2017.
 //
 
-#include <gtx/rotate_vector.hpp>
 #include "Canvas.h"
+#include <gtx/rotate_vector.hpp>
 
 Canvas::Canvas()
 {
     //__________________LOAD_SYSTEM_IMAGES____________________//
 
     m_imageHandleSpinner    = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_SPINNER);
+
+    // for testing
+    LayerManager::getInstance().addLayer();
+    LayerManager::getInstance().addLayer();
+    LayerManager::getInstance().addLayer();
+    LayerManager::getInstance().addLayer();
+    LayerManager::getInstance().addLayer();
+    LayerManager::getInstance().addLayer();
+    Image* testImage1 = new Image;
+    Image* testImage2 = new Image;
+    Image* testImage3 = new Image;
+    Image* testImage4 = new Image;
+    Image* testImage5 = new Image;
+    Image* testImage6 = new Image;
+    testImage1->load(RESOURCES_PATH"/system/cross.png");
+    testImage2->load(RESOURCES_PATH"/system/open.png");
+    testImage3->load(RESOURCES_PATH"/system/spinner.png");
+    testImage4->load(RESOURCES_PATH"/images/bug.jpg");
+    testImage5->load(RESOURCES_PATH"/images/test.png");
+    testImage6->load(RESOURCES_PATH"/images/square.png");
+    LayerManager::getInstance().setImage(testImage1, 0);
+    LayerManager::getInstance().setImage(testImage2, 1);
+    LayerManager::getInstance().setImage(testImage3, 2);
+    LayerManager::getInstance().setImage(testImage4, 3);
+    LayerManager::getInstance().setImage(testImage5, 4);
+    LayerManager::getInstance().setImage(testImage6, 5);
 }
 
 Canvas::~Canvas()
@@ -94,6 +120,7 @@ void Canvas::drawFiltersMenu()
             {
                 // apply filter for the selected image
                 FilterManager::getInstance().addImage(p_in);
+                FilterManager::getInstance().addRequiredImages();
                 FilterManager::getInstance().applyFilter();
                 *outputImages = FilterManager::getInstance().getOutputImages();
 
@@ -135,7 +162,7 @@ void Canvas::drawFiltersMenu()
     }
 
 
-    //_____________________________________________DRAW_SPINNER___________________________________________________//
+    //________________________________________________DRAW_SPINNER____________________________________________________//
 
     if(spinnerActive)
     {
