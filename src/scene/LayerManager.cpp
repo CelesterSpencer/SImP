@@ -14,7 +14,7 @@ void LayerManager::drawMenu()
     int mainWindowHeight = WindowManager::getInstance().getHeight();
 
     // set window dimension and position
-    ImGui::SetWindowSize( "Layers" , ImVec2(250, ImGui::GetWindowHeight()) );
+    ImGui::SetWindowSize( "Layers" , ImVec2(300, ImGui::GetWindowHeight()) );
     if(WindowManager::getInstance().hasBeenResized()) ImGui::SetWindowPos("Layers", ImVec2(mainWindowWidth-260, mainWindowHeight/4));
     ImGui::SetWindowSize( "Filter settings", ImVec2(mainWindowWidth/2, 0));
 
@@ -65,16 +65,52 @@ void LayerManager::drawMenu()
         if(i == m_activeLayer) layerColor = LAYER_ACTIVE_COLOR;
         ImGui::GetWindowDrawList()->AddRectFilled(start, end, layerColor);
 
+        int pos = 0;
+
         /*
          * layer name
          */
         ImGui::AlignFirstTextHeightToWidgets();
-        ImGui::Text(("Layer " + std::to_string(i)).c_str());
+        if(currentLayer->hasImage())
+        {
+            //ImGui::Text((currentLayer->getImage()->getFileName()+"#Layer " + std::to_string(i)).c_str());
+            std::string fileName = currentLayer->getImage()->getFileName();
+            int bufferSize = std::max(200, (int)fileName.size()+1);
+            char buffer[bufferSize];
+            for(int strIdx = 0; strIdx < fileName.size(); strIdx++)
+            {
+                buffer[strIdx] = fileName[strIdx];
+            }
+            buffer[fileName.size()] = '\0';
+            ImGui::PushItemWidth(73);
+            ImGui::InputText(("##Layer " + std::to_string(i)).c_str(), buffer, bufferSize, ImGuiInputTextFlags_CallbackCharFilter,
+                [](ImGuiTextEditCallbackData* data)
+                {
+                    ImWchar c = data->EventChar;
+                    if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' '))
+                        return 1;
+                    return 0;
+                }
+            );
+            std::string outputText = "";
+            for(int strIdx = 0; strIdx < bufferSize; strIdx++)
+            {
+                if (buffer[strIdx] == '\0') break;
+                outputText.push_back(buffer[strIdx]);
+            }
+
+            currentLayer->getImage()->setFileName(outputText);
+        }
+        else
+        {
+            ImGui::Text(("Layer " + std::to_string(i)).c_str());
+        }
 
         /*
          * layer opacity
          */
-        ImGui::SameLine(70);
+        pos += 100;
+        ImGui::SameLine(pos);
         float layerOpacity = currentLayer->getOpacity();
         ImGui::PushItemWidth(50);
         ImGui::SliderFloat(("##" + std::to_string(i)).c_str(), &layerOpacity, 0.0, 1.0);
@@ -83,7 +119,8 @@ void LayerManager::drawMenu()
         /*
          * image
          */
-        ImGui::SameLine(140);
+        pos += 70;
+        ImGui::SameLine(pos);
         if (currentLayer->hasImage())
             ImGui::Image((GLuint*)(intptr_t)currentLayer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
         else
@@ -96,7 +133,8 @@ void LayerManager::drawMenu()
         /*
          * load-image button
          */
-        ImGui::SameLine(170);
+        pos += 30;
+        ImGui::SameLine(pos);
         ImGui::PushID(("imageBtn"+std::to_string(i)).c_str());
         // color button gray when inactive
         if (m_isInteractionBlocked)
@@ -133,7 +171,8 @@ void LayerManager::drawMenu()
                     break;
             }
             float charWidth = 5.0;
-            ImGui::SameLine(203-channelInfo.size()/2.0*charWidth);
+            pos += 42;
+            ImGui::SameLine(pos-channelInfo.size()/2.0*charWidth);
             ImGui::Text(channelInfo.c_str());
         }
 

@@ -1,7 +1,3 @@
-//
-// Created by Windrian on 10.03.2017.
-//
-
 #include "WindowManager.h"
 
 /*

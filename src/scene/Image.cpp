@@ -2,7 +2,7 @@
 
 Image::Image()
 {
-    m_fileName = "";
+    m_fileName = "Unnamed";
     m_width = 0;
     m_height = 0;
     m_bytesPerPixel = 0;
@@ -18,6 +18,11 @@ Image::~Image()
 std::string Image::getFileName()
 {
     return m_fileName;
+}
+
+void Image::setFileName(std::string fileName)
+{
+    m_fileName = fileName;
 }
 
 int Image::getChannelNumber()
@@ -48,8 +53,8 @@ int Image::load(std::string filePath)
      */
     auto index = filePath.find_last_of("/\\") + 1;
     m_fileName = (index < filePath.size()) ? filePath.substr(index) : filePath;
-
-    std::string fileString = (index < m_fileName.size()) ? m_fileName.substr(index) : m_fileName;
+    auto indexFileEnding = m_fileName.find_last_of(".");
+    m_fileName = (indexFileEnding < m_fileName.size()) ? m_fileName.substr(0,indexFileEnding) : m_fileName;
 
     /*
      * actually loading the data
@@ -62,7 +67,10 @@ int Image::load(std::string filePath)
 
 void Image::save()
 {
-    ImageHandler::getInstance().saveImage(RESOURCES_PATH"/output/modified_"+m_fileName, m_data.data(), m_width, m_height, m_bytesPerPixel);
+    std::string filePath = RESOURCES_PATH"/output/"+m_fileName+"_modified.png";
+    std::cout << std::to_string(m_fileName.size()) << std::endl;
+    std::cout << filePath << std::endl;
+    ImageHandler::getInstance().saveImage(filePath, m_data.data(), m_width, m_height, m_bytesPerPixel);
 }
 
 void Image::copyData(Image* in)

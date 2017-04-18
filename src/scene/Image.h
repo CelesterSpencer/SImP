@@ -23,6 +23,7 @@ public:
     };
 
     std::string getFileName();
+    void setFileName(std::string fileName);
     bool hasBeenResized();
     bool hasBeenModified();
     void resetImageStatus();

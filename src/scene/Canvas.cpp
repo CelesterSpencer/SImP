@@ -10,32 +10,7 @@ Canvas::Canvas()
     //__________________LOAD_SYSTEM_IMAGES____________________//
 
     m_imageHandleSpinner    = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_SPINNER);
-
-    // for testing
-    LayerManager::getInstance().addLayer();
-    LayerManager::getInstance().addLayer();
-    LayerManager::getInstance().addLayer();
-    LayerManager::getInstance().addLayer();
-    LayerManager::getInstance().addLayer();
-    LayerManager::getInstance().addLayer();
-    Image* testImage1 = new Image;
-    Image* testImage2 = new Image;
-    Image* testImage3 = new Image;
-    Image* testImage4 = new Image;
-    Image* testImage5 = new Image;
-    Image* testImage6 = new Image;
-    testImage1->load(RESOURCES_PATH"/system/cross.png");
-    testImage2->load(RESOURCES_PATH"/system/open.png");
-    testImage3->load(RESOURCES_PATH"/system/spinner.png");
-    testImage4->load(RESOURCES_PATH"/images/bug.jpg");
-    testImage5->load(RESOURCES_PATH"/images/test.png");
-    testImage6->load(RESOURCES_PATH"/images/square.png");
-    LayerManager::getInstance().setImage(testImage1, 0);
-    LayerManager::getInstance().setImage(testImage2, 1);
-    LayerManager::getInstance().setImage(testImage3, 2);
-    LayerManager::getInstance().setImage(testImage4, 3);
-    LayerManager::getInstance().setImage(testImage5, 4);
-    LayerManager::getInstance().setImage(testImage6, 5);
+    m_currentActiveLayerIdx = -1;
 }
 
 Canvas::~Canvas()
@@ -105,10 +80,14 @@ void Canvas::drawFiltersMenu()
     if (status == 1 && !m_isProcessingActive) // user selected Apply
     {
         // start processing and block layers
+        m_currentActiveLayerIdx = LayerManager::getInstance().getActiveLayer();
         m_isProcessingActive = true;
         m_isImageTransactionDone = false;
         LayerManager::getInstance().blockInteraction();
 
+        /*
+         * execute filter application in a different thread
+         */
         if (validActiveLayer)
         {
             spinnerActive = true;
@@ -139,12 +118,12 @@ void Canvas::drawFiltersMenu()
     }
 
     /*
-     * copy the result data to the layers
+     * copy the result output images to the layers
      */
     if (!m_isProcessingActive && !m_isImageTransactionDone)
     {
         Image* out = m_tempOutputImages[0];
-        if (out != nullptr) LayerManager::getInstance().setImage(out, LayerManager::getInstance().getActiveLayer());
+        if (out != nullptr) LayerManager::getInstance().setImage(out, m_currentActiveLayerIdx);
 
         // create new layers for every other image
         for (int i = 1; i < m_tempOutputImages.size(); i++)

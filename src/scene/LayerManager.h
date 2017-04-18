@@ -6,6 +6,7 @@
 
 // project
 #include "util/Singleton.h"
+#include "imgui.h"
 
 #include "io/FileHandler.h"
 #include "scene/SystemFiles.h"
