@@ -10,6 +10,7 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#include "Shlwapi.h"
 #include <iostream>
 
 #include "util/Singleton.h"
@@ -19,6 +20,7 @@ class FileHandler : public Singleton<FileHandler>
     friend class Singleton<FileHandler>;
 public:
     int openFilePathDialog(std::string& filePath);
+    bool exists(std::string path);
 private:
     FileHandler(){};
     ~FileHandler() {};

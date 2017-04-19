@@ -33,6 +33,8 @@ private:
     std::vector<Image*> m_inputImages;
     std::vector<Image*> m_outputImages;
 
+    Timer m_timer;
+
     void drawFilterSettingsDialog();
 };
 

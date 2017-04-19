@@ -64,8 +64,9 @@ void FilterManager::applyFilter()
         {
             filter->addInputImage(m_inputImages[i]);
         }
-
+        m_timer.getDeltaTime();
         filter->process();
+        std::cout << "Filter " << filter->getName() << ": " << std::to_string(m_timer.getDeltaTime()) << std::endl;
         m_outputImages = filter->getOutputImages();
     }
 }

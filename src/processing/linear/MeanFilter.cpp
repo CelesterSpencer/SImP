@@ -12,33 +12,28 @@ void MeanFilter::process()
 
     int filterRadius = m_filterRadius;
     int filterSize = filterRadius*2 + 1;
+    std::cout << std::to_string(filterSize) << std::endl;
 
     Image* temp = new Image;
     temp->copyData(in);
 
     // iterate over image
-    for(int x = 0; x < in->getWidth(); x++)
+    for(int y = 0; y < in->getHeight(); y++)
     {
-        for(int y = 0; y < in->getHeight(); y++)
+        for(int x = 0; x < in->getWidth(); x++)
         {
-            float sumR = 0;
-            float sumG = 0;
-            float sumB = 0;
-            // iterate over filter
-            for(int fx = -filterRadius; fx <= filterRadius; fx++)
+            for(int c = 0; c < in->getChannelNumber(); c++)
             {
-                int posX = std::min(std::max(x+fx, 0), in->getWidth()-1);
-                sumR += in->get(posX, y, Image::Channel::RED);
-                sumG += in->get(posX, y, Image::Channel::GREEN);
-                sumB += in->get(posX, y, Image::Channel::BLUE);
+                float val = 0;
+                // iterate over filter
+                for(int fx = -filterRadius; fx <= filterRadius; fx++)
+                {
+                    int posX = std::min(std::max(x+fx, 0), in->getWidth()-1);
+                    val += in->get(posX, y, c);
+                }
+                val = val / filterSize;
+                temp->set((int)val, x, y, c);
             }
-            sumR = sumR / filterSize;
-            sumG = sumG / filterSize;
-            sumB = sumB / filterSize;
-            temp->set((int)sumR, x, y, Image::Channel::RED);
-            temp->set((int)sumG, x, y, Image::Channel::GREEN);
-            temp->set((int)sumB, x, y, Image::Channel::BLUE);
-
         }
     }
 
@@ -46,24 +41,18 @@ void MeanFilter::process()
     {
         for(int y = 0; y < in->getHeight(); y++)
         {
-            float sumR = 0;
-            float sumG = 0;
-            float sumB = 0;
-            // iterate over filter
-            for (int fy = -filterRadius; fy <= filterRadius; fy++)
+            for(int c = 0; c < in->getChannelNumber(); c++)
             {
-                int posY = std::min(std::max(y+fy, 0), in->getHeight()-1);
-                sumR += temp->get(x, posY, Image::Channel::RED);
-                sumG += temp->get(x, posY, Image::Channel::GREEN);
-                sumB += temp->get(x, posY, Image::Channel::BLUE);
+                float val = 0;
+                // iterate over filter
+                for (int fy = -filterRadius; fy <= filterRadius; fy++)
+                {
+                    int posY = std::min(std::max(y+fy, 0), in->getHeight()-1);
+                    val += temp->get(x, posY, c);
+                }
+                val = val / filterSize;
+                out->set((int)val, x, y, c);
             }
-            sumR = sumR / filterSize;
-            sumG = sumG / filterSize;
-            sumB = sumB / filterSize;
-            out->set((int)sumR, x, y, Image::Channel::RED);
-            out->set((int)sumG, x, y, Image::Channel::GREEN);
-            out->set((int)sumB, x, y, Image::Channel::BLUE);
-
         }
     }
 

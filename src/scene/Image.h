@@ -36,8 +36,6 @@ public:
 
     int get(int x, int y, int channel = Channel::RED);
     void set(int value, int x, int y, int channel = Channel::RGB);
-    int getDbg(int x, int y, int channel = Channel::RED);
-    void setDbg(int value, int x, int y, int channel = Channel::RGB);
 
     int getWidth();
     int getHeight();

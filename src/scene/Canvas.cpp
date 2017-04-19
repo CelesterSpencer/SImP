@@ -28,6 +28,8 @@ void Canvas::draw()
 
     LayerManager::getInstance().drawMenu();
     drawFiltersMenu();
+
+    MenuManager::getInstance().drawMenus();
 }
 
 void Canvas::drawFiltersMenu()

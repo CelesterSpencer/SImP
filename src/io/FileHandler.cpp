@@ -51,3 +51,8 @@ int FileHandler::openFilePathDialog(std::string& filePath)
         return 0;
     }
 }
+
+bool FileHandler::exists(std::string path)
+{
+    return PathFileExists(path.c_str());
+}

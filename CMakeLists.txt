@@ -79,6 +79,7 @@ target_link_libraries(SImP
         version.lib
         imm32.lib
         winmm.lib
+        Shlwapi.lib
 )
 
 # copy shader files every time the project is built
