@@ -1,0 +1,46 @@
+#version 430
+
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+
+// SSBOs
+layout(std430, binding = 0) buffer InputImage   { float inputImage[];   };
+layout(std430, binding = 1) buffer OutputImage  { float outputImage[];  };
+
+uniform int width;
+uniform int height;
+uniform int channelNumber;
+uniform int pixelNumber;
+
+void main() {
+    // get the index of the current thread
+    int threadIdx = gl_GlobalInvocationID.x;
+    if (threadIdx >= pixelNumber) return;
+
+    int filterRadius = 5;
+    int filterSize = 2*filterRadius+1;
+
+    float sum = 0.0;
+    for (int y = -filterRadius; y <= filterRadius; y++)
+    {
+        for (int x = -filterRadius; x <= filterRadius; x++)
+        {
+            sum += inputImage[getIndex(threadIdx,x,y)];
+        }
+    }
+    sum /= filterSize;
+
+    outputImage[threadIdx] = sum;
+}
+
+int getIndex(int currentIdx, int offsetX, int offsetY)
+{
+    int currentX = mod(currentIdx, width);
+    int currentY = floor(float(currentIdx) / width);
+    int newX = currentX+offsetX;
+    int newY = currentY+offsetY;
+    if(newX < 0) newX = -(1+newX);
+    if(newY < 0) newY = -(1+newY);
+    if(newX >= width) newX = 2*width-1 - newX;
+    if(newY >= height) newY = 2*height-1 - newY;
+    return newX + newY*width;
+}

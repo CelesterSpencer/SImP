@@ -154,7 +154,23 @@ void Image::set(int value, int x, int y, int channel)
     }
 }
 
-unsigned char* Image::getRawData()
+void Image::setRawData(uchar* rawData, int width, int height, int channelNumber)
+{
+    if (m_width != width || m_height != height || m_bytesPerPixel != channelNumber)
+    {
+        m_hasBeenResized = true;
+    }
+
+    m_data.clear();
+    m_data.insert(m_data.end(), rawData, rawData+width*height*channelNumber);
+    m_width = width;
+    m_height = height;
+    m_bytesPerPixel = channelNumber;
+
+    m_hasBeenModified = true;
+}
+
+uchar* Image::getRawData()
 {
     return m_data.data();
 }

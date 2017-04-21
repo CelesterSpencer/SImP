@@ -8,6 +8,31 @@
 
 using namespace std;
 
+ShaderProgram::ShaderProgram(std::string computeshader)
+{
+    // Initially, we have zero shaders attached to the program
+    m_shaderCount = 0;
+
+    // Generate a unique Id / handle for the shader program
+    // Note: We MUST have a valid rendering context before generating
+    // the m_shaderProgramHandle or it causes a segfault!
+    m_shaderProgramHandle = glCreateProgram();
+
+    //Set up fragment shader
+    Shader computeShader(GL_COMPUTE_SHADER);
+    computeShader.loadFromFile(SHADERS_PATH + computeshader);
+    computeShader.compile();
+
+    // Set up shader program
+    attachShader(computeShader);
+    link();
+
+    mapShaderProperties(GL_UNIFORM, &m_uniformMap);
+    mapShaderProperties(GL_PROGRAM_INPUT, &m_inputMap);
+    mapShaderProperties(GL_PROGRAM_OUTPUT, &m_outputMap);
+    // readUniforms();
+}
+
 ShaderProgram::ShaderProgram(std::string vertexshader, std::string fragmentshader) 
 {
     // Initially, we have zero shaders attached to the program

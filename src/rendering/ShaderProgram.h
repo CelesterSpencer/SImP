@@ -18,6 +18,14 @@ class ShaderProgram
 
 public:
 
+    /**
+	 * @brief Constructor
+	 *
+	 * @param computeshader path to the computeshader
+	 *
+	 */
+    ShaderProgram(std::string computeshader);
+
 	/**
 	 * @brief Constructor
 	 * 

@@ -20,6 +20,7 @@
 #include "processing/restructure/SplitChannels.h"
 #include "processing/test/TestFilter.h"
 
+#include "processing/ImageFilterGpu.h"
 
 
 // window

@@ -32,7 +32,8 @@ public:
     void save();
     void copyData(Image* in);
     void reserve(int width, int height, int numberOfChannels);
-    unsigned char* getRawData();
+    void setRawData(uchar* rawData, int width, int height, int channelNumber);
+    uchar* getRawData();
 
     int get(int x, int y, int channel = Channel::RED);
     void set(int value, int x, int y, int channel = Channel::RGB);
