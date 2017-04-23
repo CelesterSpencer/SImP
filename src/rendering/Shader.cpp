@@ -103,6 +103,7 @@ void Shader::compile()
         std::cerr << m_typeString << " shader compilation failed: " << strInfoLog << std::endl;
         delete[] strInfoLog;
         glfwTerminate();
+        exit(-1);
     }
     else
     {

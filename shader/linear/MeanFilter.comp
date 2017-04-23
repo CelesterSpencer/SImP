@@ -10,32 +10,12 @@ uniform int width;
 uniform int height;
 uniform int channelNumber;
 uniform int pixelNumber;
-
-void main() {
-    // get the index of the current thread
-    int threadIdx = gl_GlobalInvocationID.x;
-    if (threadIdx >= pixelNumber) return;
-
-    int filterRadius = 5;
-    int filterSize = 2*filterRadius+1;
-
-    float sum = 0.0;
-    for (int y = -filterRadius; y <= filterRadius; y++)
-    {
-        for (int x = -filterRadius; x <= filterRadius; x++)
-        {
-            sum += inputImage[getIndex(threadIdx,x,y)];
-        }
-    }
-    sum /= filterSize;
-
-    outputImage[threadIdx] = sum;
-}
+uniform int filterRadius;
 
 int getIndex(int currentIdx, int offsetX, int offsetY)
 {
-    int currentX = mod(currentIdx, width);
-    int currentY = floor(float(currentIdx) / width);
+    int currentX = int(mod(currentIdx, width));
+    int currentY = int(floor(float(currentIdx) / width));
     int newX = currentX+offsetX;
     int newY = currentY+offsetY;
     if(newX < 0) newX = -(1+newX);
@@ -43,4 +23,32 @@ int getIndex(int currentIdx, int offsetX, int offsetY)
     if(newX >= width) newX = 2*width-1 - newX;
     if(newY >= height) newY = 2*height-1 - newY;
     return newX + newY*width;
+}
+
+int getPixelChannel(int currentIdx, int offsetX, int offsetY, int channel)
+{
+    return getIndex(currentIdx,offsetX,offsetY)*channelNumber+channel;
+}
+
+void main() {
+    // get the index of the current thread
+    int threadIdx = int(gl_GlobalInvocationID.x);
+    if (threadIdx >= pixelNumber) return;
+
+    int filterSize = 2*filterRadius+1;
+
+    for (int c = 0; c < channelNumber; c++)
+    {
+        float sum = 0.0;
+        for (int y = -filterRadius; y <= filterRadius; y++)
+        {
+            for (int x = -filterRadius; x <= filterRadius; x++)
+            {
+                sum += inputImage[getPixelChannel(threadIdx,x,y,c)];
+            }
+        }
+        sum /= filterSize*filterSize;
+
+        outputImage[getPixelChannel(threadIdx,0,0,c)] = sum;
+    }
 }

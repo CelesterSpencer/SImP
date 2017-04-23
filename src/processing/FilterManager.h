@@ -19,6 +19,7 @@ public:
     std::vector<Image*> getOutputImages();
     void resetFilter();
     void applyFilter();
+    ImageFilter* getActiveFilter();
 
     int drawFilterMenu(bool validActiveLayer, bool processingActive);
 private:

@@ -25,14 +25,14 @@ void MinFilter::process()
                 {
                     int posX = std::min(std::max(x+fx, 0), in->getWidth()-1);
                     int posY = std::min(std::max(y+fy, 0), in->getHeight()-1);
-                    minR = std::min(in->get(posX, posY, Image::Channel::RED),   (int)minR);
-                    minG = std::min(in->get(posX, posY, Image::Channel::GREEN), (int)minG);
-                    minB = std::min(in->get(posX, posY, Image::Channel::BLUE),  (int)minB);
+                    minR = std::min(in->get(posX, posY, Image::Channel::RED),   minR);
+                    minG = std::min(in->get(posX, posY, Image::Channel::GREEN), minG);
+                    minB = std::min(in->get(posX, posY, Image::Channel::BLUE),  minB);
                 }
             }
-            out->set((int)minR, x, y, Image::Channel::RED);
-            out->set((int)minG, x, y, Image::Channel::GREEN);
-            out->set((int)minB, x, y, Image::Channel::BLUE);
+            out->set(minR, x, y, Image::Channel::RED);
+            out->set(minG, x, y, Image::Channel::GREEN);
+            out->set(minB, x, y, Image::Channel::BLUE);
 
         }
     }

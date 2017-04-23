@@ -28,15 +28,16 @@ public:
     bool hasBeenModified();
     void resetImageStatus();
 
-    int load(std::string filePath);
+    void load(std::string filePath);
     void save();
     void copyData(Image* in);
     void reserve(int width, int height, int numberOfChannels);
-    void setRawData(uchar* rawData, int width, int height, int channelNumber);
-    uchar* getRawData();
+    void setRawData(float* rawData, int width, int height, int channelNumber);
+    int getRawDataSize();
+    float* getRawData();
 
-    int get(int x, int y, int channel = Channel::RED);
-    void set(int value, int x, int y, int channel = Channel::RGB);
+    float get(int x, int y, int channel = Channel::RED);
+    void set(float value, int x, int y, int channel = Channel::RGB);
 
     int getWidth();
     int getHeight();
@@ -46,7 +47,7 @@ public:
 
 private:
     std::string m_fileName;
-    std::vector<unsigned char> m_data;
+    std::vector<float> m_data;
     int m_width;
     int m_height;
     int m_bytesPerPixel;

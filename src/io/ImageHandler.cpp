@@ -6,7 +6,7 @@
 
 GLuint ImageHandler::getImageHandleFromFilePath(std::string filePath)
 {
-    std::vector<uchar> data;
+    std::vector<float> data;
     int width = 0;
     int height = 0;
     int channelNumber = 0;
@@ -19,10 +19,10 @@ GLuint ImageHandler::getImageHandleFromFilePath(std::string filePath)
     return imageHandleGpu;
 }
 
-bool ImageHandler::loadImage(std::string filePath, std::vector<uchar>* data, int& width, int& height, int& channelNumber)
+bool ImageHandler::loadImage(std::string filePath, std::vector<float>* data, int& width, int& height, int& channelNumber)
 {
     stbi_set_flip_vertically_on_load(false);
-    uchar* stbData = stbi_load(filePath.c_str(), &width, &height, &channelNumber, 0);
+    unsigned char* stbData = stbi_load(filePath.c_str(), &width, &height, &channelNumber, 0);
 
     if(stbData == nullptr)
     {
@@ -32,13 +32,16 @@ bool ImageHandler::loadImage(std::string filePath, std::vector<uchar>* data, int
     }
 
     data->clear();
-    data->insert(data->end(), stbData, stbData+width*height*channelNumber);
+    for(int i = 0; i < width*height*channelNumber; i++)
+    {
+        data->push_back(static_cast<float>(stbData[i]) / 255); // values must be between 0 and 1
+    }
     stbi_image_free(stbData);
 
     return true;
 }
 
-bool ImageHandler::saveImage(std::string filePath, uchar* data, int width, int height, int channelNumber)
+bool ImageHandler::saveImage(std::string filePath, float* data, int width, int height, int channelNumber)
 {
     /*
      * if file already exists show overwrite dialog
@@ -51,9 +54,6 @@ bool ImageHandler::saveImage(std::string filePath, uchar* data, int width, int h
             std::cout << "selected " << std::to_string(savingStatus) << std::endl;
             if(savingStatus == 1)
             {
-                std::cout << filePath << std::endl;
-                std::cout << std::to_string(width) << ", " << std::to_string(height) << ", " << std::to_string(channelNumber) << std::endl;
-                std::cout << std::to_string((int)(intptr_t)data) << std::endl;
                 stbi_write_png(filePath.c_str(), width, height, channelNumber, data, 0);
                 MenuManager::getInstance().showMessage("Saved "+filePath+".", 3000);
             }
@@ -66,7 +66,7 @@ bool ImageHandler::saveImage(std::string filePath, uchar* data, int width, int h
     }
 }
 
-void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, uchar* data, int width, int height, int channelNumber)
+void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, float* data, int width, int height, int channelNumber)
 {
     // bind handle
     glBindTexture(GL_TEXTURE_2D, *imageHandleGpu);
@@ -85,24 +85,24 @@ void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, uchar*
     switch(channelNumber)
     {
         case 1:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, width, height, 0, GL_RED, GL_FLOAT, data);
             break;
         case 3:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, data);
             break;
         case 4:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, data);
             break;
         default:
             std::cerr << "Unknown format for bytes per pixel... Changed to \"4\"" << std::endl;
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, data);
             break;
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ImageHandler::replaceImageWithChangeOnGpu(GLuint* imageHandleGpu, uchar* data, int width, int height, int channelNumber)
+void ImageHandler::replaceImageWithChangeOnGpu(GLuint* imageHandleGpu, float* data, int width, int height, int channelNumber)
 {
     /*
      * delete old data
@@ -138,17 +138,17 @@ void ImageHandler::replaceImageWithChangeOnGpu(GLuint* imageHandleGpu, uchar* da
     switch(channelNumber)
     {
         case 1:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, width, height, 0, GL_RED, GL_FLOAT, data);
             break;
         case 3:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, data);
             break;
         case 4:
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, data);
             break;
         default:
             std::cerr << "Unknown format for bytes per pixel... Changed to \"4\"" << std::endl;
-            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, data);
             break;
     }
 

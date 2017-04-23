@@ -4,7 +4,6 @@
 #include <complex>
 
 // types
-using uchar = unsigned char;
 using uint = unsigned int;
 using comp = std::complex<float>;
 

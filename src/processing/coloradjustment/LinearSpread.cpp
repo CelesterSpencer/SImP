@@ -10,13 +10,13 @@ void LinearSpread::process()
     Image* out = new Image;
     out->copyData(in);
 
-    int minR = 255;
-    int minG = 255;
-    int minB = 255;
+    float minR = 255;
+    float minG = 255;
+    float minB = 255;
 
-    int maxR = 0;
-    int maxG = 0;
-    int maxB = 0;
+    float maxR = 0;
+    float maxG = 0;
+    float maxB = 0;
 
     // get the min and max values
     for(int y = 0; y < in->getHeight(); y++)
@@ -38,9 +38,9 @@ void LinearSpread::process()
     {
         for (int x = 0; x < in->getWidth(); x++)
         {
-            int r = in->get(x,y,Image::Channel::RED);
-            int g = in->get(x,y,Image::Channel::GREEN);
-            int b = in->get(x,y,Image::Channel::BLUE);
+            float r = in->get(x,y,Image::Channel::RED);
+            float g = in->get(x,y,Image::Channel::GREEN);
+            float b = in->get(x,y,Image::Channel::BLUE);
             out->set((float)(r - minR)/(maxR - minR)*255,x,y,Image::Channel::RED);
             out->set((float)(g - minG)/(maxG - minG)*255,x,y,Image::Channel::GREEN);
             out->set((float)(b - minB)/(maxB - minB)*255,x,y,Image::Channel::BLUE);

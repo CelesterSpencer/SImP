@@ -28,8 +28,8 @@ ShaderProgram::ShaderProgram(std::string computeshader)
     link();
 
     mapShaderProperties(GL_UNIFORM, &m_uniformMap);
-    mapShaderProperties(GL_PROGRAM_INPUT, &m_inputMap);
-    mapShaderProperties(GL_PROGRAM_OUTPUT, &m_outputMap);
+    //mapShaderProperties(GL_PROGRAM_INPUT, &m_inputMap);
+    //mapShaderProperties(GL_PROGRAM_OUTPUT, &m_outputMap);
     // readUniforms();
 }
 
@@ -224,7 +224,7 @@ void ShaderProgram::attachShader(Shader shader)
 void ShaderProgram::link()
 {
 	// If we have at least two shaders (like a vertex shader and a fragment shader)...
-	if (m_shaderCount >= 2)
+	if (m_shaderCount >= 1)
 	{
 		// Perform the linking process
 		glLinkProgram(m_shaderProgramHandle);
@@ -244,7 +244,7 @@ void ShaderProgram::link()
 	}
 	else
 	{
-        std::cerr << "Can't link shaders - you need at least 2, but attached shader count is only: " <<  m_shaderCount << std::endl;
+        std::cerr << "Can't link shaders - you need at least 1, but attached shader count is only: " <<  m_shaderCount << std::endl;
 		glfwTerminate();
 	}
 }
@@ -497,7 +497,7 @@ void ShaderProgram::use()
 
 	for(auto texture : m_textureMap)
 	{	
-		// std::cout << "name: " << texture.first << ", active texture:" << i << ", uniform: " << uniform(texture.first) << ", handle: " << texture.second << std::endl;
+		//std::cout << "name: " << texture.first << ", active texture:" << i << ", uniform: " << uniform(texture.first) << ", handle: " << texture.second << std::endl;
 
 		update( texture.first, i );
 		glActiveTexture(GL_TEXTURE0+i);

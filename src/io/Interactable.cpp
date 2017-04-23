@@ -26,16 +26,29 @@ int InteractableCollection::getNumberOfElements() { return m_interactableVector.
 
 Interactable* InteractableCollection::getInteractableAt(int index) { return  m_interactableVector[index]; }
 
+void InteractableCollection::uploadInteractableUniforms(ShaderProgram* shaderProgram)
+{
+    for(int i = 0; i < m_interactableVector.size(); i++)
+    {
+        Interactable* interactable = m_interactableVector.at(i);
+        if(glGetUniformLocation(shaderProgram->getShaderProgramHandle(), interactable->m_uniformName.c_str()) != -1)
+        {
+            interactable->uploadUniform(shaderProgram);
+        }
+    }
+}
+
 
 
 //_________________________________________________F_SLIDER___________________________________________________________//
 
-FSlider::FSlider(std::string name, float* data, float* min, float* max)
+FSlider::FSlider(std::string name, float* data, float* min, float* max, std::string uniformName)
 {
     m_name = name;
     m_data = data;
     m_min = min;
     m_max = max;
+    m_uniformName = uniformName;
 }
 
 void FSlider::render(int num)
@@ -43,16 +56,22 @@ void FSlider::render(int num)
     ImGui::SliderFloat(("##"+std::to_string(num)).c_str(), m_data, *m_min, *m_max);
 }
 
+void FSlider::uploadUniform(ShaderProgram* shaderProgram)
+{
+    shaderProgram->update(m_uniformName, *m_data);
+}
+
 
 
 //_________________________________________________I_SLIDER___________________________________________________________//
 
-ISlider::ISlider(std::string name, int* data, int* min, int* max)
+ISlider::ISlider(std::string name, int* data, int* min, int* max, std::string uniformName)
 {
     m_name = name;
     m_data = data;
     m_min = min;
     m_max = max;
+    m_uniformName = uniformName;
 }
 
 void ISlider::render(int num)
@@ -60,14 +79,20 @@ void ISlider::render(int num)
     ImGui::SliderInt(("##"+std::to_string(num)).c_str(), m_data, *m_min, *m_max);
 }
 
+void ISlider::uploadUniform(ShaderProgram* shaderProgram)
+{
+    shaderProgram->update(m_uniformName, *m_data);
+}
+
 
 
 //_________________________________________________CHECKBOX___________________________________________________________//
 
-Checkbox::Checkbox(std::string name, bool* data)
+Checkbox::Checkbox(std::string name, bool* data, std::string uniformName)
 {
     m_name = name;
     m_data = data;
+    m_uniformName = uniformName;
 }
 
 void Checkbox::render(int num)
@@ -75,14 +100,20 @@ void Checkbox::render(int num)
     ImGui::Checkbox(("##"+std::to_string(num)).c_str(), m_data);
 }
 
+void Checkbox::uploadUniform(ShaderProgram* shaderProgram)
+{
+    shaderProgram->update(m_uniformName, *m_data);
+}
+
 
 
 //________________________________________________SELECT_BOX__________________________________________________________//
 
-SelectBox::SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options)
+SelectBox::SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options, std::string uniformName)
 {
     m_name = name;
     m_selectedOption = selectedOption;
+    m_uniformName = uniformName;
 
     // convert options to char array
     mp_options = new const char*[options->size()];
@@ -103,6 +134,11 @@ void SelectBox::render(int num)
                  m_selectedOption,
                  mp_options,
                  m_optionsSize);
+}
+
+void SelectBox::uploadUniform(ShaderProgram* shaderProgram)
+{
+    shaderProgram->update(m_uniformName, *m_selectedOption);
 }
 
 
@@ -187,4 +223,9 @@ void ImageSelector::render(int num)
     }
 
     m_isSatisfied = m_isImageLoaded;
+}
+
+void ImageSelector::uploadUniform(ShaderProgram* shaderProgram)
+{
+    // do nothing
 }

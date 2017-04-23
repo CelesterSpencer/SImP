@@ -46,7 +46,7 @@ void Image::resetImageStatus()
     m_hasBeenModified = false;
 }
 
-int Image::load(std::string filePath)
+void Image::load(std::string filePath)
 {
     /*
      * gets the file name from the path
@@ -95,13 +95,13 @@ void Image::reserve(int width, int height, int numberOfChannels)
     m_height = height;
     m_bytesPerPixel = numberOfChannels;
 
-    m_data = std::vector<unsigned char>(width*height*numberOfChannels);
+    m_data = std::vector<float>(width*height*numberOfChannels);
 
     m_hasBeenModified = true;
     m_hasBeenResized = true;
 }
 
-int Image::get(int x, int y, int channel)
+float Image::get(int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
     {
@@ -125,7 +125,7 @@ int Image::get(int x, int y, int channel)
     }
 }
 
-void Image::set(int value, int x, int y, int channel)
+void Image::set(float value, int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
     {
@@ -154,7 +154,7 @@ void Image::set(int value, int x, int y, int channel)
     }
 }
 
-void Image::setRawData(uchar* rawData, int width, int height, int channelNumber)
+void Image::setRawData(float* rawData, int width, int height, int channelNumber)
 {
     if (m_width != width || m_height != height || m_bytesPerPixel != channelNumber)
     {
@@ -170,9 +170,14 @@ void Image::setRawData(uchar* rawData, int width, int height, int channelNumber)
     m_hasBeenModified = true;
 }
 
-uchar* Image::getRawData()
+float* Image::getRawData()
 {
     return m_data.data();
+}
+
+int Image::getRawDataSize()
+{
+    return m_data.size();
 }
 
 int Image::getWidth()

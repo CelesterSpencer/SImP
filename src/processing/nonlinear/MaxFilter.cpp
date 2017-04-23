@@ -1,7 +1,3 @@
-//
-// Created by Windrian on 22.03.2017.
-//
-
 #include "MaxFilter.h"
 
 void MaxFilter::process()
@@ -25,14 +21,14 @@ void MaxFilter::process()
                 {
                     int posX = std::min(std::max(x+fx, 0), in->getWidth()-1);
                     int posY = std::min(std::max(y+fy, 0), in->getHeight()-1);
-                    maxR = std::max(in->get(posX, posY, Image::Channel::RED),   (int) maxR);
-                    maxG = std::max(in->get(posX, posY, Image::Channel::GREEN), (int) maxG);
-                    maxB = std::max(in->get(posX, posY, Image::Channel::BLUE),  (int) maxB);
+                    maxR = std::max(in->get(posX, posY, Image::Channel::RED),   maxR);
+                    maxG = std::max(in->get(posX, posY, Image::Channel::GREEN), maxG);
+                    maxB = std::max(in->get(posX, posY, Image::Channel::BLUE),  maxB);
                 }
             }
-            out->set((int) maxR, x, y, Image::Channel::RED);
-            out->set((int) maxG, x, y, Image::Channel::GREEN);
-            out->set((int) maxB, x, y, Image::Channel::BLUE);
+            out->set(maxR, x, y, Image::Channel::RED);
+            out->set(maxG, x, y, Image::Channel::GREEN);
+            out->set(maxB, x, y, Image::Channel::BLUE);
 
         }
     }

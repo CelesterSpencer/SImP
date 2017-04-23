@@ -83,39 +83,65 @@ void Canvas::drawFiltersMenu()
     {
         // start processing and block layers
         m_currentActiveLayerIdx = LayerManager::getInstance().getActiveLayer();
-        m_isProcessingActive = true;
-        m_isImageTransactionDone = false;
-        LayerManager::getInstance().blockInteraction();
+        std::string filterType = FilterManager::getInstance().getActiveFilter()->getFilterType();
 
-        /*
-         * execute filter application in a different thread
-         */
-        if (validActiveLayer)
+        if(filterType == "gpu filter")
         {
-            spinnerActive = true;
-            m_imageProcessingThread = new std::thread([](
-                    std::vector<Image*>* outputImages,
-                    Image* p_in,
-                    bool* p_spinnerActive,
-                    bool* p_processingActive)
-            {
-                // apply filter for the selected image
-                FilterManager::getInstance().addImage(p_in);
-                FilterManager::getInstance().addRequiredImages();
-                FilterManager::getInstance().applyFilter();
-                *outputImages = FilterManager::getInstance().getOutputImages();
+            // apply filter for the selected image
+            Image* inputImage = LayerManager::getInstance().getImageOfActiveLayer();
+            FilterManager::getInstance().addImage(inputImage);
+            FilterManager::getInstance().addRequiredImages();
+            FilterManager::getInstance().applyFilter();
+            m_tempOutputImages = FilterManager::getInstance().getOutputImages();
 
-                // reset input and output images
-                FilterManager::getInstance().resetFilter();
+            // reset input and output images
+            FilterManager::getInstance().resetFilter();
 
-                // reset variables to allow further filter applications
-                *p_spinnerActive = false;
-                *p_processingActive = false;
-            },&m_tempOutputImages, LayerManager::getInstance().getImageOfActiveLayer(), &spinnerActive, &m_isProcessingActive
-            );
-        } else
-        {
+            // reset variables to allow further filter applications
             m_isProcessingActive = false;
+            m_isImageTransactionDone = false;
+        }
+        else if(filterType == "cpu filter")
+        {
+            m_isProcessingActive = true;
+            m_isImageTransactionDone = false;
+            LayerManager::getInstance().blockInteraction();
+
+            GLenum err = glGetError();
+            if (err != GL_NO_ERROR) {
+                std::cerr << "Error Test: " << std::to_string(err) << std::endl;
+            }
+
+            /*
+             * execute filter application in a different thread
+             */
+            if (validActiveLayer)
+            {
+                spinnerActive = true;
+                m_imageProcessingThread = new std::thread([](
+                        std::vector<Image*>* outputImages,
+                        Image* p_in,
+                        bool* p_spinnerActive,
+                        bool* p_processingActive)
+                {
+                    // apply filter for the selected image
+                    FilterManager::getInstance().addImage(p_in);
+                    FilterManager::getInstance().addRequiredImages();
+                    FilterManager::getInstance().applyFilter();
+                    *outputImages = FilterManager::getInstance().getOutputImages();
+
+                    // reset input and output images
+                    FilterManager::getInstance().resetFilter();
+
+                    // reset variables to allow further filter applications
+                    *p_spinnerActive = false;
+                    *p_processingActive = false;
+                },&m_tempOutputImages, LayerManager::getInstance().getImageOfActiveLayer(), &spinnerActive, &m_isProcessingActive
+                );
+            } else
+            {
+                m_isProcessingActive = false;
+            }
         }
     }
 

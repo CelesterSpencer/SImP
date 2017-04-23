@@ -21,7 +21,7 @@ public:
         m_minRadius = 0;
         m_maxRadius = 10;
         m_interactableCollection.addInteractable(
-                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius)
+                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
         );
     }
     ~MeanFilterGpu() {};

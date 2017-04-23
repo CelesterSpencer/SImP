@@ -24,11 +24,14 @@ class Interactable
 {
 public:
     std::string m_name;
+    std::string m_uniformName = "";
     bool m_isSatisfied = true;
     bool m_hasImage = false;
     Image* m_image = nullptr;
 
     virtual void render(int num) = 0;
+    virtual void uploadUniform(ShaderProgram* shaderProgram) = 0;
+    void setUniformName(std::string uniformName) { m_uniformName = uniformName; }
 };
 
 class InteractableCollection
@@ -38,6 +41,7 @@ public:
     Interactable* getInteractable(std::string name);
     int getNumberOfElements();
     Interactable* getInteractableAt(int index);
+    void uploadInteractableUniforms(ShaderProgram* shaderProgram);
 private:
     std::vector<Interactable*> m_interactableVector;
     std::map<std::string,int> m_nameIndexMap;
@@ -46,9 +50,10 @@ private:
 class FSlider : public Interactable
 {
 public:
-    FSlider(std::string name, float* data, float* min, float* max);
+    FSlider(std::string name, float* data, float* min, float* max, std::string uniformName = "");
 
     void render(int num);
+    void uploadUniform(ShaderProgram* shaderProgram);
 private:
     float* m_data;
     float* m_min;
@@ -58,9 +63,10 @@ private:
 class ISlider : public Interactable
 {
 public:
-    ISlider(std::string name, int* data, int* min, int* max);
+    ISlider(std::string name, int* data, int* min, int* max, std::string uniformName = "");
 
     void render(int num);
+    void uploadUniform(ShaderProgram* shaderProgram);
 private:
     int* m_data;
     int* m_min;
@@ -70,9 +76,10 @@ private:
 class Checkbox : public Interactable
 {
 public:
-    Checkbox(std::string name, bool* data);
+    Checkbox(std::string name, bool* data, std::string uniformName = "");
 
     void render(int num);
+    void uploadUniform(ShaderProgram* shaderProgram);
 private:
     bool* m_data;
 };
@@ -80,10 +87,11 @@ private:
 class SelectBox : public Interactable
 {
 public:
-    SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options);
+    SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options, std::string uniformName = "");
     ~SelectBox();
 
     void render(int num);
+    void uploadUniform(ShaderProgram* shaderProgram);
 
 private:
     bool* m_data;
@@ -99,6 +107,7 @@ public:
     ~ImageSelector();
 
     void render(int num);
+    void uploadUniform(ShaderProgram* shaderProgram);
 
 private:
     GLuint m_imageHandle;

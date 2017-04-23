@@ -10,7 +10,7 @@ void Saturate::process()
     {
         for(int x = 0; x < in->getWidth(); x++)
         {
-            auto max = 0;
+            auto max = 0.f;
             for(int c = 0; c < std::min(in->getChannelNumber(),3); c++)
             {
                 max = std::max(in->get(x,y,c),max);
