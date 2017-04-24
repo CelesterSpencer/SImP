@@ -29,7 +29,6 @@ void MaxFilter::process()
             out->set(maxR, x, y, Image::Channel::RED);
             out->set(maxG, x, y, Image::Channel::GREEN);
             out->set(maxB, x, y, Image::Channel::BLUE);
-
         }
     }
 

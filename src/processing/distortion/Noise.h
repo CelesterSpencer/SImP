@@ -1,7 +1,3 @@
-//
-// Created by Windrian on 21.03.2017.
-//
-
 #ifndef SRCCMAKE_NOISE_H
 #define SRCCMAKE_NOISE_H
 
@@ -15,18 +11,18 @@ public:
         m_name = "Noise";
         m_filterGroup = "distortion";
 
-        m_noiseMin = -125;
-        m_noiseMax = 125;
-        m_minFixed = -255;
-        m_maxFixed = 255;
+        m_noiseMin = -0.5f;
+        m_noiseMax = 0.5f;
+        m_minFixed = -1.f;
+        m_maxFixed = 1.f;
         m_options = {"Normal", "Salt n Pepper"};
         m_selectedOption = 0;
 
         m_interactableCollection.addInteractable(
-                new ISlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
+                new FSlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
         );
         m_interactableCollection.addInteractable(
-                new ISlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
+                new FSlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
         );
         m_interactableCollection.addInteractable(
                 new SelectBox("Type", &m_selectedOption, &m_options)
@@ -37,10 +33,10 @@ public:
     void process();
 
 private:
-    int m_noiseMin;
-    int m_noiseMax;
-    int m_minFixed;
-    int m_maxFixed;
+    float m_noiseMin;
+    float m_noiseMax;
+    float m_minFixed;
+    float m_maxFixed;
     std::vector<std::string> m_options;
     int m_selectedOption;
 };

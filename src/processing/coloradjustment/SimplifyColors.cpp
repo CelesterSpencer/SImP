@@ -6,17 +6,17 @@ void SimplifyColors::process()
     Image* out = new Image;
     out->copyData(in);
 
-    auto rNew = 0.f;
-    auto gNew = 0.f;
-    auto bNew = 0.f;
+    float rNew = 0.f;
+    float gNew = 0.f;
+    float bNew = 0.f;
 
     for(int y = 0; y < in->getHeight(); y++)
     {
         for(int x = 0; x < in->getWidth(); x++)
         {
-            auto r = in->get(x,y,Image::Channel::RED);
-            auto g = in->get(x,y,Image::Channel::GREEN);
-            auto b = in->get(x,y,Image::Channel::BLUE);
+            float r = in->get(x,y,Image::Channel::RED);
+            float g = in->get(x,y,Image::Channel::GREEN);
+            float b = in->get(x,y,Image::Channel::BLUE);
             getClosestColor(r,g,b, rNew, gNew, bNew);
             out->set(rNew,x,y,Image::Channel::RED);
             out->set(gNew,x,y,Image::Channel::GREEN);
@@ -30,19 +30,19 @@ void SimplifyColors::process()
 void SimplifyColors::getClosestColor(float rIn, float gIn, float bIn, float& rOut, float& gOut, float& bOut)
 {
     float distance = FLT_MAX;
-    auto r = 0.f;
-    auto g = 0.f;
-    auto b = 0.f;
+    float r = 0.f;
+    float g = 0.f;
+    float b = 0.f;
 
     // find closest color to the incoming color
     for (int i = 0; i < m_resolution; i++)
     {
-        auto h = (360.f*i)/m_resolution;
+        float h = (360.f*i)/m_resolution;
         hsvToRgb(h,1.f,1.f,r,g,b);
-        auto rDiff = r-rIn;
-        auto gDiff = g-gIn;
-        auto bDiff = b-bIn;
-        auto tempDist = sqrt(rDiff*rDiff + gDiff*gDiff + bDiff*bDiff);
+        float rDiff = r-rIn;
+        float gDiff = g-gIn;
+        float bDiff = b-bIn;
+        float tempDist = sqrt(rDiff*rDiff + gDiff*gDiff + bDiff*bDiff);
         if (tempDist < distance)
         {
             rOut = r;
@@ -56,11 +56,11 @@ void SimplifyColors::getClosestColor(float rIn, float gIn, float bIn, float& rOu
 void SimplifyColors::hsvToRgb(float h, float s, float v, float& r, float& g, float& b)
 {
     int hi = floor(h/60.f); // main color interval
-    auto f = (h/60.f - hi); // relative position inside hi
+    float f = (h/60.f - hi); // relative position inside hi
 
-    auto p = v*(1-s);
-    auto q = v*(1-s*f);
-    auto t = v*(1-s*(1-f));
+    float p = v*(1-s);
+    float q = v*(1-s*f);
+    float t = v*(1-s*(1-f));
 
     switch (hi)
     {
@@ -83,8 +83,4 @@ void SimplifyColors::hsvToRgb(float h, float s, float v, float& r, float& g, flo
             r = v; g = p; b = q;
             break;
     }
-
-    r = r*255;
-    g = g*255;
-    b = b*255;
 }

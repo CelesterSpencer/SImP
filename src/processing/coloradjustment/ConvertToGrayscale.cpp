@@ -15,10 +15,10 @@ void ConvertToGrayscale::process()
     {
         for(int y = 0; y < in->getHeight(); y++)
         {
-            int r = in->get(x, y, Image::Channel::RED);
-            int g = in->get(x, y, Image::Channel::GREEN);
-            int b = in->get(x, y, Image::Channel::BLUE);
-            int gray = 0;
+            float r = in->get(x, y, Image::Channel::RED);
+            float g = in->get(x, y, Image::Channel::GREEN);
+            float b = in->get(x, y, Image::Channel::BLUE);
+            float gray = 0;
             switch (m_selectedOption)
             {
                 case 0: // lightness
@@ -31,7 +31,7 @@ void ConvertToGrayscale::process()
                     gray = 0.21*r + 0.72*g + 0.07*b;
                     break;
             }
-            out->set((int)gray,   x, y, Image::Channel::RGB);
+            out->set(gray,   x, y, Image::Channel::RGB);
         }
     }
 

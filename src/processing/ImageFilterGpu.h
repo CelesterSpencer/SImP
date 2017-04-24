@@ -137,7 +137,10 @@ public:
         /*
          * delete all ssbos
          */
-        // TODO
+        for (int i = 0; i < ssboHandles.size(); i++)
+        {
+            deleteSSBO(&ssboHandles[i]);
+        }
     }
 
 protected:

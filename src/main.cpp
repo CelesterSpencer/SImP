@@ -9,7 +9,6 @@
 /*
  * linear
  */
-#include "processing/linear/MeanFilter.h"
 #include "processing/linear/MeanFilterGpu.h"
 /*
  * non linear
@@ -69,7 +68,6 @@ int main() {
     /*
      * register filters
      */
-    FilterManager::getInstance().registerImageFilter(new MeanFilter);
     FilterManager::getInstance().registerImageFilter(new MeanFilterGpu);
 
     FilterManager::getInstance().registerImageFilter(new MinFilter);

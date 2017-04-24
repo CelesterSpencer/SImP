@@ -30,7 +30,8 @@ int getPixelChannel(int currentIdx, int offsetX, int offsetY, int channel)
     return getIndex(currentIdx,offsetX,offsetY)*channelNumber+channel;
 }
 
-void main() {
+void main()
+{
     // get the index of the current thread
     int threadIdx = int(gl_GlobalInvocationID.x);
     if (threadIdx >= pixelNumber) return;

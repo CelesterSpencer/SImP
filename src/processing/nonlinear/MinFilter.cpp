@@ -15,9 +15,9 @@ void MinFilter::process()
     {
         for(int y = 0; y < in->getHeight(); y++)
         {
-            float minR = 255;
-            float minG = 255;
-            float minB = 255;
+            float minR = 1;
+            float minG = 1;
+            float minB = 1;
             // iterate over filter
             for(int fx = -m_filterRadius; fx <= m_filterRadius; fx++)
             {

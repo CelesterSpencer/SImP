@@ -11,7 +11,7 @@ public:
         /*
          * mandatory filter parameters
          */
-        m_name = "Mean Filter GPU";
+        m_name = "Mean Filter";
         m_filterGroup = "linear";
         setComputeShader("/linear/MeanFilter");
         addOutputImageDescription("Mean filtered image", 0, 0, 0);

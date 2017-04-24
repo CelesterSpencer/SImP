@@ -31,9 +31,9 @@ void LaplaceFilter::process()
                     b += in->get(posX, posY, Image::Channel::BLUE)  * m_laplaceKernel[filterIdx];
                 }
             }
-            out->set((int)r, x, y, Image::Channel::RED);
-            out->set((int)g, x, y, Image::Channel::GREEN);
-            out->set((int)b, x, y, Image::Channel::BLUE);
+            out->set(r, x, y, Image::Channel::RED);
+            out->set(g, x, y, Image::Channel::GREEN);
+            out->set(b, x, y, Image::Channel::BLUE);
 
         }
     }

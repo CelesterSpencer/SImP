@@ -1,7 +1,3 @@
-//
-// Created by Windrian on 22.03.2017.
-//
-
 #include "MedianFilter.h"
 
 void MedianFilter::process()
@@ -14,9 +10,9 @@ void MedianFilter::process()
     int median = (diameter*diameter-1)/2;
 
     // setup vector to store all values
-    std::vector<int> valuesRed;
-    std::vector<int> valuesGreen;
-    std::vector<int> valuesBlue;
+    std::vector<float> valuesRed;
+    std::vector<float> valuesGreen;
+    std::vector<float> valuesBlue;
     valuesRed.reserve(diameter*diameter);
     valuesGreen.reserve(diameter*diameter);
     valuesBlue.reserve(diameter*diameter);
@@ -44,9 +40,9 @@ void MedianFilter::process()
             std::sort(valuesRed.begin(),   valuesRed.end());
             std::sort(valuesGreen.begin(), valuesGreen.end());
             std::sort(valuesBlue.begin(),  valuesBlue.end());
-            out->set((int)valuesRed[median],   x, y, Image::Channel::RED);
-            out->set((int)valuesGreen[median], x, y, Image::Channel::GREEN);
-            out->set((int)valuesBlue[median],  x, y, Image::Channel::BLUE);
+            out->set(valuesRed[median],   x, y, Image::Channel::RED);
+            out->set(valuesGreen[median], x, y, Image::Channel::GREEN);
+            out->set(valuesBlue[median],  x, y, Image::Channel::BLUE);
         }
     }
 
