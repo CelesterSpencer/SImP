@@ -220,6 +220,8 @@ void Layer::uploadData()
     {
         // copy data to gpu
         glBindTexture(GL_TEXTURE_2D, m_gpuImageHandle);
+
+
         switch(m_image->getChannelNumber())
         {
             case 1:

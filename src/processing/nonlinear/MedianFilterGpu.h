@@ -1,25 +1,24 @@
-#ifndef SRCCMAKE_MEANFILTERGPU_H
-#define SRCCMAKE_MEANFILTERGPU_H
+#ifndef SRCCMAKE_MEDIANFILTERGPU_H
+#define SRCCMAKE_MEDIANFILTERGPU_H
 
 #include "processing/ImageFilterGpu.h"
 
-class MeanFilterGpu : public ImageFilterGpu
+class MedianFilterGpu  : public ImageFilterGpu
 {
 public:
-    MeanFilterGpu()
-    {
+    MedianFilterGpu() {
         /*
          * mandatory filter parameters
          */
-        m_name = "Mean Filter";
-        m_filterGroup = "linear";
+        m_name = "Median Filter Gpu";
+        m_filterGroup = "non linear";
 
         /*
          * gpu specific settings
          * its required to get gpu filters working
          */
-        setComputeShader("/linear/MeanFilter");
-        addOutputImageDescription("Mean filtered image", 0, 0, 0);
+        setComputeShader("/nonlinear/MedianFilter");
+        addOutputImageDescription("Median filtered image", 0, 0, 0);
 
         /*
          * interactables the user can interact with
@@ -30,8 +29,8 @@ public:
         m_interactableCollection.addInteractable(
                 new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
         );
-    }
-    ~MeanFilterGpu() {};
+    };
+    ~MedianFilterGpu() {};
 
 private:
     int m_filterRadius;
@@ -39,5 +38,4 @@ private:
     int m_maxRadius;
 };
 
-
-#endif //SRCCMAKE_MEANFILTERGPU_H
+#endif //SRCCMAKE_MEDIANFILTERGPU_H

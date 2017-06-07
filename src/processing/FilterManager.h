@@ -20,6 +20,7 @@ public:
     void resetFilter();
     void applyFilter();
     ImageFilter* getActiveFilter();
+    bool isActiveFilterValid();
 
     int drawFilterMenu(bool validActiveLayer, bool processingActive);
 private:

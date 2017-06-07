@@ -76,6 +76,11 @@ ImageFilter* FilterManager::getActiveFilter()
     return m_imageFilters[m_selectedFilter];
 }
 
+bool FilterManager::isActiveFilterValid()
+{
+    return m_selectedFilter >= 0 && m_selectedFilter < m_imageFilters.size();
+}
+
 int FilterManager::drawFilterMenu(bool validActiveLayer, bool processingActive)
 {
     int mainWindowWidth = WindowManager::getInstance().getWidth();

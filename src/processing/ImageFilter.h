@@ -9,6 +9,11 @@
 class ImageFilter
 {
 public:
+    ImageFilter()
+    {
+        m_filterType = "cpu filter";
+    }
+
     // Filter information
     std::string getName() { return m_name; }
     std::string getFilterGroup() { return m_filterGroup; }

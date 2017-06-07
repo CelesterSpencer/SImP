@@ -63,16 +63,14 @@ void main()
 
     for (int c = 0; c < channelNumber; c++)
     {
-        float sum = 0.0;
+        float max = 0.0;
         for (int y = -filterRadius; y <= filterRadius; y++)
         {
             for (int x = -filterRadius; x <= filterRadius; x++)
             {
-                sum += inputImage[getPixelChannel(0,threadIdx,x,y,c)];
+                max = max(inputImage[getPixelChannel(0,threadIdx,x,y,c)], max);
             }
         }
-        sum /= filterSize*filterSize;
-
-        outputImage[getPixelChannel(1,threadIdx,0,0,c)] = sum;
+        outputImage[getPixelChannel(1,threadIdx,0,0,c)] = max;
     }
 }

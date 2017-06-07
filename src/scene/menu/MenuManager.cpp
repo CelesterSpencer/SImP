@@ -111,3 +111,21 @@ void MenuManager::showMessage(std::string message, int milliseconds)
     };
     m_menus.push_back(Menu(func, milliseconds));
 }
+
+void MenuManager::showSpinner()
+{
+    if(!m_spinner.isActive())
+    {
+        m_spinner.show();
+        auto func = [=]() -> bool
+        {
+            m_spinner.draw();
+            return !m_spinner.isActive();
+        };
+        m_menus.push_back(Menu(func, 0));
+    }
+}
+void MenuManager::hideSpinner()
+{
+    m_spinner.hide();
+}

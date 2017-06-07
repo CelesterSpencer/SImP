@@ -1,6 +1,6 @@
-#include "TestFilter.h"
+#include "MixImages.h"
 
-void TestFilter::process()
+void MixImages::process()
 {
     Image* in1 = getInputImage(1);
     Image* in2 = getInputImage(2);
@@ -31,8 +31,8 @@ void TestFilter::process()
             int y2 = std::floor(y*skipY2);
             for (int c = 0; c < outImageChannelNumber; c++)
             {
-                int val1 = in1->get(x1, y1, c);
-                int val2 = in2->get(x2, y2, c);
+                float val1 = in1->get(x1, y1, c);
+                float val2 = in2->get(x2, y2, c);
                 outImage->set((1-m_alpha)*val1+m_alpha*val2, x, y, c);
             }
         }

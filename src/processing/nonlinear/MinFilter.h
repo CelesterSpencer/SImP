@@ -6,7 +6,8 @@
 class MinFilter : public ImageFilter
 {
 public:
-    MinFilter() {
+    MinFilter()
+    {
         m_name = "Min Filter";
         m_filterGroup = "non linear";
 

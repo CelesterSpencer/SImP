@@ -5,44 +5,25 @@
 #include "scene/Canvas.h"
 #include "rendering/WindowManager.h"
 #include "processing/FilterManager.h"
-
-/*
- * linear
- */
+// linear
 #include "processing/linear/MeanFilterGpu.h"
-/*
- * non linear
- */
-#include "processing/nonlinear/MinFilter.h"
-#include "processing/nonlinear/MaxFilter.h"
+// non linear
+#include "processing/nonlinear/MinFilterGpu.h"
+#include "processing/nonlinear/MaxFilterGpu.h"
 #include "processing/nonlinear/MedianFilter.h"
-/*
- * edge detection
- */
+// edge detection
 #include "processing/edgedetection/LaplaceFilter.h"
-/*
- * color adjustment
- */
+// color adjustment
 #include "processing/coloradjustment/ConvertToGrayscale.h"
 #include "processing/coloradjustment/SimplifyColors.h"
 #include "processing/coloradjustment/Saturate.h"
 #include "processing/coloradjustment/LinearSpread.h"
-/*
- * fft
- */
-#include "processing/fft/FastFourierTransform.h"
-/*
- * distortion
- */
+// distortion
 #include "processing/distortion/Noise.h"
-/*
- * restructure
- */
+// restructure
 #include "processing/restructure/SplitChannels.h"
-/*
- * test
- */
-#include "processing/test/TestFilter.h"
+#include "processing/restructure/MixImages.h"
+
 
 
 // window
@@ -53,47 +34,38 @@ float WINDOW_HEIGHT = 768;
 
 int main() {
 
-    //_________________________________________________//
-    //_________________Initalization___________________//
-    //_________________________________________________//
+    //__________________________________________INIT_RENDERING_ENGINE_________________________________________________//
 
     WindowManager::getInstance().init(WINDOW_WIDTH, WINDOW_HEIGHT);
     GLFWwindow* window = WindowManager::getInstance().getWindow();
-
-    /*
-     * create canvas
-     */
     Canvas canvas;
 
-    /*
-     * register filters
-     */
+
+
+    //________________________________________REGISTER_FILTERS_IN_PROGRAM_____________________________________________//
+
+    // linear filter
     FilterManager::getInstance().registerImageFilter(new MeanFilterGpu);
-
-    FilterManager::getInstance().registerImageFilter(new MinFilter);
-    FilterManager::getInstance().registerImageFilter(new MaxFilter);
+    // non-linear filter
+    FilterManager::getInstance().registerImageFilter(new MinFilterGpu);
+    FilterManager::getInstance().registerImageFilter(new MaxFilterGpu);
     FilterManager::getInstance().registerImageFilter(new MedianFilter);
-
+    // edge detection
     FilterManager::getInstance().registerImageFilter(new LaplaceFilter);
-
+    // color adjustment
     FilterManager::getInstance().registerImageFilter(new ConvertToGrayscale);
     FilterManager::getInstance().registerImageFilter(new SimplifyColors);
     FilterManager::getInstance().registerImageFilter(new Saturate);
     FilterManager::getInstance().registerImageFilter(new LinearSpread);
-
-    FilterManager::getInstance().registerImageFilter(new FastFourierTransform);
-
+    // distortion
     FilterManager::getInstance().registerImageFilter(new Noise);
-
+    // restructure
     FilterManager::getInstance().registerImageFilter(new SplitChannels);
-
-    FilterManager::getInstance().registerImageFilter(new TestFilter);
-
+    FilterManager::getInstance().registerImageFilter(new MixImages);
 
 
-    //_________________________________________________//
-    //___________________Drawing_______________________//
-    //_________________________________________________//
+
+    //_________________________________________________DRAWING________________________________________________________//
 
     // run until user closes the window or presses ALT+F4
     auto lambda = [&](){ canvas.draw(); };

@@ -48,6 +48,58 @@ int getPixelChannel(int imageIdx, int currentIdx, int offsetX, int offsetY, int 
     return getIndex(imageIdx, currentIdx,offsetX,offsetY)*channelNumber+channel;
 }
 
+int iParent(int i) { return int(floor((i-1) / 2.0)); }
+int iLeftChild(int i) { return 2*i+1; }
+
+void siftDown(inout float values[441], int start, int end)
+{
+    int root = start;
+    while(iLeftChild(root) <= end)
+    {
+        int child = iLeftChild(root);
+
+        if(child+1 <= end && values[child] < values[child+1]) child = child+1;
+        if(values[root] < values[child])
+        {
+            // swap
+            float temp = values[root];
+            values[root] = values[child];
+            values[child] = temp;
+
+            // change indices to accomodate for the swap
+            root = child;
+        }
+        else break;
+    }
+}
+
+void heapify(inout float values[441], int length)
+{
+    int start = iParent(length-1);
+    while(start >= 0)
+    {
+        siftDown(values, start, length-1);
+        start -= 1;
+    }
+}
+
+void heapsort(inout float values[441], int length)
+{
+    heapify(values, length);
+    int end = length-1;
+    while(end > 0)
+    {
+        //swap
+        float temp = values[end];
+        values[end] = values[0];
+        values[0] = temp;
+        // reduce size of the heap
+        end -= 1;
+        // restore heap property
+        siftDown(values, 0, end);
+    }
+}
+
 void main()
 {
     // get the index of the current thread
@@ -63,16 +115,24 @@ void main()
 
     for (int c = 0; c < channelNumber; c++)
     {
-        float sum = 0.0;
+        float values[441]; // 21*21
+
+        // collect values
         for (int y = -filterRadius; y <= filterRadius; y++)
         {
             for (int x = -filterRadius; x <= filterRadius; x++)
             {
-                sum += inputImage[getPixelChannel(0,threadIdx,x,y,c)];
+                int i = (y+filterRadius)*filterSize + (x+filterRadius);
+                values[i] = inputImage[getPixelChannel(0,threadIdx,x,y,c)];
             }
         }
-        sum /= filterSize*filterSize;
 
-        outputImage[getPixelChannel(1,threadIdx,0,0,c)] = sum;
+        // sort array
+        heapsort(values, filterSize*filterSize);
+
+        // find the median
+        float median = values[filterSize*filterSize / 2];
+
+        outputImage[getPixelChannel(1,threadIdx,0,0,c)] = median;
     }
 }

@@ -12,7 +12,7 @@
 // project
 #include "util/Types.h"
 #include "util/Singleton.h"
-#include "scene/MenuManager.h"
+#include "../scene/menu/MenuManager.h"
 #include "io/FileHandler.h"
 
 class ImageHandler : public Singleton<ImageHandler>

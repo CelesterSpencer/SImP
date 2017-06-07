@@ -14,6 +14,7 @@
 #include "rendering/WindowManager.h"
 #include "rendering/ColorStyles.h"
 #include "util/Timer.h"
+#include "SpinnerWidget.h"
 
 class MenuManager : public Singleton<MenuManager>
 {
@@ -45,6 +46,9 @@ public:
         std::function<bool()> m_drawFunction;
     };
 
+    /**
+     * Drawing all specified menus
+     */
     void drawMenus();
 
     /**
@@ -59,9 +63,16 @@ public:
      */
     void showMessage(std::string message, int milliseconds);
 
+    /**
+     * Launches a spinner
+     */
+    void showSpinner();
+    void hideSpinner();
+
 private:
     Timer m_timer;
     std::vector<Menu> m_menus;
+    SpinnerWidget m_spinner;
 };
 
 

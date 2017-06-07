@@ -1,7 +1,3 @@
-//
-// Created by Windrian on 11.03.2017.
-//
-
 #include "Canvas.h"
 #include <gtx/rotate_vector.hpp>
 
@@ -9,7 +5,6 @@ Canvas::Canvas()
 {
     //__________________LOAD_SYSTEM_IMAGES____________________//
 
-    m_imageHandleSpinner    = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_SPINNER);
     m_currentActiveLayerIdx = -1;
 }
 
@@ -77,12 +72,14 @@ void Canvas::drawFiltersMenu()
     ImGui::PopStyleColor(1);
 
 
+
     //__________________________________________APPLY_SELECTED_FILTER_________________________________________________//
 
     if (status == 1 && !m_isProcessingActive) // user selected Apply
     {
         // start processing and block layers
         m_currentActiveLayerIdx = LayerManager::getInstance().getActiveLayer();
+        std::cout << FilterManager::getInstance().isActiveFilterValid() << std::endl;
         std::string filterType = FilterManager::getInstance().getActiveFilter()->getFilterType();
 
         if(filterType == "gpu filter")
@@ -117,7 +114,7 @@ void Canvas::drawFiltersMenu()
              */
             if (validActiveLayer)
             {
-                spinnerActive = true;
+                MenuManager::getInstance().showSpinner();
                 m_imageProcessingThread = new std::thread([](
                         std::vector<Image*>* outputImages,
                         Image* p_in,
@@ -145,16 +142,14 @@ void Canvas::drawFiltersMenu()
         }
     }
 
-    /*
-     * copy the result output images to the layers
-     */
+
+
+    //__________________________________________COPY_OUTPUT_IMAGES_TO_LAYERS__________________________________________//
+
     if (!m_isProcessingActive && !m_isImageTransactionDone)
     {
-        Image* out = m_tempOutputImages[0];
-        if (out != nullptr) LayerManager::getInstance().setImage(out, m_currentActiveLayerIdx);
-
-        // create new layers for every other image
-        for (int i = 1; i < m_tempOutputImages.size(); i++)
+        // create new layers for every output image
+        for (int i = 0; i < m_tempOutputImages.size(); i++)
         {
             LayerManager::getInstance().addLayer();
             LayerManager::getInstance().setImage(m_tempOutputImages[i], LayerManager::getInstance().getNumberOfLayers()-1);
@@ -166,45 +161,6 @@ void Canvas::drawFiltersMenu()
         // finish transaction and unblock layers
         m_isImageTransactionDone = true;
         LayerManager::getInstance().unblockInteraction();
-    }
-
-
-    //________________________________________________DRAW_SPINNER____________________________________________________//
-
-    if(spinnerActive)
-    {
-        float windowWidth = 100;
-        float windowHeight= 100;
-        ImGui::SetNextWindowPos(ImVec2(mainWindowWidth/2.0-windowWidth/2.0f,
-                                       mainWindowHeight/2.0-windowHeight/2.0f));
-        ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight));
-        ImGui::Begin("LoadingSpinner", NULL,
-                     ImGuiWindowFlags_NoTitleBar |
-                     ImGuiWindowFlags_NoResize |
-                     ImGuiWindowFlags_NoMove);
-
-        static float angle = 0;
-        auto draw_list = ImGui::GetWindowDrawList();
-        glm::vec2 offset = glm::vec2(ImGui::GetWindowPos().x+windowWidth/2,
-                                     ImGui::GetWindowPos().y+windowHeight/2);
-        float radius = 50;
-        glm::vec2 v1 = glm::vec2(radius*cos(angle),       radius*sin(angle))        + offset;
-        glm::vec2 v2 = glm::vec2(radius*cos(angle+PI/2),  radius*sin(angle+PI/2))   + offset;
-        glm::vec2 v3 = glm::vec2(radius*cos(angle+PI),    radius*sin(angle+PI))     + offset;
-        glm::vec2 v4 = glm::vec2(radius*cos(angle+3*PI/2),radius*sin(angle+3*PI/2)) + offset;
-        draw_list->PushTextureID((GLuint*)(intptr_t)m_imageHandleSpinner);
-        draw_list->PrimReserve(6, 6);
-        draw_list->PrimVtx(ImVec2(v1.x,v1.y),ImVec2(1,0),0xFFFFFFFF);
-        draw_list->PrimVtx(ImVec2(v2.x,v2.y),ImVec2(0,0),0xFFFFFFFF);
-        draw_list->PrimVtx(ImVec2(v3.x,v3.y),ImVec2(0,1),0xFFFFFFFF);
-        draw_list->PrimVtx(ImVec2(v4.x,v4.y),ImVec2(1,1),0xFFFFFFFF);
-        draw_list->PrimVtx(ImVec2(v1.x,v1.y),ImVec2(1,0),0xFFFFFFFF);
-        draw_list->PrimVtx(ImVec2(v3.x,v3.y),ImVec2(0,1),0xFFFFFFFF);
-        draw_list->PopTextureID();
-        float T = 2*PI;
-        angle += T / 2 / ImGui::GetIO().Framerate;
-        if(angle >= T) angle = angle-T;
-
-        ImGui::End();
+        MenuManager::getInstance().hideSpinner();
     }
 }

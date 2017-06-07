@@ -31,9 +31,6 @@ private:
     bool                m_isProcessingActive = false;
     bool                m_isImageTransactionDone = true;
     int                 m_currentActiveLayerIdx;
-
-    // loading spinner icon
-    GLuint              m_imageHandleSpinner;
 };
 
 

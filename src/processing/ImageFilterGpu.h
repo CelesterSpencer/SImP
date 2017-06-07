@@ -11,6 +11,14 @@
 class ImageFilterGpu : public ImageFilter
 {
 public:
+    struct ImageDimensions
+    {
+        int width;
+        int height;
+        int channelNumber;
+        int isInputImage;
+    };
+
     struct OutputImageDescription
     {
         OutputImageDescription(std::string name, int width, int height, int channelNumber)
@@ -38,6 +46,11 @@ public:
         Image* firstInputImage = getInputImage(0);
 
         /*
+         * gpu image struct
+         */
+        std::vector<ImageDimensions> imageDimensions;
+
+        /*
          * create ssbos for all input images
          */
         std::vector<GLuint> ssboHandles;
@@ -50,6 +63,7 @@ public:
             createSSBO<float>(&ssboHandle, imageSize);
             copyDataToSSBO<float>(&ssboHandle, inputImage->getRawData(), imageSize);
             ssboHandles.push_back(ssboHandle);
+            imageDimensions.push_back(ImageDimensions{inputImage->getWidth(),inputImage->getHeight(),inputImage->getChannelNumber(),1});
         }
         std::cout << "created input ssbos" << std::endl;
 
@@ -70,15 +84,24 @@ public:
             std::cout << std::to_string(ssboHandle) << std::endl;
             fillSSBOwithInitialValue<float>(&ssboHandle, 0.0f, imageSize);
             ssboHandles.push_back(ssboHandle);
+            imageDimensions.push_back(ImageDimensions{width,height,channelNumber,0});
         }
         std::cout << "created output ssbos" << std::endl;
 
         /*
+         * create ssbo for gpu image descriptions
+         */
+        GLuint gpuImageDescriptionSSBOHandle = 0;
+        createSSBO<ImageDimensions>(&gpuImageDescriptionSSBOHandle, imageDimensions.size());
+        copyDataToSSBO<ImageDimensions>(&gpuImageDescriptionSSBOHandle, imageDimensions.data(), imageDimensions.size());
+
+        /*
          * bind all ssbos
          */
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, gpuImageDescriptionSSBOHandle);
         for (int i = 0; i < ssboHandles.size(); i++)
         {
-            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i, ssboHandles[i]);
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i+1, ssboHandles[i]);
         }
         std::cout << "bound buffers" << std::endl;
 
@@ -87,13 +110,11 @@ public:
          */
         int pixelNumber = firstInputImage->getWidth()*firstInputImage->getHeight();
         m_computeShader->use();
-        m_computeShader->update("width", firstInputImage->getWidth());
-        m_computeShader->update("height", firstInputImage->getHeight());
-        m_computeShader->update("channelNumber", firstInputImage->getChannelNumber());
         m_computeShader->update("pixelNumber", pixelNumber);
         m_interactableCollection.uploadInteractableUniforms(m_computeShader);
         glDispatchCompute(pixelNumber/256, 1, 1);
         glMemoryBarrier(GL_ALL_BARRIER_BITS);
+        glFinish;
 
         GLuint err = glGetError();
         if (err != GL_NO_ERROR) {
@@ -106,9 +127,10 @@ public:
         /*
          * unbind all ssbos
          */
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
         for (int i = 0; i < ssboHandles.size(); i++)
         {
-            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i, 0);
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i+1, 0);
         }
         std::cout << "unbound ssbos" << std::endl;
 
@@ -137,10 +159,12 @@ public:
         /*
          * delete all ssbos
          */
+        deleteSSBO(&gpuImageDescriptionSSBOHandle);
         for (int i = 0; i < ssboHandles.size(); i++)
         {
             deleteSSBO(&ssboHandles[i]);
         }
+        std::cout << "deleted all ssbos" << std::endl;
     }
 
 protected:
