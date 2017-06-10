@@ -1,5 +1,4 @@
 #include "SpinnerWidget.h"
-#include "scene/SystemFiles.h"
 
 SpinnerWidget::SpinnerWidget()
 {
@@ -11,13 +10,13 @@ SpinnerWidget::~SpinnerWidget()
 
 }
 
-void SpinnerWidget::draw()
+bool SpinnerWidget::draw(int width, int height, float deltaTime)
 {
-    if(!m_isActive) return;
+    if(!m_isActive) return true;
 
     // window dimensions
-    int mainWindowWidth = WindowManager::getInstance().getWidth();
-    int mainWindowHeight = WindowManager::getInstance().getHeight();
+    int mainWindowWidth = width;
+    int mainWindowHeight = height;
     float windowWidth = 100;
     float windowHeight= 100;
 
@@ -52,4 +51,6 @@ void SpinnerWidget::draw()
     if(angle >= T) angle = angle-T;
 
     ImGui::End();
+
+    return true;
 }

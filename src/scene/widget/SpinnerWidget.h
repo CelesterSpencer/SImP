@@ -4,17 +4,21 @@
 // lib
 #include <GL/gl3w.h>
 #include <glm.hpp>
+#include <imgui.h>
 
 // project
+#include "Widget.h"
 #include "util/Types.h"
+#include "scene/SystemFiles.h"
 
-class SpinnerWidget
+class SpinnerWidget : public Widget
 {
 public:
     SpinnerWidget();
     ~SpinnerWidget();
 
-    void draw();
+    // inherit from Widget
+    bool draw(int width, int height, float deltaTime);
 
     void show() { m_isActive = true; }
     void hide() { m_isActive = false; }
@@ -24,6 +28,5 @@ private:
     bool m_isActive;
     GLuint m_imageHandleSpinner;
 };
-
 
 #endif //SRCCMAKE_SPINNERWIDGET_H

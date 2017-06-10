@@ -43,27 +43,7 @@ bool ImageHandler::loadImage(std::string filePath, std::vector<float>* data, int
 
 bool ImageHandler::saveImage(std::string filePath, float* data, int width, int height, int channelNumber)
 {
-    /*
-     * if file already exists show overwrite dialog
-     */
-    int savingStatus = -1;
-    if(FileHandler::getInstance().exists(filePath))
-    {
-        MenuManager::getInstance().showYesNoDialog("Do you want to overwrite "+filePath+"?", [=](int savingStatus)
-        {
-            std::cout << "selected " << std::to_string(savingStatus) << std::endl;
-            if(savingStatus == 1)
-            {
-                stbi_write_png(filePath.c_str(), width, height, channelNumber, data, 0);
-                MenuManager::getInstance().showMessage("Saved "+filePath+".", 3000);
-            }
-        });
-    }
-    else
-    {
-        stbi_write_png(filePath.c_str(), width, height, channelNumber, data, 0);
-        MenuManager::getInstance().showMessage("Saved "+filePath+".", 3000);
-    }
+    stbi_write_png(filePath.c_str(), width, height, channelNumber, data, 0);
 }
 
 void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, float* data, int width, int height, int channelNumber)

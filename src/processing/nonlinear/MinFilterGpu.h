@@ -10,7 +10,7 @@ public:
         /*
          * mandatory filter parameters
          */
-        m_name = "Max Filter Gpu";
+        m_name = "Min Filter (Gpu)";
         m_filterGroup = "non linear";
 
         /*

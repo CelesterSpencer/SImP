@@ -1,10 +1,10 @@
-// standard includes
-#include <fstream>
+// include program
+#include <core/Program.h>
 
-// internal includes
-#include "scene/Canvas.h"
-#include "rendering/WindowManager.h"
-#include "processing/FilterManager.h"
+//_________________________________________________//
+//                 IMAGE FILTERS                   //
+//_________________________________________________//
+
 // linear
 #include "processing/linear/MeanFilterGpu.h"
 // non linear
@@ -26,50 +26,41 @@
 
 
 
-// window
-float WINDOW_WIDTH = 1024;
-float WINDOW_HEIGHT = 768;
-
-
-
 int main() {
+    //________________________________________________INIT_PROGRAM____________________________________________________//
 
-    //__________________________________________INIT_RENDERING_ENGINE_________________________________________________//
-
-    WindowManager::getInstance().init(WINDOW_WIDTH, WINDOW_HEIGHT);
-    GLFWwindow* window = WindowManager::getInstance().getWindow();
-    Canvas canvas;
+    Program program;
 
 
 
-    //________________________________________REGISTER_FILTERS_IN_PROGRAM_____________________________________________//
+    //___________________________________________ADD_FILTERS_TO_PROGRAM_______________________________________________//
 
     // linear filter
-    FilterManager::getInstance().registerImageFilter(new MeanFilterGpu);
+    program.addFilter(new MeanFilterGpu);
     // non-linear filter
-    FilterManager::getInstance().registerImageFilter(new MinFilterGpu);
-    FilterManager::getInstance().registerImageFilter(new MaxFilterGpu);
-    FilterManager::getInstance().registerImageFilter(new MedianFilter);
+    program.addFilter(new MinFilterGpu);
+    program.addFilter(new MaxFilterGpu);
+    program.addFilter(new MedianFilter);
     // edge detection
-    FilterManager::getInstance().registerImageFilter(new LaplaceFilter);
+    program.addFilter(new LaplaceFilter);
     // color adjustment
-    FilterManager::getInstance().registerImageFilter(new ConvertToGrayscale);
-    FilterManager::getInstance().registerImageFilter(new SimplifyColors);
-    FilterManager::getInstance().registerImageFilter(new Saturate);
-    FilterManager::getInstance().registerImageFilter(new LinearSpread);
+    program.addFilter(new ConvertToGrayscale);
+    program.addFilter(new SimplifyColors);
+    program.addFilter(new Saturate);
+    program.addFilter(new LinearSpread);
     // distortion
-    FilterManager::getInstance().registerImageFilter(new Noise);
+    program.addFilter(new Noise);
     // restructure
-    FilterManager::getInstance().registerImageFilter(new SplitChannels);
-    FilterManager::getInstance().registerImageFilter(new MixImages);
+    program.addFilter(new SplitChannels);
+    program.addFilter(new MixImages);
 
 
 
-    //_________________________________________________DRAWING________________________________________________________//
+    //________________________________________________RUN_PROGRAM_____________________________________________________//
 
-    // run until user closes the window or presses ALT+F4
-    auto lambda = [&](){ canvas.draw(); };
-    WindowManager::getInstance().render(lambda);
+    program.run();
+
+
 
     return 0;
 }

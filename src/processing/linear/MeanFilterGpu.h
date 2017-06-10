@@ -11,7 +11,7 @@ public:
         /*
          * mandatory filter parameters
          */
-        m_name = "Mean Filter";
+        m_name = "Mean Filter (Gpu)";
         m_filterGroup = "linear";
 
         /*

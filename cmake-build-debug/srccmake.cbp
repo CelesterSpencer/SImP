@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="srccmake"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SImP">
+				<Option output="C:/Development/CLanguages/SImP/cmake-build-debug/SImP.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DSHADERS_PATH=&quot;C:/Development/CLanguages/SImP/shader&quot;"/>
+					<Add option="-DRESOURCES_PATH=&quot;C:/Development/CLanguages/SImP/resources&quot;"/>
+					<Add option="-DDEPENDENCIES_PATH=&quot;&quot;"/>
+					<Add directory="C:/Development/CLanguages/SImP/src"/>
+					<Add directory="C:/Program Files (x86)/glfw/include"/>
+					<Add directory="C:/Program Files (x86)/glm/glm"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/gl3w/include"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/imgui"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/stb"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/mingw_thread"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/include"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/include"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 SImP"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SImP/fast">
+				<Option output="C:/Development/CLanguages/SImP/cmake-build-debug/SImP.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DSHADERS_PATH=&quot;C:/Development/CLanguages/SImP/shader&quot;"/>
+					<Add option="-DRESOURCES_PATH=&quot;C:/Development/CLanguages/SImP/resources&quot;"/>
+					<Add option="-DDEPENDENCIES_PATH=&quot;&quot;"/>
+					<Add directory="C:/Development/CLanguages/SImP/src"/>
+					<Add directory="C:/Program Files (x86)/glfw/include"/>
+					<Add directory="C:/Program Files (x86)/glm/glm"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/gl3w/include"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/imgui"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/stb"/>
+					<Add directory="C:/Development/CLanguages/SImP/deps/mingw_thread"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/include"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/include-fixed"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/include"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/Program Files/mingw-w64/x86_64/mingw64/lib/gcc/../../x86_64-w64-mingw32/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 SImP/fast"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="copy_shaders">
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 copy_shaders"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/gl3w/src/gl3w.c">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imconfig.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui_draw.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui_impl_glfw_gl3.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui_impl_glfw_gl3.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/imgui_internal.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/stb_rect_pack.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/stb_textedit.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/imgui/stb_truetype.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/stb/stb_image.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/deps/stb/stb_image_write.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/Program.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/Program.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/FileHandler.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/FileHandler.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/ImageHandler.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/ImageHandler.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/Interactable.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/io/Interactable.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/main.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/FilterManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/FilterManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/ConvertToGrayscale.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/ConvertToGrayscale.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/LinearSpread.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/LinearSpread.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/Saturate.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/Saturate.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/SimplifyColors.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/SimplifyColors.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/distortion/Noise.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/distortion/Noise.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/edgedetection/LaplaceFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/edgedetection/LaplaceFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/fft/FastFourierTransform.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/fft/FastFourierTransform.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MaxFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MaxFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MedianFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MedianFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MinFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MinFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/MixImages.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/MixImages.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/SplitChannels.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/SplitChannels.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/Shader.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/Shader.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/ShaderProgram.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/ShaderProgram.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/WindowManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/WindowManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Image.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Image.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Layer.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Layer.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/LayerManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/LayerManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/SystemFiles.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/SystemFiles.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/DialogWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/DialogWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/FilterSettingsWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/FilterSettingsWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/LayerWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/LayerWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/MessageWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/MessageWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/SpinnerWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/SpinnerWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/WidgetManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/WidgetManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/cmake/FindGLFW3.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/cmake/FindGLM.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
