@@ -1,28 +1,28 @@
 // include program
-#include <core/Program.h>
+#include "core/Program.h"
 
 //_________________________________________________//
 //                 IMAGE FILTERS                   //
 //_________________________________________________//
 
 // linear
-#include "processing/linear/MeanFilterGpu.h"
+#include "filters/linear/MeanFilterGpu.h"
 // non linear
-#include "processing/nonlinear/MinFilterGpu.h"
-#include "processing/nonlinear/MaxFilterGpu.h"
-#include "processing/nonlinear/MedianFilter.h"
+#include "filters/nonlinear/MinFilterGpu.h"
+#include "filters/nonlinear/MaxFilterGpu.h"
+#include "filters/nonlinear/MedianFilter.h"
 // edge detection
-#include "processing/edgedetection/LaplaceFilter.h"
+#include "filters/edgedetection/LaplaceFilter.h"
 // color adjustment
-#include "processing/coloradjustment/ConvertToGrayscale.h"
-#include "processing/coloradjustment/SimplifyColors.h"
-#include "processing/coloradjustment/Saturate.h"
-#include "processing/coloradjustment/LinearSpread.h"
+#include "filters/coloradjustment/ConvertToGrayscale.h"
+#include "filters/coloradjustment/SimplifyColors.h"
+#include "filters/coloradjustment/Saturate.h"
+#include "filters/coloradjustment/LinearSpread.h"
 // distortion
-#include "processing/distortion/Noise.h"
+#include "filters/distortion/Noise.h"
 // restructure
-#include "processing/restructure/SplitChannels.h"
-#include "processing/restructure/MixImages.h"
+#include "filters/restructure/SplitChannels.h"
+#include "filters/restructure/MixImages.h"
 
 
 

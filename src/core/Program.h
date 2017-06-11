@@ -5,14 +5,14 @@
 #include <thread.h>
 
 // project
-#include "scene/widget/WidgetManager.h"
-#include "scene/widget/FilterSettingsWidget.h"
-#include "scene/widget/SpinnerWidget.h"
-#include "scene/widget/MessageWidget.h"
-#include "scene/widget/DialogWidget.h"
-#include "scene/widget/LayerWidget.h"
-#include "processing/FilterManager.h"
-#include "io/ImageHandler.h"
+#include "core/widget/WidgetManager.h"
+#include "core/widget/FilterSettingsWidget.h"
+#include "core/widget/SpinnerWidget.h"
+#include "core/widget/MessageWidget.h"
+#include "core/widget/DialogWidget.h"
+#include "core/widget/LayerWidget.h"
+#include "core/scene/FilterManager.h"
+#include "core/io/ImageHandler.h"
 
 class Program
 {
@@ -24,7 +24,6 @@ public:
     void run();
 
 private:
-    std::thread* m_imageProcessingThread;
     // window
     float WINDOW_WIDTH = 1024;
     float WINDOW_HEIGHT = 768;

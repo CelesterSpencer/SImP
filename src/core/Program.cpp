@@ -1,4 +1,4 @@
-#include <scene/widget/SpinnerWidget.h>
+#include "core/widget/SpinnerWidget.h"
 #include "Program.h"
 
 Program::Program()
@@ -23,6 +23,11 @@ void Program::run()
     int mainWindowHeight = WindowManager::getInstance().getHeight();
 
 
+    // setup layers
+    LayerManager layerManager;
+
+
+
     // setup menu widget manager
     WidgetManager widgetManager;
 
@@ -33,7 +38,8 @@ void Program::run()
     SpinnerWidget spinnerWidget; // spinner should be above everything
     widgetManager.addWidget(&spinnerWidget, 100);
 
-    LayerWidget layerWidget(mainWindowWidth, mainWindowHeight);
+
+    LayerWidget layerWidget(&layerManager, mainWindowWidth, mainWindowHeight);
     widgetManager.addWidget(&layerWidget, 10);
 
 
@@ -42,11 +48,9 @@ void Program::run()
 
     auto saveAction = [&]()
     {
-        Image* image = layerWidget.getSelectedImage();
+        Image* image = layerManager.getImageOfActiveLayer();
         std::string fileName = image->getFileName()+"_modified";
-        std::string filePath = RESOURCES_PATH"/output/"+fileName+".png";
-        ImageHandler::getInstance().saveImage(filePath, image->getRawData(),
-                                              image->getWidth(), image->getHeight(), image->getChannelNumber());
+        image->save();
         widgetManager.addWidget(new MessageWidget("Saved "+fileName+".", 10000.f), 60, true);
     };
 
@@ -55,7 +59,7 @@ void Program::run()
         [&]
         {
             // get file name and create file path for saving
-            Image* image = layerWidget.getSelectedImage();
+            Image* image = layerManager.getImageOfActiveLayer();
             std::string fileName = image->getFileName()+"_modified";
             std::string filePath = RESOURCES_PATH"/output/"+fileName+".png";
 
@@ -97,24 +101,25 @@ void Program::run()
     auto synchronizeImages = [&]()
     {
         // copy output images to the layers
-        if (shouldSynchronizeImages)
+        if (FilterManager::getInstance().getFilterStatus() == FilterManager::FilterStatus::DONE)
         {
+            std::cout << "copy images" << std::endl;
             // create new layers for every output image
             auto outputImages = FilterManager::getInstance().getOutputImages();
             for (int i = 0; i < outputImages.size(); i++)
             {
-                LayerManager::getInstance().addLayer();
-                LayerManager::getInstance().setImage(outputImages[i], LayerManager::getInstance().getNumberOfLayers()-1);
+                layerManager.addLayer();
+                layerManager.setImage(outputImages[i], layerManager.getNumberOfLayers()-1);
             }
 
             // reset temp images
             outputImages.clear();
 
-            // reset input and output images
-            FilterManager::getInstance().resetFilter();
+            // cleanup image filters and set filtermanager to ready
+            FilterManager::getInstance().cleanup();
 
             // finish transaction and unblock layers
-            LayerManager::getInstance().unblockInteraction();
+            layerWidget.enable();
             spinnerWidget.hide();
             shouldSynchronizeImages = false;
         }
@@ -133,49 +138,24 @@ void Program::run()
         widgetManager.addMenuTabEntry("Filter", "    "+imageFilter->getName(), [&, i]
         {
             ImageFilter* imageFilter = FilterManager::getInstance().getImageFilters()[i];
-            widgetManager.addWidget(new FilterSettingsWidget(imageFilter, [&, i](int status)
+            widgetManager.addWidget(new FilterSettingsWidget(imageFilter, &widgetManager, &layerManager,
+                [&, i](int status)
                 {
                     if(status == 0) return; // user selected cancel
 
-                    // start processing and block layers
-                    ImageFilter* imageFilter = FilterManager::getInstance().getImageFilters()[i];
-                    std::string filterType = imageFilter->getFilterType();
-
-
-                    // execute gpu filter
-                    if(filterType == "gpu filter")
+                    // if selected image filter is on cpu then block the layers and show spinner widget
+                    ImageFilter* p_imageFilter = FilterManager::getInstance().getImageFilters()[i];
+                    if(p_imageFilter->getFilterType() == "cpu filter")
                     {
-                        // apply filter for the selected image
-                        Image* inputImage = layerWidget.getSelectedImage();
-                        FilterManager::getInstance().addImage(inputImage);
-                        FilterManager::getInstance().addRequiredImages();
-                        FilterManager::getInstance().applyFilter();
-
-                        // filter execution is done
-                        shouldSynchronizeImages = true;
-                    }
-                    // execute cpu filter
-                    else if(filterType == "cpu filter")
-                    {
-                        LayerManager::getInstance().blockInteraction();
+                        layerWidget.disable();
                         spinnerWidget.show();
-
-                        // execute filter application in a different thread
-                        m_imageProcessingThread = new std::thread(
-                        [](Image* p_in,  bool* p_shouldSynchronizeImages)
-                            {
-                                // apply filter for the selected image
-                                FilterManager::getInstance().addImage(p_in);
-                                FilterManager::getInstance().addRequiredImages();
-                                FilterManager::getInstance().applyFilter();
-
-                                // reset variables to allow further filter applications
-                                *p_shouldSynchronizeImages = true;
-                            },LayerManager::getInstance().getImageOfActiveLayer(), &shouldSynchronizeImages
-                        );
                     }
+
+                    // execute image filter
+                    Image* p_selectedImage = layerManager.getImageOfActiveLayer();
+                    FilterManager::getInstance().execute(p_imageFilter, p_selectedImage);
                 }
-            ), 30);
+            ), 30, true);
         });
     }
 
@@ -186,12 +166,14 @@ void Program::run()
     auto blockUnblockFilterMenuTab = [&]
     {
         // check state of filter menu
-        if(FilterManager::getInstance().isRunning() || layerWidget.getActiveLayerIndex() == -1)
+        if(FilterManager::getInstance().getFilterStatus() == FilterManager::FilterStatus::RUNNING ||
+                !layerManager.isValidImageSelected())
             widgetManager.disableMenuTab("Filter");
         else
             widgetManager.enableMenuTab("Filter");
 
-        if(layerWidget.getActiveLayerIndex() == -1)
+        // check state of save dialog
+        if(!layerManager.isValidImageSelected())
             widgetManager.disableMenuTabEntry("File", "Save");
         else
             widgetManager.enableMenuTabEntry("File", "Save");

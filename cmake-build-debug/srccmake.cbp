@@ -155,181 +155,187 @@
 		<Unit filename="C:/Development/CLanguages/SImP/src/core/Program.h">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/FileHandler.cpp">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/FileHandler.cpp">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/FileHandler.h">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/FileHandler.h">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/ImageHandler.cpp">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/ImageHandler.cpp">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/ImageHandler.h">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/ImageHandler.h">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/Interactable.cpp">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/Interactable.cpp">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/io/Interactable.h">
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/Interactable.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/SystemFiles.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/io/SystemFiles.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/Shader.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/Shader.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/ShaderProgram.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/ShaderProgram.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/WindowManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/rendering/WindowManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/FilterManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/FilterManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/Image.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/Image.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/Layer.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/Layer.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/LayerManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/scene/LayerManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/DialogWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/DialogWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/FilterSettingsWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/FilterSettingsWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/ImageSelectionWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/ImageSelectionWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/LayerWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/LayerWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/MessageWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/MessageWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/SpinnerWidget.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/SpinnerWidget.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/WidgetManager.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/core/widget/WidgetManager.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/ConvertToGrayscale.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/ConvertToGrayscale.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/LinearSpread.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/LinearSpread.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/Saturate.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/Saturate.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/SimplifyColors.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/coloradjustment/SimplifyColors.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/distortion/Noise.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/distortion/Noise.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/edgedetection/LaplaceFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/edgedetection/LaplaceFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/fft/FastFourierTransform.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/fft/FastFourierTransform.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MaxFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MaxFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MinFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MinFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MixImages.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MixImages.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/SplitChannels.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/SplitChannels.h">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/main.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/FilterManager.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/FilterManager.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/ConvertToGrayscale.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/ConvertToGrayscale.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/LinearSpread.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/LinearSpread.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/Saturate.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/Saturate.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/SimplifyColors.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/coloradjustment/SimplifyColors.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/distortion/Noise.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/distortion/Noise.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/edgedetection/LaplaceFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/edgedetection/LaplaceFilter.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/fft/FastFourierTransform.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/fft/FastFourierTransform.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MaxFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MaxFilter.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MedianFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MedianFilter.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MinFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/nonlinear/MinFilter.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/MixImages.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/MixImages.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/SplitChannels.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/processing/restructure/SplitChannels.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/Shader.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/Shader.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/ShaderProgram.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/ShaderProgram.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/WindowManager.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/rendering/WindowManager.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Image.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Image.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Layer.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/Layer.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/LayerManager.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/LayerManager.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/SystemFiles.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/SystemFiles.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/DialogWidget.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/DialogWidget.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/FilterSettingsWidget.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/FilterSettingsWidget.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/LayerWidget.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/LayerWidget.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/MessageWidget.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/MessageWidget.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/SpinnerWidget.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/SpinnerWidget.h">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/WidgetManager.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/scene/widget/WidgetManager.h">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/CMakeLists.txt">
