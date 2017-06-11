@@ -65,7 +65,6 @@ bool FilterSettingsWidget::draw(int width, int height, float deltaTime)
         ImGui::SameLine(5);
         if(ImGui::Button("Apply", ImVec2(ImGui::GetWindowWidth()/2 - 12, 20)) && isSatisfied)
         {
-            // change state to
             m_callbackFunction(1);
             status = false;
         }

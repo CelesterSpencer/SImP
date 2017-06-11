@@ -151,6 +151,7 @@ public:
             float* rawData = getDataFromSSBO<float>(&ssboHandle, imageSize);
             Image* outputImage = new Image;
             outputImage->setRawData(rawData, width, height, channelNumber);
+            outputImage->setFileName(firstInputImage->getFileName());
             returnImage(outputImage);
             delete rawData;
         }

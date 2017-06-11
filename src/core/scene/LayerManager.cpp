@@ -88,7 +88,7 @@ Image* LayerManager::getImageOfActiveLayer()
 {
     if(isValidImageSelected())
         return m_layers[m_activeLayer]->getImage();
-    return nullptr;
+    throw std::out_of_range("Accessing layers out of range.");
 }
 
 Image* LayerManager::getImage(int layerIndex)

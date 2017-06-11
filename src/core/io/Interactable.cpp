@@ -200,7 +200,7 @@ void ImageSelector::render(int num, WidgetManager* p_widgetManager, LayerManager
     if(ImGui::ImageButton((GLuint*)(intptr_t)m_imageHandleOpen, ImVec2(19,19), ImVec2(0,0), ImVec2(1,1), 0) && !m_dialogIsOpen)
     {
         p_widgetManager->addWidget(new ImageSelectionWidget(p_layerManager,
-            [&](int status, int selectedImageIndex)
+            [&, p_layerManager](int status, int selectedImageIndex)
             {
                 if(status == 1)
                 {

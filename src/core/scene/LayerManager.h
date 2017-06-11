@@ -3,6 +3,7 @@
 
 // std
 #include <vector>
+#include <stdexcept>
 
 // project
 #include "core/io/FileHandler.h"

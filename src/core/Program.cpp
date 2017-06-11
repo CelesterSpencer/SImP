@@ -73,12 +73,7 @@ void Program::run()
                     [&](int savingStatus)
                     {
                         if(savingStatus == 1)
-                        {
-                            Image* image = layerManager.getImageOfActiveLayer();
-                            std::string fileName = image->getFileName()+"_modified";
-                            image->save();
-                            widgetManager.addWidget(new MessageWidget("Saved "+fileName+".", 10000.f), 60, true);
-                        }
+                            saveAction();
                     }
                 );
                 widgetManager.addWidget(p_fileOverwriteDialog, 50, true);
@@ -106,7 +101,6 @@ void Program::run()
         // copy output images to the layers
         if (FilterManager::getInstance().getFilterStatus() == FilterManager::FilterStatus::DONE)
         {
-            std::cout << "copy images" << std::endl;
             // create new layers for every output image
             auto outputImages = FilterManager::getInstance().getOutputImages();
             for (int i = 0; i < outputImages.size(); i++)
