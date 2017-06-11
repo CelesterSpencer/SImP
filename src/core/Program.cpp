@@ -74,7 +74,10 @@ void Program::run()
                     {
                         if(savingStatus == 1)
                         {
-                            saveAction();
+                            Image* image = layerManager.getImageOfActiveLayer();
+                            std::string fileName = image->getFileName()+"_modified";
+                            image->save();
+                            widgetManager.addWidget(new MessageWidget("Saved "+fileName+".", 10000.f), 60, true);
                         }
                     }
                 );

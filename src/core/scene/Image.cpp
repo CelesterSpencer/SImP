@@ -70,7 +70,7 @@ void Image::save()
     std::string filePath = RESOURCES_PATH"/output/"+m_fileName+"_modified.png";
     std::cout << std::to_string(m_fileName.size()) << std::endl;
     std::cout << filePath << std::endl;
-    ImageHandler::getInstance().saveImage(filePath, m_data.data(), m_width, m_height, m_bytesPerPixel);
+    ImageHandler::getInstance().saveImage(filePath, m_data, m_width, m_height, m_bytesPerPixel);
 }
 
 void Image::copyData(Image* in)
