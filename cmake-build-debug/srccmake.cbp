@@ -317,12 +317,6 @@
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.h">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MinFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MinFilter.h">
-			<Option target="SImP"/>
-		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MixImages.cpp">
 			<Option target="SImP"/>
 		</Unit>
@@ -333,6 +327,12 @@
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/SplitChannels.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/test/Multithreading.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/test/Multithreading.h">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/main.cpp">

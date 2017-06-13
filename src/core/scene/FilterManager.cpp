@@ -73,7 +73,7 @@ void FilterManager::applyFilter(ImageFilter* imageFilter)
     }
     m_timer.getDeltaTime();
     imageFilter->process();
-    //std::cout << "Filter " << imageFilter->getName() << ": " << std::to_string(m_timer.getDeltaTime()) << std::endl;
+    std::cout << "Filter " << imageFilter->getName() << ": " << std::to_string(m_timer.getDeltaTime()) << std::endl;
     m_outputImages = std::vector<Image*>(imageFilter->getOutputImages());
 
     // filter execution is done

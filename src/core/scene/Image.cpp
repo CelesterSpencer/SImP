@@ -101,6 +101,8 @@ void Image::reserve(int width, int height, int numberOfChannels)
     m_hasBeenResized = true;
 }
 
+
+
 float Image::get(int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
@@ -154,6 +156,56 @@ void Image::set(float value, int x, int y, int channel)
     }
 }
 
+void Image::parallel(std::function<float(int w, int h, int c, float val)> processingFunction, int threadCount)
+{
+    std::cout << "start" << std::endl;
+    Timer timer; timer.getDeltaTime();
+    Image* temp = new Image;
+    temp->copyData(this);
+    std::cout << "create output image" << std::to_string(timer.getDeltaTime()) << std::endl;
+
+    auto threadFunction = [](Image* p_out, Image* p_temp, int from, int to,
+                             std::function<float(int w, int h, int c, float val)> function)
+    {
+        for(int i = from; i < to; i++)
+        {
+            int w = i % p_out->getWidth();
+            int h = i / p_out->getWidth();
+            for(int c = 0; c < p_out->getChannelNumber(); c++)
+            {
+                float val = p_out->get(w, h, c);
+                float result = function(w,h,c,val);
+                p_temp->set(result,w,h,c);
+            }
+        }
+    };
+
+    // init threads
+    int dataSize = this->getWidth()*this->getHeight();
+    int chunkSize = (int)std::ceil((float)dataSize / threadCount);
+    std::vector<std::thread*> threads;
+    for(int i = 0; i < threadCount; i++)
+    {
+        int from = i*chunkSize;
+        int to = std::min((i+1)*chunkSize, dataSize);
+        threads.push_back(new std::thread(threadFunction, this, temp, from, to, processingFunction));
+    }
+
+    // wait for threads to finish
+    for (auto& th : threads)
+        th->join();
+    std::cout << "processing: " << std::to_string(timer.getDeltaTime()) << std::endl;
+
+    // copy back results
+    this->copyData(temp);
+    std::cout << "copy result data: " << std::to_string(timer.getDeltaTime()) << std::endl;
+
+    // cleanup
+    delete temp;
+}
+
+
+
 void Image::setRawData(float* rawData, int width, int height, int channelNumber)
 {
     if (m_width != width || m_height != height || m_bytesPerPixel != channelNumber)
@@ -175,11 +227,6 @@ float* Image::getRawData()
     return m_data.data();
 }
 
-int Image::getRawDataSize()
-{
-    return m_data.size();
-}
-
 int Image::getWidth()
 {
     return m_width;
@@ -188,26 +235,6 @@ int Image::getWidth()
 int Image::getHeight()
 {
     return m_height;
-}
-
-int Image::getMin()
-{
-    int min = INT_MAX;
-    for (int i = 0; i < m_data.size(); i++)
-    {
-        min = (m_data[i] < min) ? m_data[i] : min;
-    }
-    return min;
-}
-
-int Image::getMax()
-{
-    int max = INT_MIN;
-    for (int i = 0; i < m_data.size(); i++)
-    {
-        max = (m_data[i] > max) ? m_data[i] : max;
-    }
-    return max;
 }
 
 int Image::calculateIndex(int x, int y, int channel)

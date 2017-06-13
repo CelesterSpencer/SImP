@@ -3,13 +3,13 @@
 
 #include "filters/ImageFilter.h"
 
-class MinFilter : public ImageFilter
+class Multithreading : public ImageFilter
 {
 public:
-    MinFilter()
+    Multithreading()
     {
-        m_name = "Min Filter";
-        m_filterGroup = "non linear";
+        m_name = "Multithreading";
+        m_filterGroup = "test";
 
         m_filterRadius = 5;
         m_minRadius = 0;
@@ -17,8 +17,15 @@ public:
         m_interactableCollection.addInteractable(
                 new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius)
         );
+
+        m_threadCount = 4;
+        m_threadsMin = 1;
+        m_threadsMax = 16;
+        m_interactableCollection.addInteractable(
+                new ISlider("Thread count", &m_threadCount, &m_threadsMin, &m_threadsMax)
+        );
     };
-    ~MinFilter() {};
+    ~Multithreading() {};
 
     void process();
 
@@ -26,6 +33,10 @@ private:
     int m_filterRadius;
     int m_minRadius;
     int m_maxRadius;
+
+    int m_threadCount;
+    int m_threadsMin;
+    int m_threadsMax;
 };
 
 

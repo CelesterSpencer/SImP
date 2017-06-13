@@ -23,6 +23,8 @@
 // restructure
 #include "filters/restructure/SplitChannels.h"
 #include "filters/restructure/MixImages.h"
+// test
+#include "filters/test/Multithreading.h"
 
 
 
@@ -53,6 +55,10 @@ int main() {
     // restructure
     program.addFilter(new SplitChannels);
     program.addFilter(new MixImages);
+    // test
+    program.addFilter(new Multithreading);
+    program.addFilter(new Multithreading);
+    program.addFilter(new Multithreading);
 
 
 
