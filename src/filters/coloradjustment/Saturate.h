@@ -6,11 +6,7 @@
 class Saturate : public ImageFilter
 {
 public:
-    Saturate() {
-        m_name = "Saturate";
-        m_filterGroup = "color adjustment";
-    };
-    ~Saturate() {};
+    Saturate();
 
     void process();
 };

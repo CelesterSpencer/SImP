@@ -41,7 +41,7 @@ void WindowManager::init(int width, int height)
     // create glfw window
     m_window = glfwCreateWindow(m_viewportWidth, m_viewportHeight, "SImP", NULL, NULL);
     if (!m_window) {
-        std::cout << "GLFW Window couldn't be initialized" << std::endl;
+        std::cerr << "GLFW Window couldn't be initialized" << std::endl;
         std::exit(1);
     }
 
@@ -57,13 +57,13 @@ void WindowManager::init(int width, int height)
     //_______________________INIT_GL3W________________________//
 
     if (gl3wInit()) {
-        std::cout << "GLEW couldn't be initialized" << std::endl;
+        std::cerr << "GLEW couldn't be initialized" << std::endl;
         std::exit(1);
     }
 
     // check for glew features
     if (!gl3wIsSupported(3,2)) {
-        std::cout << "OpenGL 3.2 not supported" << std::endl;
+        std::cerr << "OpenGL 3.2 not supported" << std::endl;
         std::exit(1);
     }
 

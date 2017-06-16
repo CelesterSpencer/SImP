@@ -1,14 +1,15 @@
-//
-// Created by Windrian on 28.03.2017.
-//
-
 #include "LinearSpread.h"
+
+LinearSpread::LinearSpread()
+{
+    m_name = "Linear Spread";
+    m_filterGroup = "color adjustment";
+};
 
 void LinearSpread::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     float minR = 1;
     float minG = 1;

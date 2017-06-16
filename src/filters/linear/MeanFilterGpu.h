@@ -31,7 +31,6 @@ public:
                 new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
         );
     }
-    ~MeanFilterGpu() {};
 
 private:
     int m_filterRadius;

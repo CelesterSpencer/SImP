@@ -6,11 +6,7 @@
 class LinearSpread : public ImageFilter
 {
 public:
-    LinearSpread() {
-        m_name = "Linear Spread";
-        m_filterGroup = "color adjustment";
-    };
-    ~LinearSpread() {};
+    LinearSpread();
 
     void process();
 };

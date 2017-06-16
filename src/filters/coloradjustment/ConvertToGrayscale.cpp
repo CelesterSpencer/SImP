@@ -1,14 +1,22 @@
-//
-// Created by Windrian on 23.03.2017.
-//
-
 #include "ConvertToGrayscale.h"
+
+ConvertToGrayscale::ConvertToGrayscale()
+{
+    m_name = "Convert to grayscale";
+    m_filterGroup = "color adjustment";
+
+    m_options = {"Lightness", "Average", "Luminocity"};
+    m_selectedOption = 0;
+
+    m_interactableCollection.addInteractable(
+            new SelectBox("Convert to gray",&m_selectedOption, &m_options)
+    );
+};
 
 void ConvertToGrayscale::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     // iterate over image
     for(int x = 0; x < in->getWidth(); x++)

@@ -6,6 +6,8 @@
 #include <fstream>
 #include <gtc/type_ptr.hpp>
 
+#define SHADERS_PATH "shader"
+
 using namespace std;
 
 ShaderProgram::ShaderProgram(std::string computeshader)
@@ -239,8 +241,10 @@ void ShaderProgram::link()
 		}
 		else
 		{
+            #ifdef DEBUG
             std::cout << "Shader program linking OK." << std::endl;
-		}
+            #endif
+        }
 	}
 	else
 	{
@@ -290,7 +294,7 @@ GLuint ShaderProgram::uniform(const std::string &uniform)
 	}
 	else
 	{
-        std::cout << "ERROR: Could not find uniform in shader program: " << uniform << std::endl;
+        std::cerr << "ERROR: Could not find uniform in shader program: " << uniform << std::endl;
 		return -1;
 	}
 }

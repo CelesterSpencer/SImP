@@ -24,8 +24,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add option="-DSHADERS_PATH=&quot;C:/Development/CLanguages/SImP/shader&quot;"/>
-					<Add option="-DRESOURCES_PATH=&quot;C:/Development/CLanguages/SImP/resources&quot;"/>
+					<Add option="-DSHADERS_PATH=&quot;&quot;"/>
+					<Add option="-DRESOURCES_PATH=&quot;&quot;"/>
 					<Add option="-DDEPENDENCIES_PATH=&quot;&quot;"/>
 					<Add directory="C:/Development/CLanguages/SImP/src"/>
 					<Add directory="C:/Program Files (x86)/glfw/include"/>
@@ -55,8 +55,8 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add option="-DSHADERS_PATH=&quot;C:/Development/CLanguages/SImP/shader&quot;"/>
-					<Add option="-DRESOURCES_PATH=&quot;C:/Development/CLanguages/SImP/resources&quot;"/>
+					<Add option="-DSHADERS_PATH=&quot;&quot;"/>
+					<Add option="-DRESOURCES_PATH=&quot;&quot;"/>
 					<Add option="-DDEPENDENCIES_PATH=&quot;&quot;"/>
 					<Add directory="C:/Development/CLanguages/SImP/src"/>
 					<Add directory="C:/Program Files (x86)/glfw/include"/>
@@ -94,6 +94,16 @@
 				<Option type="4"/>
 				<MakeCommands>
 					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 copy_shaders"/>
+					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="copy_images">
+				<Option working_dir="C:/Development/CLanguages/SImP/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 copy_images"/>
 					<CompileFile command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="C:/PROGRA~1/MINGW-~1/x86_64/mingw64/bin/mingw32-make.exe -f &quot;C:/Development/CLanguages/SImP/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -293,6 +303,12 @@
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/distortion/Noise.h">
 			<Option target="SImP"/>
 		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/distortion/Whirl.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/distortion/Whirl.h">
+			<Option target="SImP"/>
+		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/edgedetection/LaplaceFilter.cpp">
 			<Option target="SImP"/>
 		</Unit>
@@ -305,16 +321,16 @@
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/fft/FastFourierTransform.h">
 			<Option target="SImP"/>
 		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MaxFilter.cpp">
-			<Option target="SImP"/>
-		</Unit>
-		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MaxFilter.h">
-			<Option target="SImP"/>
-		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.cpp">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MergeChannels.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MergeChannels.h">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MixImages.cpp">

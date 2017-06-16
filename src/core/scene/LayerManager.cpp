@@ -60,15 +60,43 @@ int LayerManager::getNumberOfLayers()
 
 void LayerManager::loadImage(std::string filepath, int layerIndex)
 {
+    // get the file name from the path
+    auto index = filepath.find_last_of("/\\") + 1;
+    std::string fileName = (index < filepath.size()) ? filepath.substr(index) : filepath;
+    auto indexFileEnding = fileName.find_last_of(".");
+    fileName = (indexFileEnding < fileName.size()) ? fileName.substr(0,indexFileEnding) : fileName;
+
+    // actually loading the data
+    std::vector<float> data;
+    int width, height, channelCount;
+    ImageHandler::getInstance().loadImage(filepath, &data, width, height, channelCount);
+
+    // either create new image or use existing image
     if(!m_layers[layerIndex]->hasImage())
     {
+        // create image from provided data
         Image* p_image = new Image;
-        p_image->load(filepath);
+        p_image->m_fileName = fileName;
+        p_image->m_width = width;
+        p_image->m_height = height;
+        p_image->m_channelNumber = channelCount;
+        p_image->m_data = data;
+        p_image->m_hasBeenModified = true;
+        p_image->m_hasBeenResized = true;
+
+        // add image to layer
         m_layers[layerIndex]->setImage(p_image);
     }
     else
     {
-        m_layers[layerIndex]->getImage()->load(filepath);
+        Image* p_image = m_layers[layerIndex]->getImage();
+        p_image->m_fileName = fileName;
+        p_image->m_width = width;
+        p_image->m_height = height;
+        p_image->m_channelNumber = channelCount;
+        p_image->m_data = data;
+        p_image->m_hasBeenModified = true;
+        p_image->m_hasBeenResized = true;
     }
 }
 void LayerManager::setImage(Image* image, int layerIndex)

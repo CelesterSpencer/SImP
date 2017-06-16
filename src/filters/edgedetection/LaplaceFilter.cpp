@@ -1,14 +1,20 @@
-//
-// Created by Windrian on 22.03.2017.
-//
-
 #include "LaplaceFilter.h"
+
+LaplaceFilter::LaplaceFilter()
+{
+    m_name = "Laplace Filter";
+    m_filterGroup = "edge detection";
+
+    static const int data[] = { 0,-1, 0,
+                                -1, 4,-1,
+                                0,-1, 0 };
+    m_laplaceKernel = std::vector<int>(data, data + 9);
+};
 
 void LaplaceFilter::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     // iterate over image
     for(int x = 0; x < in->getWidth(); x++)

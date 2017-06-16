@@ -32,10 +32,7 @@ void MenuTab::addEntry(std::string entryName, std::function<void()> action, int 
 {
     m_entries.push_back(new MenuTabEntry(entryName, action, priority, color, true, type));
     m_nameEntryMap[entryName] = m_entries[m_entries.size()-1];
-    std::sort(m_entries.begin(), m_entries.end(), [](MenuTabEntry* a, MenuTabEntry* b) -> bool
-    {
-        return a->priority < b->priority;
-    });
+    std::stable_sort(m_entries.begin(), m_entries.end(), [](MenuTabEntry* a, MenuTabEntry* b) { return a->priority < b->priority; });
 }
 void MenuTab::enableEntry(std::string entryName)
 {

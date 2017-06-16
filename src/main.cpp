@@ -20,8 +20,10 @@
 #include "filters/coloradjustment/LinearSpread.h"
 // distortion
 #include "filters/distortion/Noise.h"
+#include "filters/distortion/Whirl.h"
 // restructure
 #include "filters/restructure/SplitChannels.h"
+#include "filters/restructure/MergeChannels.h"
 #include "filters/restructure/MixImages.h"
 // test
 #include "filters/test/Multithreading.h"
@@ -52,12 +54,12 @@ int main() {
     program.addFilter(new LinearSpread);
     // distortion
     program.addFilter(new Noise);
+    program.addFilter(new Whirl);
     // restructure
     program.addFilter(new SplitChannels);
+    program.addFilter(new MergeChannels);
     program.addFilter(new MixImages);
     // test
-    program.addFilter(new Multithreading);
-    program.addFilter(new Multithreading);
     program.addFilter(new Multithreading);
 
 

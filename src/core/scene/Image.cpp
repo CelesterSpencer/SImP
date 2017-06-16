@@ -2,103 +2,47 @@
 
 Image::Image()
 {
-    m_fileName = "Unnamed";
+    m_fileName = "Unnamed image";
     m_width = 0;
     m_height = 0;
-    m_bytesPerPixel = 0;
+    m_channelNumber = 0;
     m_hasBeenModified = false;
     m_hasBeenResized = false;
 }
-
+Image::Image(const Image* other)
+{
+    m_fileName      = other->m_fileName;
+    m_width         = other->m_width;
+    m_height        = other->m_height;
+    m_channelNumber = other->m_channelNumber;
+    m_data          = other->m_data;
+    m_hasBeenResized  = true;
+    m_hasBeenModified = true;
+}
+Image::Image(int width, int height, int channelNumber, float* p_data, std::string filename)
+{
+    m_fileName      = filename;
+    m_width         = width;
+    m_height        = height;
+    m_channelNumber = channelNumber;
+    if(p_data != nullptr)
+        m_data = std::vector<float>(p_data, p_data + width*height*channelNumber);
+    else
+        m_data = std::vector<float>(width*height*channelNumber);
+    m_hasBeenResized  = true;
+    m_hasBeenModified = true;
+}
 Image::~Image()
 {
     std::cout << "Delete image" << std::endl;
 }
-
-std::string Image::getFileName()
+Image& Image::operator=(Image&& other)
 {
-    return m_fileName;
-}
-
-void Image::setFileName(std::string fileName)
-{
-    m_fileName = fileName;
-}
-
-int Image::getChannelNumber()
-{
-    return m_bytesPerPixel;
-}
-
-bool Image::hasBeenResized()
-{
-    return m_hasBeenResized;
-}
-
-bool Image::hasBeenModified()
-{
-    return m_hasBeenModified;
-}
-
-void Image::resetImageStatus()
-{
-    m_hasBeenResized = false;
-    m_hasBeenModified = false;
-}
-
-void Image::load(std::string filePath)
-{
-    /*
-     * gets the file name from the path
-     */
-    auto index = filePath.find_last_of("/\\") + 1;
-    m_fileName = (index < filePath.size()) ? filePath.substr(index) : filePath;
-    auto indexFileEnding = m_fileName.find_last_of(".");
-    m_fileName = (indexFileEnding < m_fileName.size()) ? m_fileName.substr(0,indexFileEnding) : m_fileName;
-
-    /*
-     * actually loading the data
-     */
-    ImageHandler::getInstance().loadImage(filePath, &m_data, m_width, m_height, m_bytesPerPixel);
-
-    m_hasBeenModified = true;
-    m_hasBeenResized = true;
-}
-
-void Image::save()
-{
-    std::string filePath = RESOURCES_PATH"/output/"+m_fileName+"_modified.png";
-    std::cout << std::to_string(m_fileName.size()) << std::endl;
-    std::cout << filePath << std::endl;
-    ImageHandler::getInstance().saveImage(filePath, m_data, m_width, m_height, m_bytesPerPixel);
-}
-
-void Image::copyData(Image* in)
-{
-    if (m_width != in->getWidth() || m_height != in->getHeight() || m_bytesPerPixel != in->m_bytesPerPixel)
-    {
-        m_hasBeenResized = true;
-    }
-
-    m_fileName = in->m_fileName;
-    m_width = in->m_width;
-    m_height = in->m_height;
-    m_bytesPerPixel = in->m_bytesPerPixel;
-    m_data = in->m_data;
-
-    m_hasBeenModified = true;
-}
-
-void Image::reserve(int width, int height, int numberOfChannels)
-{
-    m_width = width;
-    m_height = height;
-    m_bytesPerPixel = numberOfChannels;
-
-    m_data = std::vector<float>(width*height*numberOfChannels);
-
-    m_hasBeenModified = true;
-    m_hasBeenResized = true;
+    this->m_fileName = other.m_fileName;
+    this->m_width = other.m_width;
+    this->m_height = other.m_height;
+    this->m_channelNumber = other.m_channelNumber;
+    this->m_data = other.m_data;
 }
 
 
@@ -126,7 +70,6 @@ float Image::get(int x, int y, int channel)
         return 0;
     }
 }
-
 void Image::set(float value, int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
@@ -155,40 +98,45 @@ void Image::set(float value, int x, int y, int channel)
         std::cerr << "Accessing image out of bounds" << std::endl;
     }
 }
-
-void Image::parallel(std::function<float(int w, int h, int c, float val)> processingFunction, int threadCount)
+void Image::parallel(std::function<float(Image* img, int x, int y, int c)> processingFunction)
 {
     std::cout << "start" << std::endl;
     Timer timer; timer.getDeltaTime();
-    Image* temp = new Image;
-    temp->copyData(this);
+    Image* temp = new Image(this);
     std::cout << "create output image" << std::to_string(timer.getDeltaTime()) << std::endl;
 
-    auto threadFunction = [](Image* p_out, Image* p_temp, int from, int to,
-                             std::function<float(int w, int h, int c, float val)> function)
+    // function executed by every thread
+    auto threadFunction = [](Image* p_out, Image* p_temp, int fromX, int toX, int fromY, int toY,
+                             std::function<float(Image* img, int x, int y, int c)> func)
     {
-        for(int i = from; i < to; i++)
+        for(int y = fromY; y < toY; y++)
         {
-            int w = i % p_out->getWidth();
-            int h = i / p_out->getWidth();
-            for(int c = 0; c < p_out->getChannelNumber(); c++)
+            for(int x = fromX; x < toX; x++)
             {
-                float val = p_out->get(w, h, c);
-                float result = function(w,h,c,val);
-                p_temp->set(result,w,h,c);
+                for(int c = 0; c < p_out->getChannelNumber(); c++)
+                {
+                    float result = func(p_out,x,y,c);
+                    p_temp->set(result,x,y,c);
+                }
             }
         }
     };
 
     // init threads
-    int dataSize = this->getWidth()*this->getHeight();
-    int chunkSize = (int)std::ceil((float)dataSize / threadCount);
+    int chunkSizeX = (int)std::ceil((float)this->getWidth() / 2);
+    int chunkSizeY = (int)std::ceil((float)this->getHeight() / 2);
     std::vector<std::thread*> threads;
-    for(int i = 0; i < threadCount; i++)
+    for(int y = 0; y < 2; y++)
     {
-        int from = i*chunkSize;
-        int to = std::min((i+1)*chunkSize, dataSize);
-        threads.push_back(new std::thread(threadFunction, this, temp, from, to, processingFunction));
+        for(int x = 0; x < 2; x++)
+        {
+            int fromX = y*chunkSizeX;
+            int toX = std::min((y+1)*chunkSizeX, this->getWidth());
+            int fromY = x*chunkSizeY;
+            int toY = std::min((x+1)*chunkSizeY, this->getHeight());
+            threads.push_back(new std::thread(threadFunction, this, temp, fromX, toX,
+                                              fromY, toY, processingFunction));
+        }
     }
 
     // wait for threads to finish
@@ -197,7 +145,7 @@ void Image::parallel(std::function<float(int w, int h, int c, float val)> proces
     std::cout << "processing: " << std::to_string(timer.getDeltaTime()) << std::endl;
 
     // copy back results
-    this->copyData(temp);
+    *this = temp;
     std::cout << "copy result data: " << std::to_string(timer.getDeltaTime()) << std::endl;
 
     // cleanup
@@ -206,42 +154,30 @@ void Image::parallel(std::function<float(int w, int h, int c, float val)> proces
 
 
 
-void Image::setRawData(float* rawData, int width, int height, int channelNumber)
+std::string Image::getFileName()
 {
-    if (m_width != width || m_height != height || m_bytesPerPixel != channelNumber)
-    {
-        m_hasBeenResized = true;
-    }
-
-    m_data.clear();
-    m_data.insert(m_data.end(), rawData, rawData+width*height*channelNumber);
-    m_width = width;
-    m_height = height;
-    m_bytesPerPixel = channelNumber;
-
-    m_hasBeenModified = true;
+    return m_fileName;
 }
-
-float* Image::getRawData()
-{
-    return m_data.data();
-}
-
 int Image::getWidth()
 {
     return m_width;
 }
-
 int Image::getHeight()
 {
     return m_height;
 }
+int Image::getChannelNumber()
+{
+    return m_channelNumber;
+}
+
+
 
 int Image::calculateIndex(int x, int y, int channel)
 {
-    if(channel < m_bytesPerPixel)
+    if(channel < m_channelNumber)
     {
-        return y*m_width*m_bytesPerPixel + x*m_bytesPerPixel + channel;
+        return y*m_width*m_channelNumber + x*m_channelNumber + channel;
     }
-    return y*m_width*m_bytesPerPixel + x*m_bytesPerPixel + Channel::RED;
+    return y*m_width*m_channelNumber + x*m_channelNumber + Channel::RED;
 }

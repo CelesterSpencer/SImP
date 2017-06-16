@@ -1,5 +1,18 @@
 #include "FastFourierTransform.h"
 
+FastFourierTransform::FastFourierTransform()
+{
+    m_name = "Fast Fourier Transform";
+    m_filterGroup = "fft";
+
+    m_interactableCollection.addInteractable(
+            new Checkbox("Inverse", &m_isInverse)
+    );
+    m_interactableCollection.addInteractable(
+            new ImageSelector("Phase image")
+    );
+};
+
 void FastFourierTransform::process()
 {
     Image* in = getInputImage(0);
@@ -17,10 +30,8 @@ void FastFourierTransform::process()
     std::vector<comp> complexMat(sizeX*sizeY, 0);
 
     // init the result image
-    Image*MagnitudeImage = new Image;
-    MagnitudeImage->reserve(sizeX, sizeY, 1); // gray scale image
-    Image*PhaseImage = new Image;
-    PhaseImage->reserve(sizeX, sizeY, 1); // gray scale image
+    Image* MagnitudeImage = new Image(sizeX, sizeY, 1); // gray scale image
+    Image* PhaseImage     = new Image(sizeX, sizeY, 1); // gray scale image
 
 
     // fill input image

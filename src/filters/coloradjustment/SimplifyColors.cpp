@@ -1,10 +1,23 @@
 #include "SimplifyColors.h"
 
+SimplifyColors::SimplifyColors()
+{
+    m_name = "Simplify colors";
+    m_filterGroup = "color adjustment";
+
+    m_resolution = 3;
+    m_minResolution = 3;
+    m_maxResolution = 30;
+
+    m_interactableCollection.addInteractable(
+            new ISlider("Number of colors", &m_resolution, &m_minResolution, &m_maxResolution)
+    );
+};
+
 void SimplifyColors::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     float rNew = 0.f;
     float gNew = 0.f;

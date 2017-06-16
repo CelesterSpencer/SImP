@@ -1,10 +1,22 @@
 #include "MedianFilter.h"
 
+MedianFilter::MedianFilter()
+{
+    m_name = "Median Filter";
+    m_filterGroup = "non linear";
+
+    m_filterRadius = 2;
+    m_minRadius = 0;
+    m_maxRadius = 10;
+    m_interactableCollection.addInteractable(
+            new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius)
+    );
+};
+
 void MedianFilter::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     int diameter = m_filterRadius*2 + 1;
     int median = (diameter*diameter-1)/2;

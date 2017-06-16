@@ -1,29 +1,35 @@
 #include "Multithreading.h"
 
+Multithreading::Multithreading()
+{
+    m_name = "Multithreading";
+    m_filterGroup = "test";
+
+    m_noiseMin = -0.5f;
+    m_noiseMax = 0.5f;
+    m_minFixed = -1.f;
+    m_maxFixed = 1.f;
+
+    m_interactableCollection.addInteractable(
+            new FSlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
+    );
+    m_interactableCollection.addInteractable(
+            new FSlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
+    );
+};
+
 void Multithreading::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     // iterate over image
-    out->parallel([=](int w, int h, int c, float val) -> float
+    out->parallel([=](Image* img, int x, int y, int c) -> float
     {
-            float min = 1;
-
-            // iterate over filter
-            for(int fx = -m_filterRadius; fx <= m_filterRadius; fx++)
-            {
-                for (int fy = -m_filterRadius; fy <= m_filterRadius; fy++)
-                {
-                    int posX = std::min(std::max(w+fx, 0), in->getWidth()-1);
-                    int posY = std::min(std::max(h+fy, 0), in->getHeight()-1);
-                    min = std::min(out->get(posX, posY, c), min);
-                }
-            }
-
-            return min;
-    }, m_threadCount);
+        float random = rand() % int(m_noiseMax-m_noiseMin + 1) + m_noiseMin;
+        float val = std::max(std::min(img->get(x, y, c) + random, 1.f), 0.f);
+        return val;
+    });
 
     returnImage(out);
 }

@@ -1,4 +1,6 @@
 #include "ImageHandler.h"
+#include "core/scene/Image.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -41,12 +43,12 @@ bool ImageHandler::loadImage(std::string filePath, std::vector<float>* data, int
     return true;
 }
 
-bool ImageHandler::saveImage(std::string filePath, std::vector<float>& data, int width, int height, int channelNumber)
+bool ImageHandler::saveImage(std::string filePath, Image* p_image)
 {
     std::vector<unsigned char> outData;
-    for(auto& entry : data)
-        outData.push_back(entry*255);
-    stbi_write_png(filePath.c_str(), width, height, channelNumber, outData.data(), 0);
+    for(int i = 0; i < p_image->m_width*p_image->m_height*p_image->m_channelNumber; i++)
+        outData.push_back(p_image->m_data[i]*255);
+    stbi_write_png(filePath.c_str(), p_image->m_width, p_image->m_height, p_image->m_channelNumber, outData.data(), 0);
 }
 
 void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, float* data, int width, int height, int channelNumber)

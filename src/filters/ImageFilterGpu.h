@@ -61,11 +61,10 @@ public:
             GLuint ssboHandle = 0;
             int imageSize = inputImage->getWidth()*inputImage->getHeight()*inputImage->getChannelNumber();
             createSSBO<float>(&ssboHandle, imageSize);
-            copyDataToSSBO<float>(&ssboHandle, inputImage->getRawData(), imageSize);
+            copyDataToSSBO<float>(&ssboHandle, inputImage->m_data.data(), imageSize);
             ssboHandles.push_back(ssboHandle);
             imageDimensions.push_back(ImageDimensions{inputImage->getWidth(),inputImage->getHeight(),inputImage->getChannelNumber(),1});
         }
-        std::cout << "created input ssbos" << std::endl;
 
         /*
          * create ssbos for all output images
@@ -81,12 +80,10 @@ public:
 
             GLuint ssboHandle = 0;
             createSSBO<float>(&ssboHandle, imageSize);
-            std::cout << std::to_string(ssboHandle) << std::endl;
             fillSSBOwithInitialValue<float>(&ssboHandle, 0.0f, imageSize);
             ssboHandles.push_back(ssboHandle);
             imageDimensions.push_back(ImageDimensions{width,height,channelNumber,0});
         }
-        std::cout << "created output ssbos" << std::endl;
 
         /*
          * create ssbo for gpu image descriptions
@@ -103,7 +100,6 @@ public:
         {
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i+1, ssboHandles[i]);
         }
-        std::cout << "bound buffers" << std::endl;
 
         /*
          * upload all user defined variables and execute the compute shader
@@ -120,7 +116,6 @@ public:
         if (err != GL_NO_ERROR) {
             std::cerr << "Error after shader execution: " << std::to_string(err) << std::endl;
         }
-        std::cout << "executed compute shader" << std::endl;
 
 
 
@@ -132,7 +127,6 @@ public:
         {
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, i+1, 0);
         }
-        std::cout << "unbound ssbos" << std::endl;
 
         /*
          * download all output images
@@ -149,13 +143,10 @@ public:
 
             GLuint ssboHandle = ssboHandles[i+inputImagesNumber];
             float* rawData = getDataFromSSBO<float>(&ssboHandle, imageSize);
-            Image* outputImage = new Image;
-            outputImage->setRawData(rawData, width, height, channelNumber);
-            outputImage->setFileName(firstInputImage->getFileName());
+            Image* outputImage = new Image(width, height, channelNumber, rawData, firstInputImage->getFileName());
             returnImage(outputImage);
             delete rawData;
         }
-        std::cout << "downloaded ssbos" << std::endl;
 
         /*
          * delete all ssbos
@@ -165,7 +156,6 @@ public:
         {
             deleteSSBO(&ssboHandles[i]);
         }
-        std::cout << "deleted all ssbos" << std::endl;
     }
 
 protected:

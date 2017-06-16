@@ -38,6 +38,37 @@ protected:
     std::string m_filterType = "cpu filter";
     InteractableCollection m_interactableCollection;
 
+
+    void init(std::string filterName, std::string filterGroupName)
+    {
+        m_name = filterName;
+        m_filterGroup = filterGroupName;
+    }
+
+    void addUserInput(std::string text)
+    {
+        m_interactableCollection.addInteractable(new ImageSelector(text));
+    }
+    void addUserInput(std::string text, bool* val)
+    {
+        m_interactableCollection.addInteractable(new Checkbox(text, val));
+    }
+    void addUserInput(std::string text, int* selectedOption, std::vector<std::string>* options)
+    {
+        m_interactableCollection.addInteractable(
+                new SelectBox(text, selectedOption, options)
+        );
+    }
+    void addUserInput(std::string text, int* val, int* min, int* max)
+    {
+        m_interactableCollection.addInteractable(new ISlider(text, val, min, max));
+    }
+    void addUserInput(std::string text, float* val, float* min, float* max)
+    {
+        m_interactableCollection.addInteractable(new FSlider(text, val, min, max));
+    }
+
+
     int getNumberOfInputImages() { return m_inputImages.size(); }
     Image* getInputImage(int index) { return m_inputImages[index]; }
     void returnImage(Image* out) { m_outputImages.push_back(out); }

@@ -109,7 +109,7 @@ bool LayerWidget::draw(int width, int height, float deltaTime)
                 outputText.push_back(buffer[strIdx]);
             }
 
-            currentLayer->getImage()->setFileName(outputText);
+            currentLayer->getImage()->m_fileName = outputText;
         }
         else
         {

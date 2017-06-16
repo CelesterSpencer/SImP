@@ -6,11 +6,7 @@
 class SplitChannels : public ImageFilter
 {
 public:
-    SplitChannels() {
-        m_name = "Split channels";
-        m_filterGroup = "restructure";
-    };
-    ~SplitChannels() {};
+    SplitChannels();
 
     void process();
 };

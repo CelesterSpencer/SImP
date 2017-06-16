@@ -1,5 +1,11 @@
 #include "SplitChannels.h"
 
+SplitChannels::SplitChannels()
+{
+    m_name = "Split channels";
+    m_filterGroup = "restructure";
+};
+
 void SplitChannels::process()
 {
     Image* in = getInputImage(0);
@@ -8,8 +14,7 @@ void SplitChannels::process()
     std::vector<Image*> outputImages;
     for (int i = 0; i < in->getChannelNumber(); i++)
     {
-        Image* out = new Image;
-        out->reserve(in->getWidth(), in->getHeight(), 1);
+        Image* out = new Image(in->getWidth(), in->getHeight(), 1);
         outputImages.push_back(out);
     }
 

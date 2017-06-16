@@ -8,16 +8,7 @@
 class LaplaceFilter : public ImageFilter
 {
 public:
-    LaplaceFilter() {
-        m_name = "Laplace Filter";
-        m_filterGroup = "edge detection";
-
-        static const int data[] = { 0,-1, 0,
-                                   -1, 4,-1,
-                                    0,-1, 0 };
-        m_laplaceKernel = std::vector<int>(data, data + 9);
-    };
-    ~LaplaceFilter() {};
+    LaplaceFilter();
 
     void process();
 

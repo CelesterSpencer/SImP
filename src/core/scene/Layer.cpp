@@ -69,7 +69,7 @@ void Layer::render(ShaderProgram* shaderProgram)
     if (hasImage())
     {
         // upload data if image had been modified
-        if (m_image->hasBeenModified()) uploadData();
+        if (m_image->m_hasBeenModified) uploadData();
 
         // calculate scale to fit images aspect ratio
         float widthScale = 1;
@@ -149,7 +149,7 @@ void Layer::makeBuffer(float zPos)
 void Layer::uploadData()
 {
     //________________________________________________REPLACE_IMAGE___________________________________________________//
-    if (m_gpuImageHandle == 0 || m_image->hasBeenResized())
+    if (m_gpuImageHandle == 0 || m_image->m_hasBeenResized)
     {
         /*
          * delete old data
@@ -184,17 +184,17 @@ void Layer::uploadData()
         switch(m_image->getChannelNumber())
         {
             case 1:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, m_image->getWidth(), m_image->getHeight(), 0, GL_RED, GL_FLOAT, m_image->getRawData());
+                glTexImage2D(GL_TEXTURE_2D, 0,GL_RED, m_image->getWidth(), m_image->getHeight(), 0, GL_RED, GL_FLOAT, m_image->m_data.data());
                 break;
             case 3:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, m_image->getWidth(), m_image->getHeight(), 0, GL_RGB, GL_FLOAT, m_image->getRawData());
+                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, m_image->getWidth(), m_image->getHeight(), 0, GL_RGB, GL_FLOAT, m_image->m_data.data());
                 break;
             case 4:
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, m_image->getWidth(), m_image->getHeight(), 0, GL_RGBA, GL_FLOAT, m_image->getRawData());
+                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, m_image->getWidth(), m_image->getHeight(), 0, GL_RGBA, GL_FLOAT, m_image->m_data.data());
                 break;
             default:
                 std::cerr << "Unknown format for bytes per pixel... Changed to \"4\"" << std::endl;
-                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, m_image->getWidth(), m_image->getHeight(), 0, GL_RGBA, GL_FLOAT, m_image->getRawData());
+                glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, m_image->getWidth(), m_image->getHeight(), 0, GL_RGBA, GL_FLOAT, m_image->m_data.data());
                 break;
         }
 
@@ -214,7 +214,8 @@ void Layer::uploadData()
         glBindTexture(GL_TEXTURE_2D, 0);
 
         // image is no longer in modified or resized state
-        m_image->resetImageStatus();
+        m_image->m_hasBeenResized = false;
+        m_image->m_hasBeenModified = false;
     }
     //_____________________________________________NO_IMAGE_UPLOADED_YET______________________________________________//
     else
@@ -226,20 +227,23 @@ void Layer::uploadData()
         switch(m_image->getChannelNumber())
         {
             case 1:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RED, GL_FLOAT, m_image->getRawData());
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RED, GL_FLOAT, m_image->m_data.data());
                 break;
             case 3:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RGB, GL_FLOAT, m_image->getRawData());
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RGB, GL_FLOAT, m_image->m_data.data());
                 break;
             case 4:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RGBA, GL_FLOAT, m_image->getRawData());
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_image->getWidth(), m_image->getHeight(), GL_RGBA, GL_FLOAT, m_image->m_data.data());
                 break;
             default:
                 std::cerr << "Unknown format for bytes per pixel. Texture won't be updated" << std::endl;
                 break;
         }
         glBindTexture(GL_TEXTURE_2D, 0);
-        m_image->resetImageStatus();
+
+        // image is no longer in modified or resized state
+        m_image->m_hasBeenResized = false;
+        m_image->m_hasBeenModified = false;
     }
 
     GLenum err = glGetError();

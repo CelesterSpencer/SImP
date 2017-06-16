@@ -15,9 +15,18 @@
 #include "core/util/Timer.h"
 
 class Image {
+    friend class ImageFilterGpu;
+    friend class LayerManager;
+    friend class ImageHandler;
+    friend class LayerWidget;
+    friend class Layer;
 public:
     Image();
+    Image(const Image* other);
+    Image(int width, int height, int channelNumber, float* p_data = nullptr, std::string filename = "Unnamed image");
     ~Image();
+    Image& operator=(Image&& other);
+
 
     enum Channel
     {
@@ -29,41 +38,27 @@ public:
         RGBA  = 5
     };
 
-    std::string getFileName();
-    void setFileName(std::string fileName);
-
-
-    // used by the core
-    void load(std::string filePath);
-    void save();
-    bool hasBeenResized();
-    bool hasBeenModified();
-    void resetImageStatus();
-
-
     // image initialization
-    void copyData(Image* in);
-    void reserve(int width, int height, int numberOfChannels);
-    void setRawData(float* rawData, int width, int height, int channelNumber);
-    float* getRawData();
+/*    void copyData(Image* in);
+    void reserve(int width, int height, int numberOfChannels);*/
 
-
-    // data manipulation
-    float get(int x, int y, int channel = Channel::RED);
-    void set(float value, int x, int y, int channel = Channel::RGB);
-    void parallel(std::function<float(int w, int h, int c, float val)> processingFunction, int threadCount);
-
-    // image dimensions
+    std::string getFileName();
     int getWidth();
     int getHeight();
     int getChannelNumber();
 
+    float get(int x, int y, int channel = Channel::RED);
+    void set(float value, int x, int y, int channel = Channel::RGB);
+    void parallel(std::function<float(Image* img, int x, int y, int c)> processingFunction);
+
 private:
     std::string m_fileName;
+
     std::vector<float> m_data;
     int m_width;
     int m_height;
-    int m_bytesPerPixel;
+    int m_channelNumber;
+
     bool m_hasBeenModified;
     bool m_hasBeenResized;
 

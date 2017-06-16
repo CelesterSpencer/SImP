@@ -107,6 +107,8 @@ void Shader::compile()
     }
     else
     {
+        #ifdef DEBUG
         std::cout << m_typeString << " shader compilation OK" << std::endl;
+        #endif
     }
 }

@@ -7,19 +7,7 @@
 class SimplifyColors : public ImageFilter
 {
 public:
-    SimplifyColors() {
-        m_name = "Simplify colors";
-        m_filterGroup = "color adjustment";
-
-        m_resolution = 3;
-        m_minResolution = 3;
-        m_maxResolution = 30;
-
-        m_interactableCollection.addInteractable(
-            new ISlider("Number of colors", &m_resolution, &m_minResolution, &m_maxResolution)
-        );
-    };
-    ~SimplifyColors() {};
+    SimplifyColors();
 
     void process();
 

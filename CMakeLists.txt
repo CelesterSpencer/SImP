@@ -1,13 +1,17 @@
 project(srccmake)
 cmake_minimum_required(VERSION 2.8)
 
-# set paths
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# set flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mwindows")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake CACHE PATH "Project specific path. Set manually if it was not found.")
+SET(BUILD_SHARED_LIBRARIES OFF)
+SET(CMAKE_EXE_LINKER_FLAGS "-static")
+
+# set paths
 set(PROJECT_SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps)
-set(SHADERS_PATH ${CMAKE_SOURCE_DIR}/shader)
-set(RESOURCES_PATH ${CMAKE_SOURCE_DIR}/resources)
+#set(SHADERS_PATH ${CMAKE_SOURCE_DIR}/shader)
+#set(RESOURCES_PATH ${CMAKE_SOURCE_DIR}/resources)
 
 # add defines
 add_definitions(-DSHADERS_PATH="${SHADERS_PATH}")
@@ -80,6 +84,7 @@ target_link_libraries(SImP
         imm32.lib
         winmm.lib
         Shlwapi.lib
+        -mwindows
 )
 
 # copy shader files every time the project is built
@@ -87,4 +92,11 @@ add_custom_target(copy_shaders ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_SOURCE_DIR}/shader" "${CMAKE_BINARY_DIR}/shader"
         COMMENT "Copied shaders from ${CMAKE_SOURCE_DIR}/shader to ${CMAKE_BINARY_DIR}/shader" VERBATIM
+)
+
+# copy images
+add_custom_target(copy_images ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/resources" "${CMAKE_BINARY_DIR}/resources"
+        COMMENT "Copied resources from ${CMAKE_SOURCE_DIR}/resources to ${CMAKE_BINARY_DIR}/resources" VERBATIM
 )

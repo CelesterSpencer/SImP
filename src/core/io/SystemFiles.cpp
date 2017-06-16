@@ -2,9 +2,9 @@
 
 void SystemFiles::init()
 {
-    m_deleteIconHandle  = ImageHandler::getInstance().getImageHandleFromFilePath(RESOURCES_PATH"/system/cross.png");
-    m_openIconHandle    = ImageHandler::getInstance().getImageHandleFromFilePath(RESOURCES_PATH"/system/open.png");
-    m_spinnerIconHandle = ImageHandler::getInstance().getImageHandleFromFilePath(RESOURCES_PATH"/system/spinner.png");
+    m_deleteIconHandle  = ImageHandler::getInstance().getImageHandleFromFilePath("resources/system/cross.png");
+    m_openIconHandle    = ImageHandler::getInstance().getImageHandleFromFilePath("resources/system/open.png");
+    m_spinnerIconHandle = ImageHandler::getInstance().getImageHandleFromFilePath("resources/system/spinner.png");
 }
 
 GLuint SystemFiles::getImageHandle(int iconType)

@@ -48,9 +48,10 @@ void Program::run()
 
     auto saveAction = [&]()
     {
-        Image* image = layerManager.getImageOfActiveLayer();
-        std::string fileName = image->getFileName()+"_modified";
-        image->save();
+        Image* p_image = layerManager.getImageOfActiveLayer();
+        std::string fileName = p_image->getFileName()+"_modified";
+        std::string filePath = "resources/output/"+fileName+".png";
+        ImageHandler::getInstance().saveImage(filePath, p_image);
         widgetManager.addWidget(new MessageWidget("Saved "+fileName+".", 10000.f), 60, true);
     };
 
@@ -61,7 +62,7 @@ void Program::run()
             // get file name and create file path for saving
             Image* image = layerManager.getImageOfActiveLayer();
             std::string fileName = image->getFileName()+"_modified";
-            std::string filePath = RESOURCES_PATH"/output/"+fileName+".png";
+            std::string filePath = "resources/output/"+fileName+".png";
 
 
 

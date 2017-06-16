@@ -10,18 +10,7 @@
 class FastFourierTransform : public ImageFilter
 {
 public:
-    FastFourierTransform() {
-        m_name = "Fast Fourier Transform";
-        m_filterGroup = "fft";
-
-        m_interactableCollection.addInteractable(
-                new Checkbox("Inverse", &m_isInverse)
-        );
-        m_interactableCollection.addInteractable(
-                new ImageSelector("Phase image")
-        );
-    };
-    ~FastFourierTransform() {};
+    FastFourierTransform();
 
     void process();
 

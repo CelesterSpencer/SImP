@@ -1,10 +1,15 @@
 #include "Saturate.h"
 
+Saturate::Saturate()
+{
+    m_name = "Saturate";
+    m_filterGroup = "color adjustment";
+};
+
 void Saturate::process()
 {
     Image* in = getInputImage(0);
-    Image* out = new Image;
-    out->copyData(in);
+    Image* out = new Image(in);
 
     for(int y = 0; y < in->getHeight(); y++)
     {

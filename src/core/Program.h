@@ -1,9 +1,6 @@
 #ifndef SRCCMAKE_PROGRAM_H
 #define SRCCMAKE_PROGRAM_H
 
-// std
-#include <thread.h>
-
 // project
 #include "core/widget/WidgetManager.h"
 #include "core/widget/FilterSettingsWidget.h"

@@ -28,6 +28,7 @@ int FileHandler::openFilePathDialog(std::string& filePath)
     {
         // All this stuff below is to tell you exactly how you messed up above.
         // Once you've got that fixed, you can often (not always!) reduce it to a 'user cancelled' assumption.
+        #ifdef DEBUG
         switch (CommDlgExtendedError())
         {
             case CDERR_DIALOGFAILURE   : std::cout << "CDERR_DIALOGFAILURE\n";   break;
@@ -47,6 +48,8 @@ int FileHandler::openFilePathDialog(std::string& filePath)
             case FNERR_SUBCLASSFAILURE : std::cout << "FNERR_SUBCLASSFAILURE\n"; break;
             default                    : std::cout << "You cancelled.\n";
         }
+        #endif
+
         filePath = "";
         return 0;
     }
