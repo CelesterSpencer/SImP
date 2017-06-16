@@ -2,16 +2,15 @@
 
 SimplifyColors::SimplifyColors()
 {
-    m_name = "Simplify colors";
-    m_filterGroup = "color adjustment";
+    // init filter
+    init("Simplify colors", "color adjustment");
 
+    // add user input
     m_resolution = 3;
     m_minResolution = 3;
     m_maxResolution = 30;
 
-    m_interactableCollection.addInteractable(
-            new ISlider("Number of colors", &m_resolution, &m_minResolution, &m_maxResolution)
-    );
+    addUserInput("Number of colors", &m_resolution, &m_minResolution, &m_maxResolution);
 };
 
 void SimplifyColors::process()

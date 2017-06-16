@@ -2,20 +2,15 @@
 
 Multithreading::Multithreading()
 {
-    m_name = "Multithreading";
-    m_filterGroup = "test";
+    init("Multithreading", "test");
 
     m_noiseMin = -0.5f;
     m_noiseMax = 0.5f;
     m_minFixed = -1.f;
     m_maxFixed = 1.f;
 
-    m_interactableCollection.addInteractable(
-            new FSlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
-    );
-    m_interactableCollection.addInteractable(
-            new FSlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
-    );
+    addUserInput("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax);
+    addUserInput("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed);
 };
 
 void Multithreading::process()

@@ -7,30 +7,20 @@ class MaxFilterGpu  : public ImageFilterGpu
 {
 public:
     MaxFilterGpu() {
-        /*
-         * mandatory filter parameters
-         */
-        m_name = "Max Filter (Gpu)";
-        m_filterGroup = "non linear";
+        // init gpu filter
+        initGpu("Max Filter", "non linear", "/nonlinear/MaxFilter");
 
-        /*
-         * gpu specific settings
-         * its required to get gpu filters working
-         */
-        setComputeShader("/nonlinear/MaxFilter");
+        // output images must be specified for gpu filter
         addOutputImageDescription("Max filtered image", 0, 0, 0);
 
-        /*
-         * interactables the user can interact with
-         */
+        // interactables the user can interact with
         m_filterRadius = 5;
         m_minRadius = 0;
         m_maxRadius = 10;
-        m_interactableCollection.addInteractable(
-                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
-        );
+
+        // filter radius can be modified
+        addUserInputGpu("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius");
     };
-    ~MaxFilterGpu() {};
 
 private:
     int m_filterRadius;

@@ -7,30 +7,19 @@ class MedianFilterGpu  : public ImageFilterGpu
 {
 public:
     MedianFilterGpu() {
-        /*
-         * mandatory filter parameters
-         */
-        m_name = "Median Filter Gpu";
-        m_filterGroup = "non linear";
+        // mandatory filter parameters
+        initGpu("Median Filter", "non linear", "/nonlinear/MedianFilter");
 
-        /*
-         * gpu specific settings
-         * its required to get gpu filters working
-         */
-        setComputeShader("/nonlinear/MedianFilter");
+        // output images must be specified for gpu filter
         addOutputImageDescription("Median filtered image", 0, 0, 0);
 
-        /*
-         * interactables the user can interact with
-         */
+        // add user input
         m_filterRadius = 5;
         m_minRadius = 0;
         m_maxRadius = 10;
-        m_interactableCollection.addInteractable(
-                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
-        );
+
+        addUserInputGpu("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius");
     };
-    ~MedianFilterGpu() {};
 
 private:
     int m_filterRadius;

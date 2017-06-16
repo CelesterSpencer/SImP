@@ -2,9 +2,10 @@
 
 LaplaceFilter::LaplaceFilter()
 {
-    m_name = "Laplace Filter";
-    m_filterGroup = "edge detection";
+    // init filter
+    init("Laplace Filter", "edge detection");
 
+    // laplace kernel
     static const int data[] = { 0,-1, 0,
                                 -1, 4,-1,
                                 0,-1, 0 };

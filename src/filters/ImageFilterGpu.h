@@ -159,8 +159,11 @@ public:
     }
 
 protected:
-    void setComputeShader(std::string computeShaderPath)
+    void initGpu(std::string filterName, std::string filterGroupName, std::string computeShaderPath)
     {
+        m_name = filterName + " (GPU)";
+        m_filterGroup = filterGroupName;
+
         std::string fullPath = computeShaderPath+".comp";
         m_computeShader = new ShaderProgram(fullPath);
 
@@ -168,6 +171,28 @@ protected:
         if (err != GL_NO_ERROR) {
             std::cerr << "Error while creating shader program: " << std::to_string(err) << std::endl;
         }
+    }
+    void addUserInputGpu(std::string text)
+    {
+        m_interactableCollection.addInteractable(new ImageSelector(text));
+    }
+    void addUserInputGpu(std::string text, bool* val, std::string uniformName)
+    {
+        m_interactableCollection.addInteractable(new Checkbox(text, val, uniformName));
+    }
+    void addUserInputGpu(std::string text, int* selectedOption, std::vector<std::string>* options, std::string uniformName)
+    {
+        m_interactableCollection.addInteractable(
+                new SelectBox(text, selectedOption, options, uniformName)
+        );
+    }
+    void addUserInputGpu(std::string text, int* val, int* min, int* max, std::string uniformName)
+    {
+        m_interactableCollection.addInteractable(new ISlider(text, val, min, max, uniformName));
+    }
+    void addUserInputGpu(std::string text, float* val, float* min, float* max, std::string uniformName)
+    {
+        m_interactableCollection.addInteractable(new FSlider(text, val, min, max, uniformName));
     }
 
     void addOutputImageDescription(std::string name, int width, int height, int channelNumber)

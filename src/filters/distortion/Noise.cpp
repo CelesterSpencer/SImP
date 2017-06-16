@@ -2,9 +2,10 @@
 
 Noise::Noise()
 {
-    m_name = "Noise";
-    m_filterGroup = "distortion";
+    // init filter
+    init("Noise", "distortion");
 
+    // add user input
     m_noiseMin = -0.5f;
     m_noiseMax = 0.5f;
     m_minFixed = -1.f;
@@ -12,15 +13,9 @@ Noise::Noise()
     m_options = {"Normal", "Salt n Pepper"};
     m_selectedOption = 0;
 
-    m_interactableCollection.addInteractable(
-            new FSlider("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax)
-    );
-    m_interactableCollection.addInteractable(
-            new FSlider("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed)
-    );
-    m_interactableCollection.addInteractable(
-            new SelectBox("Type", &m_selectedOption, &m_options)
-    );
+    addUserInput("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax);
+    addUserInput("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed);
+    addUserInput("Type", &m_selectedOption, &m_options);
 };
 
 void Noise::process()

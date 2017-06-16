@@ -2,12 +2,12 @@
 
 MergeChannels::MergeChannels()
 {
-    m_name = "Merge Channels";
-    m_filterGroup = "restructure";
+    init("Merge Channels", "restructure");
 
-    m_interactableCollection.addInteractable(new ImageSelector("R Channel"));
-    m_interactableCollection.addInteractable(new ImageSelector("G Channel"));
-    m_interactableCollection.addInteractable(new ImageSelector("B Channel"));
+    // select 3 images for every channel
+    addUserInput("R Channel");
+    addUserInput("G Channel");
+    addUserInput("B Channel");
 }
 
 void MergeChannels::process()

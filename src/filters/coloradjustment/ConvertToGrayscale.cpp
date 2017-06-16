@@ -2,15 +2,14 @@
 
 ConvertToGrayscale::ConvertToGrayscale()
 {
-    m_name = "Convert to grayscale";
-    m_filterGroup = "color adjustment";
+    // init filter
+    init("Convert to grayscale", "color adjustment");
 
+    // add user input
     m_options = {"Lightness", "Average", "Luminocity"};
     m_selectedOption = 0;
 
-    m_interactableCollection.addInteractable(
-            new SelectBox("Convert to gray",&m_selectedOption, &m_options)
-    );
+    addUserInput("Convert to gray",&m_selectedOption, &m_options);
 };
 
 void ConvertToGrayscale::process()

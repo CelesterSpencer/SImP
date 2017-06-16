@@ -2,8 +2,8 @@
 
 Saturate::Saturate()
 {
-    m_name = "Saturate";
-    m_filterGroup = "color adjustment";
+    // init filter
+    init("Saturate", "color adjustment");
 };
 
 void Saturate::process()

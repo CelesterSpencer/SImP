@@ -8,6 +8,7 @@
 
 class ImageFilter
 {
+    friend class ImageFilterGpu;
 public:
     ImageFilter()
     {
@@ -33,12 +34,6 @@ public:
     virtual void process() = 0;
 
 protected:
-    std::string m_name = "unnamed";
-    std::string m_filterGroup = "default";
-    std::string m_filterType = "cpu filter";
-    InteractableCollection m_interactableCollection;
-
-
     void init(std::string filterName, std::string filterGroupName)
     {
         m_name = filterName;
@@ -76,6 +71,11 @@ protected:
 private:
     std::vector<Image*> m_inputImages;
     std::vector<Image*> m_outputImages;
+
+    std::string m_name = "unnamed";
+    std::string m_filterGroup = "default";
+    std::string m_filterType = "cpu filter";
+    InteractableCollection m_interactableCollection;
 };
 
 #endif //SRCCMAKE_IMAGEFILTER_H

@@ -2,8 +2,7 @@
 
 SplitChannels::SplitChannels()
 {
-    m_name = "Split channels";
-    m_filterGroup = "restructure";
+    init("Split Channels", "restructure");
 };
 
 void SplitChannels::process()

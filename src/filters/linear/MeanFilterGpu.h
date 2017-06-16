@@ -8,28 +8,18 @@ class MeanFilterGpu : public ImageFilterGpu
 public:
     MeanFilterGpu()
     {
-        /*
-         * mandatory filter parameters
-         */
-        m_name = "Mean Filter (Gpu)";
-        m_filterGroup = "linear";
+        // init gpu filter
+        initGpu("Mean Filter", "linear", "/linear/MeanFilter");
 
-        /*
-         * gpu specific settings
-         * its required to get gpu filters working
-         */
-        setComputeShader("/linear/MeanFilter");
+        // output images must be specified for gpu filter
         addOutputImageDescription("Mean filtered image", 0, 0, 0);
 
-        /*
-         * interactables the user can interact with
-         */
+        // define user input
         m_filterRadius = 5;
         m_minRadius = 0;
         m_maxRadius = 10;
-        m_interactableCollection.addInteractable(
-                new ISlider("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius")
-        );
+
+        addUserInputGpu("Filter radius", &m_filterRadius, &m_minRadius, &m_maxRadius, "filterRadius");
     }
 
 private:

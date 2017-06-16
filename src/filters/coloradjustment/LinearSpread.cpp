@@ -2,8 +2,7 @@
 
 LinearSpread::LinearSpread()
 {
-    m_name = "Linear Spread";
-    m_filterGroup = "color adjustment";
+    init("Linear Spread", "color adjustment");
 };
 
 void LinearSpread::process()

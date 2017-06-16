@@ -2,15 +2,12 @@
 
 FastFourierTransform::FastFourierTransform()
 {
-    m_name = "Fast Fourier Transform";
-    m_filterGroup = "fft";
+    // init filter
+    init("Fast Fourier Transform", "fft");
 
-    m_interactableCollection.addInteractable(
-            new Checkbox("Inverse", &m_isInverse)
-    );
-    m_interactableCollection.addInteractable(
-            new ImageSelector("Phase image")
-    );
+    // add user input
+    addUserInput("Inverse", &m_isInverse);
+    addUserInput("Phase image");
 };
 
 void FastFourierTransform::process()
