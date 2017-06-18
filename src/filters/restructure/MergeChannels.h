@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MERGECHANNELS_H
 #define SRCCMAKE_MERGECHANNELS_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class MergeChannels : public ImageFilter
 {

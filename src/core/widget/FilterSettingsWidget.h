@@ -12,7 +12,7 @@
 #include "core/scene/LayerManager.h"
 #include "core/io/SystemFiles.h"
 #include "core/widget/WidgetManager.h"
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 // styles
 #include "core/rendering/ColorStyles.h"

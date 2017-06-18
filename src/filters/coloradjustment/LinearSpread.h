@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_LINEARSPREAD_H
 #define SRCCMAKE_LINEARSPREAD_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class LinearSpread : public ImageFilter
 {

@@ -321,10 +321,22 @@
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/fft/FastFourierTransform.h">
 			<Option target="SImP"/>
 		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/KuwaharaFilter.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/KuwaharaFilter.h">
+			<Option target="SImP"/>
+		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.cpp">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/MedianFilter.h">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/SNN.cpp">
+			<Option target="SImP"/>
+		</Unit>
+		<Unit filename="C:/Development/CLanguages/SImP/src/filters/nonlinear/SNN.h">
 			<Option target="SImP"/>
 		</Unit>
 		<Unit filename="C:/Development/CLanguages/SImP/src/filters/restructure/MergeChannels.cpp">

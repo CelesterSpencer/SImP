@@ -2,10 +2,22 @@ project(srccmake)
 cmake_minimum_required(VERSION 2.8)
 
 # set flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mwindows")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake CACHE PATH "Project specific path. Set manually if it was not found.")
 SET(BUILD_SHARED_LIBRARIES OFF)
 SET(CMAKE_EXE_LINKER_FLAGS "-static")
+
+# Compiler flags release mode
+IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+    message("release mode")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
+
+## Compiler flags gcc
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")        ## Optimize
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")  ## Strip binary
+endif()
 
 # set paths
 set(PROJECT_SRC ${CMAKE_SOURCE_DIR}/src)
@@ -84,7 +96,7 @@ target_link_libraries(SImP
         imm32.lib
         winmm.lib
         Shlwapi.lib
-        -mwindows
+        #-mwindows
 )
 
 # copy shader files every time the project is built

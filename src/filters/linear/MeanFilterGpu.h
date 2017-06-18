@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MEANFILTERGPU_H
 #define SRCCMAKE_MEANFILTERGPU_H
 
-#include "filters/ImageFilterGpu.h"
+#include "core/scene/ImageFilterGpu.h"
 
 class MeanFilterGpu : public ImageFilterGpu
 {

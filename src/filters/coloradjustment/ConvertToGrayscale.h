@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class ConvertToGrayscale : public ImageFilter
 {

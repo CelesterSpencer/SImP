@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class MedianFilter : public ImageFilter
 {

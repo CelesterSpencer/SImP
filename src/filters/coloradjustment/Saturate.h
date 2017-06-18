@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_SATURATE_H
 #define SRCCMAKE_SATURATE_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class Saturate : public ImageFilter
 {

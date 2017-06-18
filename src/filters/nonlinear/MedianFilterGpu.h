@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MEDIANFILTERGPU_H
 #define SRCCMAKE_MEDIANFILTERGPU_H
 
-#include "filters/ImageFilterGpu.h"
+#include "core/scene/ImageFilterGpu.h"
 
 class MedianFilterGpu  : public ImageFilterGpu
 {

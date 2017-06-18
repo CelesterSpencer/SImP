@@ -14,6 +14,8 @@
 #include "core/io/ImageHandler.h"
 #include "core/util/Timer.h"
 
+using image_ft = std::function<float(Image* img, int x, int y, int c)>;
+
 class Image {
     friend class ImageFilterGpu;
     friend class LayerManager;
@@ -37,10 +39,12 @@ public:
         RGB   = 4,
         RGBA  = 5
     };
-
-    // image initialization
-/*    void copyData(Image* in);
-    void reserve(int width, int height, int numberOfChannels);*/
+    enum BoundMode
+    {
+        CLAMP = 0,
+        REPEAT= 1,
+        BINARY= 2
+    };
 
     std::string getFileName();
     int getWidth();
@@ -48,8 +52,10 @@ public:
     int getChannelNumber();
 
     float get(int x, int y, int channel = Channel::RED);
+    int getXInBounds(int x, int boundMode = BoundMode::CLAMP);
+    int getYInBounds(int y, int boundMode = BoundMode::CLAMP);
     void set(float value, int x, int y, int channel = Channel::RGB);
-    void parallel(std::function<float(Image* img, int x, int y, int c)> processingFunction);
+    void parallel(image_ft processingFunction);
 
 private:
     std::string m_fileName;

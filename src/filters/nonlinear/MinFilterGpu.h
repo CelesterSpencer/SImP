@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MINFILTERGPU_H
 #define SRCCMAKE_MINFILTERGPU_H
 
-#include "filters/ImageFilterGpu.h"
+#include "core/scene/ImageFilterGpu.h"
 
 class MinFilterGpu  : public ImageFilterGpu
 {

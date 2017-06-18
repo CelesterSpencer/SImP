@@ -11,6 +11,8 @@
 #include "filters/nonlinear/MinFilterGpu.h"
 #include "filters/nonlinear/MaxFilterGpu.h"
 #include "filters/nonlinear/MedianFilter.h"
+#include "filters/nonlinear/KuwaharaFilter.h"
+#include "filters/nonlinear/SNN.h"
 // edge detection
 #include "filters/edgedetection/LaplaceFilter.h"
 // color adjustment
@@ -45,6 +47,8 @@ int main() {
     program.addFilter(new MinFilterGpu);
     program.addFilter(new MaxFilterGpu);
     program.addFilter(new MedianFilter);
+    program.addFilter(new KuwaharaFilter);
+    program.addFilter(new SNN);
     // edge detection
     program.addFilter(new LaplaceFilter);
     // color adjustment

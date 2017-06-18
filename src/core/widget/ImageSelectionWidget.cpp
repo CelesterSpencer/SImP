@@ -14,16 +14,14 @@ ImageSelectionWidget::~ImageSelectionWidget()
 bool ImageSelectionWidget::draw(int width, int height, float deltaTime)
 {
     // set window properties
-    int mainWindowWidth = WindowManager::getInstance().getWidth();
-    int mainWindowHeight = WindowManager::getInstance().getHeight();
     ImGui::SetWindowSize("Select image", ImVec2(std::max(ImGui::GetWindowWidth()/2, 400.f), -1));
     ImGui::PushStyleColor(ImGuiCol_WindowBg, WINDOW_CONTENT_COLOR_O);
-    ImGui::SetWindowPos(  "Select image",
-                          ImVec2(mainWindowWidth/2 - ImGui::GetWindowWidth()/2,
-                                 mainWindowHeight/2 - ImGui::GetWindowHeight()/2 - (400)/2));
 
     // select image window
     ImGui::Begin("Select image", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+    ImGui::SetWindowPos(  "Select image",
+                          ImVec2(width/2.f - ImGui::GetWindowWidth()/2.f,
+                                 height/2.f - ImGui::GetWindowHeight()/2.f));
 
     // draw selected background rect and the corresponding image
     int imageWidth = 100;

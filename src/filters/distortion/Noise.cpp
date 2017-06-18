@@ -13,9 +13,9 @@ Noise::Noise()
     m_options = {"Normal", "Salt n Pepper"};
     m_selectedOption = 0;
 
-    addUserInput("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax);
-    addUserInput("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed);
     addUserInput("Type", &m_selectedOption, &m_options);
+    addUserInput("Noise min", &m_noiseMin, &m_minFixed, &m_noiseMax, [=]() -> bool { return m_selectedOption == 0; });
+    addUserInput("Noise max", &m_noiseMax, &m_noiseMin, &m_maxFixed, [=]() -> bool { return m_selectedOption == 0; });
 };
 
 void Noise::process()

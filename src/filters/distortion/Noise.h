@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_NOISE_H
 #define SRCCMAKE_NOISE_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class Noise : public ImageFilter
 {

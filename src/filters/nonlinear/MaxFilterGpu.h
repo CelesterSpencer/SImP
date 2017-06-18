@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MAXFILTERGPU_H
 #define SRCCMAKE_MAXFILTERGPU_H
 
-#include "filters/ImageFilterGpu.h"
+#include "core/scene/ImageFilterGpu.h"
 
 class MaxFilterGpu  : public ImageFilterGpu
 {

@@ -26,6 +26,13 @@ public:
 private:
     LayerManager*       mp_layerManager;
     bool                m_isActive;
+    // position
+    int                 m_previousWidth;
+    int                 m_previousHeight;
+    int                 m_previousPosX;
+    int                 m_previousPosY;
+    int                 m_distanceToBorder;
+    bool                m_isOnTheRightSide;
     // button icons
     GLuint              m_imageHandleDelete;
     GLuint              m_imageHandleOpen;

@@ -70,6 +70,46 @@ float Image::get(int x, int y, int channel)
         return 0;
     }
 }
+int Image::getXInBounds(int x, int boundMode)
+{
+    switch(boundMode)
+    {
+        case BoundMode::CLAMP:
+            return std::max(0, std::min(x, m_width-1));
+            break;
+        case BoundMode::REPEAT:
+            if(x < 0) x = m_width-x;
+            else if(x >= m_width) x = x - m_width;
+            return x;
+            break;
+        case BoundMode::BINARY:
+            return (x >= 0 && x < m_width); // returns true when in bounds
+            break;
+        default: // clamp is default
+            return std::max(0, std::min(x, m_width-1));
+            break;
+    }
+}
+int Image::getYInBounds(int y, int boundMode)
+{
+    switch(boundMode)
+    {
+        case BoundMode::CLAMP:
+            return std::max(0, std::min(y, m_height-1));
+            break;
+        case BoundMode::REPEAT:
+            if(y < 0) y = m_height-y;
+            else if(y >= m_height) y = y - m_height;
+            return y;
+            break;
+        case BoundMode::BINARY:
+            return (y >= 0 && y < m_height); // returns true when in bounds
+            break;
+        default: // clamp is default
+            return std::max(0, std::min(y, m_height-1));
+            break;
+    }
+}
 void Image::set(float value, int x, int y, int channel)
 {
     if(x >= 0 && y >= 0 && x < m_width && y < m_height && channel >= 0 && channel < 6)
@@ -103,24 +143,61 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
     std::cout << "start" << std::endl;
     Timer timer; timer.getDeltaTime();
     Image* temp = new Image(this);
+    int channelNumber = this->getChannelNumber();
     std::cout << "create output image" << std::to_string(timer.getDeltaTime()) << std::endl;
 
-    // function executed by every thread
-    auto threadFunction = [](Image* p_out, Image* p_temp, int fromX, int toX, int fromY, int toY,
-                             std::function<float(Image* img, int x, int y, int c)> func)
+    auto grayScaleFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
     {
         for(int y = fromY; y < toY; y++)
         {
             for(int x = fromX; x < toX; x++)
             {
-                for(int c = 0; c < p_out->getChannelNumber(); c++)
-                {
-                    float result = func(p_out,x,y,c);
-                    p_temp->set(result,x,y,c);
-                }
+                p_out->set(func(p_in, x, y, Image::Channel::RED), x, y, Image::Channel::RED);
             }
         }
     };
+    auto twoColorFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    {
+        for(int y = fromY; y < toY; y++)
+        {
+            for(int x = fromX; x < toX; x++)
+            {
+                p_out->set(func(p_in, x, y, Image::Channel::RED), x, y, Image::Channel::RED);
+                p_out->set(func(p_in, x, y, Image::Channel::GREEN), x, y, Image::Channel::GREEN);
+            }
+        }
+    };
+    auto rgbFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    {
+        for(int y = fromY; y < toY; y++)
+        {
+            for(int x = fromX; x < toX; x++)
+            {
+                p_out->set(func(p_in, x, y, Image::Channel::RED), x, y, Image::Channel::RED);
+                p_out->set(func(p_in, x, y, Image::Channel::GREEN), x, y, Image::Channel::GREEN);
+                p_out->set(func(p_in, x, y, Image::Channel::BLUE), x, y, Image::Channel::BLUE);
+            }
+        }
+    };
+    auto rgbaFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    {
+        for(int y = fromY; y < toY; y++)
+        {
+            for (int x = fromX; x < toX; x++)
+            {
+                p_out->set(func(p_in, x, y, Image::Channel::RED), x, y, Image::Channel::RED);
+                p_out->set(func(p_in, x, y, Image::Channel::GREEN), x, y, Image::Channel::GREEN);
+                p_out->set(func(p_in, x, y, Image::Channel::BLUE), x, y, Image::Channel::BLUE);
+                p_out->set(func(p_in, x, y, Image::Channel::ALPHA), x, y, Image::Channel::ALPHA);
+            }
+        }
+    };
+
+    // function executed by every thread
+    auto threadFunction = ( channelNumber == 4) ? rgbaFunction :
+                          ((channelNumber == 3) ? rgbFunction :
+                          ((channelNumber == 2) ? twoColorFunction :
+                                                  grayScaleFunction));
 
     // init threads
     int chunkSizeX = (int)std::ceil((float)this->getWidth() / 2);

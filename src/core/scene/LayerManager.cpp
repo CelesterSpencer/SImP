@@ -24,6 +24,7 @@ Layer* LayerManager::getLayer(int index)
 void LayerManager::deleteLayer(int index)
 {
     bool shouldDecreaseActiveLayerId = m_activeLayer == m_layers.size()-1;
+    delete m_layers[index];
     if (index < m_layers.size()) m_layers.erase(m_layers.begin() + index);
     if(shouldDecreaseActiveLayerId) m_activeLayer--;
 }

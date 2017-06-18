@@ -5,7 +5,7 @@
 #include <vector>
 
 // project
-#include "filters/ImageFilter.h"
+#include "ImageFilter.h"
 #include "core/rendering/ShaderProgram.h"
 
 class ImageFilterGpu : public ImageFilter
@@ -172,27 +172,32 @@ protected:
             std::cerr << "Error while creating shader program: " << std::to_string(err) << std::endl;
         }
     }
-    void addUserInputGpu(std::string text)
+
+    void addUserInputGpu(std::string text, std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new ImageSelector(text));
+        m_interactableCollection.addInteractable(new ImageSelector(text, isEnabledFunction));
     }
-    void addUserInputGpu(std::string text, bool* val, std::string uniformName)
+    void addUserInputGpu(std::string text, bool* val, std::string uniformName,
+                         std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new Checkbox(text, val, uniformName));
+        m_interactableCollection.addInteractable(new Checkbox(text, val, uniformName, isEnabledFunction));
     }
-    void addUserInputGpu(std::string text, int* selectedOption, std::vector<std::string>* options, std::string uniformName)
+    void addUserInputGpu(std::string text, int* selectedOption, std::vector<std::string>* options,
+                         std::string uniformName, std::function<bool()> isEnabledFunction = nullptr)
     {
         m_interactableCollection.addInteractable(
-                new SelectBox(text, selectedOption, options, uniformName)
+                new SelectBox(text, selectedOption, options, uniformName, isEnabledFunction)
         );
     }
-    void addUserInputGpu(std::string text, int* val, int* min, int* max, std::string uniformName)
+    void addUserInputGpu(std::string text, int* val, int* min, int* max, std::string uniformName,
+                         std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new ISlider(text, val, min, max, uniformName));
+        m_interactableCollection.addInteractable(new ISlider(text, val, min, max, uniformName, isEnabledFunction));
     }
-    void addUserInputGpu(std::string text, float* val, float* min, float* max, std::string uniformName)
+    void addUserInputGpu(std::string text, float* val, float* min, float* max, std::string uniformName,
+                         std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new FSlider(text, val, min, max, uniformName));
+        m_interactableCollection.addInteractable(new FSlider(text, val, min, max, uniformName, isEnabledFunction));
     }
 
     void addOutputImageDescription(std::string name, int width, int height, int channelNumber)

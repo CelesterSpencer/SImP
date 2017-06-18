@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_WHIRL_H
 #define SRCCMAKE_WHIRL_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class Whirl : public ImageFilter
 {

@@ -30,10 +30,12 @@ public:
     bool m_isSatisfied = true;
     bool m_hasImage = false;
     Image* m_image = nullptr;
+    std::function<bool()> m_isEnabledFunction = []() -> bool { return true; };
 
     virtual void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager) = 0;
     virtual void uploadUniform(ShaderProgram* shaderProgram) = 0;
     void setUniformName(std::string uniformName) { m_uniformName = uniformName; }
+    bool isEnabled() { return m_isEnabledFunction(); }
 };
 
 class InteractableCollection
@@ -52,7 +54,8 @@ private:
 class FSlider : public Interactable
 {
 public:
-    FSlider(std::string name, float* data, float* min, float* max, std::string uniformName = "");
+    FSlider(std::string name, float* data, float* min, float* max, std::string uniformName = "",
+            std::function<bool()> isEnabledFunction = nullptr);
 
     void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager);
     void uploadUniform(ShaderProgram* shaderProgram);
@@ -65,7 +68,8 @@ private:
 class ISlider : public Interactable
 {
 public:
-    ISlider(std::string name, int* data, int* min, int* max, std::string uniformName = "");
+    ISlider(std::string name, int* data, int* min, int* max, std::string uniformName = "",
+            std::function<bool()> isEnabledFunction = nullptr);
 
     void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager);
     void uploadUniform(ShaderProgram* shaderProgram);
@@ -78,7 +82,8 @@ private:
 class Checkbox : public Interactable
 {
 public:
-    Checkbox(std::string name, bool* data, std::string uniformName = "");
+    Checkbox(std::string name, bool* data, std::string uniformName = "",
+             std::function<bool()> isEnabledFunction = nullptr);
 
     void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager);
     void uploadUniform(ShaderProgram* shaderProgram);
@@ -89,7 +94,8 @@ private:
 class SelectBox : public Interactable
 {
 public:
-    SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options, std::string uniformName = "");
+    SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options,
+              std::string uniformName = "", std::function<bool()> isEnabledFunction = nullptr);
     ~SelectBox();
 
     void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager);
@@ -105,7 +111,7 @@ private:
 class ImageSelector : public Interactable
 {
 public:
-    ImageSelector(std::string name);
+    ImageSelector(std::string name, std::function<bool()> isEnabledFunction = nullptr);
     ~ImageSelector();
 
     void render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager);

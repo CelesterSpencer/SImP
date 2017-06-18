@@ -40,27 +40,32 @@ protected:
         m_filterGroup = filterGroupName;
     }
 
-    void addUserInput(std::string text)
+    void addUserInput(std::string text,
+                      std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new ImageSelector(text));
+        m_interactableCollection.addInteractable(new ImageSelector(text, isEnabledFunction));
     }
-    void addUserInput(std::string text, bool* val)
+    void addUserInput(std::string text, bool* val,
+                      std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new Checkbox(text, val));
+        m_interactableCollection.addInteractable(new Checkbox(text, val, "", isEnabledFunction));
     }
-    void addUserInput(std::string text, int* selectedOption, std::vector<std::string>* options)
+    void addUserInput(std::string text, int* selectedOption, std::vector<std::string>* options,
+                      std::function<bool()> isEnabledFunction = nullptr)
     {
         m_interactableCollection.addInteractable(
-                new SelectBox(text, selectedOption, options)
+                new SelectBox(text, selectedOption, options, "", isEnabledFunction)
         );
     }
-    void addUserInput(std::string text, int* val, int* min, int* max)
+    void addUserInput(std::string text, int* val, int* min, int* max,
+                      std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new ISlider(text, val, min, max));
+        m_interactableCollection.addInteractable(new ISlider(text, val, min, max, "", isEnabledFunction));
     }
-    void addUserInput(std::string text, float* val, float* min, float* max)
+    void addUserInput(std::string text, float* val, float* min, float* max,
+                      std::function<bool()> isEnabledFunction = nullptr)
     {
-        m_interactableCollection.addInteractable(new FSlider(text, val, min, max));
+        m_interactableCollection.addInteractable(new FSlider(text, val, min, max, "", isEnabledFunction));
     }
 
 

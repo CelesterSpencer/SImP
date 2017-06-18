@@ -13,7 +13,7 @@
 #include "core/rendering/WindowManager.h"
 #include "core/rendering/ColorStyles.h"
 #include "core/scene/Image.h"
-#include "filters/ImageFilter.h"
+#include "ImageFilter.h"
 
 class FilterManager : public Singleton<FilterManager>
 {

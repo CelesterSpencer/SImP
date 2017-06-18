@@ -2,6 +2,7 @@
 #define SRCCMAKE_TYPES_H
 
 #include <complex>
+#include <functional>
 
 // types
 using uint = unsigned int;

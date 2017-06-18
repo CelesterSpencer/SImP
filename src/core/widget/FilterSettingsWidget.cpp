@@ -35,21 +35,36 @@ bool FilterSettingsWidget::draw(int width, int height, float deltaTime)
         ImGui::Separator();
         ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();ImGui::Spacing();
 
+        // show selected image
+        bool validSelectedImage = false;
+        if(mp_layerManager->isValidImageSelected())
+        {
+            validSelectedImage = true;
+            Layer* p_layer = mp_layerManager->getLayer(mp_layerManager->getActiveLayerIndex());
+            ImGui::Text("Input image");
+            ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
+            ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
+            ImGui::Image((GLuint*)(intptr_t)p_layer->getGpuImageHandle(), ImVec2(19,19), ImVec2(0,0), ImVec2(1,1));
+        }
+
         // render all image filter options
-        bool isSatisfied = true;
+        bool isSatisfied = validSelectedImage;
         for(int i = 0; i < numberOfInteractableElements; i++)
         {
             // interactable name
             Interactable* interactable = m_imagefilter->getInteractableCollection()->getInteractableAt(i);
-            ImGui::Text(interactable->m_name.c_str());
+            if(interactable->isEnabled())
+            {
+                ImGui::Text(interactable->m_name.c_str());
 
-            // interactable content
-            ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
-            ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
-            interactable->render(i, mp_widgetManager, mp_layerManager);
+                // interactable content
+                ImGui::SameLine(ImGui::GetWindowWidth()/2 + 5);
+                ImGui::PushItemWidth(ImGui::GetWindowWidth()/2-20);
+                interactable->render(i, mp_widgetManager, mp_layerManager);
 
-            // collect if interactable's requirements are satisfied
-            isSatisfied = isSatisfied && interactable->m_isSatisfied;
+                // collect if interactable's requirements are satisfied
+                isSatisfied = isSatisfied && interactable->m_isSatisfied;
+            }
         }
 
         // apply button

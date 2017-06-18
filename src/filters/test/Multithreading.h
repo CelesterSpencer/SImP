@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_MINFILTER_H
 #define SRCCMAKE_MINFILTER_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class Multithreading : public ImageFilter
 {

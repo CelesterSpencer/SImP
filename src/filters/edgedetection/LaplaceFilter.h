@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class LaplaceFilter : public ImageFilter
 {

@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_SIMPLIFYCOLORS_H
 #define SRCCMAKE_SIMPLIFYCOLORS_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 #include "core/util/Types.h"
 
 class SimplifyColors : public ImageFilter

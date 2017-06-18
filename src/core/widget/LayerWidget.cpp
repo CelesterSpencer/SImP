@@ -8,7 +8,8 @@ LayerWidget::LayerWidget(LayerManager* layerManager, int width, int height) : m_
 
     m_isActive = true;
     mp_layerManager = layerManager;
-    ImGui::SetWindowPos("Layers", ImVec2(width-260, height/4));
+    m_previousWidth = -1;
+    m_previousHeight = -1;
 }
 
 bool LayerWidget::draw(int width, int height, float deltaTime)
@@ -22,13 +23,17 @@ bool LayerWidget::draw(int width, int height, float deltaTime)
 
 
 
-    int mainWindowWidth = width;
-    int mainWindowHeight = height;
-
-
-
-    // set window dimension and position
-    ImGui::SetWindowSize( "Layers" , ImVec2(300, ImGui::GetWindowHeight()) );
+    ImGui::SetNextWindowSize(ImVec2(300, height/2.f));
+    if(m_previousWidth == -1 || m_previousHeight == -1)
+    {
+        ImGui::SetNextWindowPos(ImVec2(width-310, height/4));
+        m_previousWidth = width;
+        m_previousHeight = height;
+        m_previousPosX = width-310;
+        m_previousPosY = height/4;
+        m_distanceToBorder = 310;
+        m_isOnTheRightSide = true;
+    }
 
 
 
@@ -40,6 +45,31 @@ bool LayerWidget::draw(int width, int height, float deltaTime)
 
 
     ImGui::Begin("Layers", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    // update position
+    ImVec2 windowPos = ImGui::GetWindowPos();
+    if(m_previousPosX != windowPos.x || m_previousPosY != windowPos.y)
+    {
+        m_distanceToBorder = (m_isOnTheRightSide) ? m_previousWidth - m_previousPosX : m_previousPosX;
+        m_previousPosX = windowPos.x;
+        m_previousPosY = windowPos.y;
+        m_isOnTheRightSide = (windowPos.x+150 > m_previousWidth/2);
+
+        std::cout << std::to_string(m_distanceToBorder) << std::endl;
+        std::cout << std::to_string(m_isOnTheRightSide) << std::endl;
+    }
+
+    // update position when window size changes
+    if(m_previousWidth != width || m_previousHeight != height)
+    {
+        int newX = (m_isOnTheRightSide) ? width - m_distanceToBorder : m_distanceToBorder;
+        // window is more to the right
+        ImGui::SetWindowPos("Layers", ImVec2(newX, m_previousPosY));
+        m_previousWidth = width;
+        m_previousHeight = height;
+    }
+
+    // draw layers
     for (int i = 0; i < layerCount; i++)
     {
         ImGui::BeginGroup();

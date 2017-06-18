@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_TESTFILTER_H
 #define SRCCMAKE_TESTFILTER_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class MixImages : public ImageFilter
 {

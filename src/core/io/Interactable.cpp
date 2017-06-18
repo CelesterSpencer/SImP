@@ -28,12 +28,13 @@ Interactable* InteractableCollection::getInteractableAt(int index) { return  m_i
 
 void InteractableCollection::uploadInteractableUniforms(ShaderProgram* shaderProgram)
 {
+    // upload all enabled interactables that have a uniform name which appears in the shader
     for(int i = 0; i < m_interactableVector.size(); i++)
     {
         Interactable* interactable = m_interactableVector.at(i);
         if(glGetUniformLocation(shaderProgram->getShaderProgramHandle(), interactable->m_uniformName.c_str()) != -1)
         {
-            interactable->uploadUniform(shaderProgram);
+            if(interactable->isEnabled()) interactable->uploadUniform(shaderProgram);
         }
     }
 }
@@ -42,13 +43,14 @@ void InteractableCollection::uploadInteractableUniforms(ShaderProgram* shaderPro
 
 //_________________________________________________F_SLIDER___________________________________________________________//
 
-FSlider::FSlider(std::string name, float* data, float* min, float* max, std::string uniformName)
+FSlider::FSlider(std::string name, float* data, float* min, float* max, std::string uniformName, std::function<bool()> isEnabledFunction)
 {
     m_name = name;
     m_data = data;
     m_min = min;
     m_max = max;
     m_uniformName = uniformName;
+    if(isEnabledFunction != nullptr) m_isEnabledFunction = isEnabledFunction;
 }
 
 void FSlider::render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager)
@@ -65,13 +67,14 @@ void FSlider::uploadUniform(ShaderProgram* shaderProgram)
 
 //_________________________________________________I_SLIDER___________________________________________________________//
 
-ISlider::ISlider(std::string name, int* data, int* min, int* max, std::string uniformName)
+ISlider::ISlider(std::string name, int* data, int* min, int* max, std::string uniformName, std::function<bool()> isEnabledFunction)
 {
     m_name = name;
     m_data = data;
     m_min = min;
     m_max = max;
     m_uniformName = uniformName;
+    if(isEnabledFunction != nullptr) m_isEnabledFunction = isEnabledFunction;
 }
 
 void ISlider::render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager)
@@ -88,11 +91,12 @@ void ISlider::uploadUniform(ShaderProgram* shaderProgram)
 
 //_________________________________________________CHECKBOX___________________________________________________________//
 
-Checkbox::Checkbox(std::string name, bool* data, std::string uniformName)
+Checkbox::Checkbox(std::string name, bool* data, std::string uniformName, std::function<bool()> isEnabledFunction)
 {
     m_name = name;
     m_data = data;
     m_uniformName = uniformName;
+    if(isEnabledFunction != nullptr) m_isEnabledFunction = isEnabledFunction;
 }
 
 void Checkbox::render(int num, WidgetManager* p_widgetManager, LayerManager* p_layerManager)
@@ -109,7 +113,7 @@ void Checkbox::uploadUniform(ShaderProgram* shaderProgram)
 
 //________________________________________________SELECT_BOX__________________________________________________________//
 
-SelectBox::SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options, std::string uniformName)
+SelectBox::SelectBox(std::string name, int* selectedOption, std::vector<std::string>* options, std::string uniformName, std::function<bool()> isEnabledFunction)
 {
     m_name = name;
     m_selectedOption = selectedOption;
@@ -121,6 +125,7 @@ SelectBox::SelectBox(std::string name, int* selectedOption, std::vector<std::str
         mp_options[optionsIdx] = options->at(optionsIdx).c_str();
 
     m_optionsSize = options->size();
+    if(isEnabledFunction != nullptr) m_isEnabledFunction = isEnabledFunction;
 }
 
 SelectBox::~SelectBox()
@@ -145,7 +150,7 @@ void SelectBox::uploadUniform(ShaderProgram* shaderProgram)
 
 //______________________________________________IMAGE_SELECTOR________________________________________________________//
 
-ImageSelector::ImageSelector(std::string name)
+ImageSelector::ImageSelector(std::string name, std::function<bool()> isEnabledFunction)
 {
     m_name = name;
     m_isSatisfied = false;
@@ -158,6 +163,7 @@ ImageSelector::ImageSelector(std::string name)
 
     // load open image
     m_imageHandleOpen = SystemFiles::getInstance().getImageHandle(SystemFiles::ICON_OPEN);
+    if(isEnabledFunction != nullptr) m_isEnabledFunction = isEnabledFunction;
 }
 
 ImageSelector::~ImageSelector()

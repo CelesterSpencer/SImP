@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_SPLITCHANNELS_H
 #define SRCCMAKE_SPLITCHANNELS_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 
 class SplitChannels : public ImageFilter
 {

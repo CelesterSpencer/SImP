@@ -136,6 +136,7 @@ void Program::run()
         widgetManager.addMenuTabEntry("Filter", "    "+imageFilter->getName(), [&, i]
         {
             ImageFilter* imageFilter = FilterManager::getInstance().getImageFilters()[i];
+            Image* p_image = layerManager.getImageOfActiveLayer();
             widgetManager.addWidget(new FilterSettingsWidget(imageFilter, &widgetManager, &layerManager,
                 [&, i](int status)
                 {

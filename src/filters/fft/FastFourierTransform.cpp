@@ -7,12 +7,14 @@ FastFourierTransform::FastFourierTransform()
 
     // add user input
     addUserInput("Inverse", &m_isInverse);
-    addUserInput("Phase image");
+    addUserInput("Phase image", [=]() -> bool { return m_isInverse; });
 };
 
 void FastFourierTransform::process()
 {
     Image* in = getInputImage(0);
+    Image* in2;
+    if(m_isInverse) in2 = getInputImage(1);
 
     // get power of two for the image dimensions
     int sizeX = getNextPowerOfTwo(in->getWidth());
@@ -21,10 +23,10 @@ void FastFourierTransform::process()
 
 
     // fit image into vector with power of two sizes
-    std::vector<comp> input(sizeX*sizeY, 0);
+    std::vector<comp> input(sizeX*sizeY, comp(0, 0));
 
     // matrix holding the results of the first 1D fft
-    std::vector<comp> complexMat(sizeX*sizeY, 0);
+    std::vector<comp> complexMat(sizeX*sizeY, comp(0, 0));
 
     // init the result image
     Image* MagnitudeImage = new Image(sizeX, sizeY, 1); // gray scale image
@@ -36,7 +38,14 @@ void FastFourierTransform::process()
     {
         for(int x = 0; x < in->getWidth(); x++)
         {
-            input[y*sizeX+x] = comp(in->get(x,y,Image::Channel::RED), 0);
+            if(m_isInverse)
+            {
+                input[y*sizeX+x] = comp(in->get(x,y,Image::Channel::RED), in2->get(x,y,Image::Channel::RED));
+            }
+            else
+            {
+                input[y*sizeX+x] = comp(in->get(x,y,Image::Channel::RED), 0);
+            }
         }
     }
 
@@ -46,7 +55,7 @@ void FastFourierTransform::process()
     for(int y = 0; y < sizeY; y++)
     {
         // fill row
-        std::vector<comp> row(sizeX, 0);
+        std::vector<comp> row(sizeX, comp(0, 0));
         for(int x = 0; x < sizeX; x++)
         {
             row[x] = input[y*sizeX+x];
@@ -66,7 +75,7 @@ void FastFourierTransform::process()
     for(int x = 0; x < sizeX; x++)
     {
         // fill column
-        std::vector<comp> column(sizeY, 0);
+        std::vector<comp> column(sizeY, comp(0, 0));
         for(int y = 0; y < sizeY; y++)
         {
             column[y] = complexMat[y*sizeX+x];
@@ -78,8 +87,8 @@ void FastFourierTransform::process()
 
         for(int y = 0; y < sizeY; y++)
         {
-            MagnitudeImage->set(std::norm(column[y]),x,y,Image::Channel::RED);
-            PhaseImage->set(255*(std::atan2(column[y].imag(), column[y].real())+PI) / (2*PI),x,y,Image::Channel::RED);
+            MagnitudeImage->set(std::norm(column[y]), x, y, Image::Channel::RED);
+            PhaseImage->set((std::atan2(column[y].imag(), column[y].real())+PI) / (2*PI), x, y,Image::Channel::RED);
         }
     }
 
@@ -99,7 +108,7 @@ std::vector<comp> FastFourierTransform::fft(std::vector<comp> in)
     }
     else
     {
-        std::vector<comp> result(n,0);
+        std::vector<comp> result(n, comp(0, 0));
 
         // fill even and odd
         std::vector<comp> even;

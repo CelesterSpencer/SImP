@@ -1,7 +1,7 @@
 #ifndef SRCCMAKE_FASTFOURIERTRANSFORM_H
 #define SRCCMAKE_FASTFOURIERTRANSFORM_H
 
-#include "filters/ImageFilter.h"
+#include "core/scene/ImageFilter.h"
 #include "core/util/Types.h"
 
 // http://paulbourke.net/miscellaneous/dft/
