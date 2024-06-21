@@ -8,7 +8,14 @@ rudimentary Gui is used for interaction with images.
 
 ## Build
 
-***TODO***
+You should be able to build the project with the following commands
+```bash
+mkdir build
+cd build
+cmake ..
+make
+```
+All dependencies are downloaded and built automatically.
 
 ## Usage
 
