@@ -54,37 +54,30 @@ void WindowManager::init(int width, int height)
 
 
 
-    //_______________________INIT_GL3W________________________//
+    //_______________________INIT_GLAD________________________//
 
-    if (gl3wInit()) {
-        std::cerr << "GLEW couldn't be initialized" << std::endl;
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+      std::cout << "Failed to initialize GLAD" << std::endl;
         std::exit(1);
     }
-
-    // check for glew features
-    if (!gl3wIsSupported(3,2)) {
-        std::cerr << "OpenGL 3.2 not supported" << std::endl;
-        std::exit(1);
-    }
-
-
 
     //___________________OPENGL_FEATURES______________________//
     glClearColor(0.3,0.3,0.3,1.0);
     glEnable (GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-
     //_____________________INIT_IMG_UI________________________//
-    ImGui_ImplGlfwGL3_Init(m_window, true);
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
 
     auto& style = ImGui::GetStyle();
 
     style.FrameRounding                     = 0.0f;
     style.WindowRounding                    = 5.0f;
     style.ScrollbarSize                     = 5.0f;
-    style.WindowFillAlphaDefault            = 1.0f;
+    style.Colors[ImGuiCol_WindowBg].w       = 1.0f;
     style.GrabMinSize                       = 15.0f;
     style.GrabRounding                      = 3.0f;
     style.ItemInnerSpacing                  = ImVec2(8, 6);
@@ -125,13 +118,16 @@ void WindowManager::render(std::function<void()> renderCallback)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // request new frame
-        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         // call render callback function
         renderCallback();
 
         // finally show gui
         ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // swap buffers after new frame is filled successfully
         glfwSwapBuffers(m_window);
@@ -140,7 +136,7 @@ void WindowManager::render(std::function<void()> renderCallback)
     }
 
     // destroy window after render function has been exited
-    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }

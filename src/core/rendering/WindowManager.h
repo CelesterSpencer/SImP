@@ -8,14 +8,15 @@
 #include <functional>
 
 // glew, include it before gl.h and glfw.h
-#include <GL/gl3w.h>
+#include <glad/glad.h>
 
 // glfw
 #include <GLFW/glfw3.h>
 
 // imgui
 #include <imgui.h>
-#include "imgui_impl_glfw_gl3.h"
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 
 // local includes
 #include "core/util/Singleton.h"

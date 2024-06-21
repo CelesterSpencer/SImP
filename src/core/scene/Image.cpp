@@ -1,5 +1,7 @@
 #include "Image.h"
 
+using ImageFT = std::function<void(Image*, Image*, int, int, int, int, image_ft)>;
+
 Image::Image()
 {
     m_fileName = "Unnamed image";
@@ -43,6 +45,8 @@ Image& Image::operator=(Image&& other)
     this->m_height = other.m_height;
     this->m_channelNumber = other.m_channelNumber;
     this->m_data = other.m_data;
+
+    return *this;
 }
 
 
@@ -146,7 +150,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
     int channelNumber = this->getChannelNumber();
     std::cout << "create output image" << std::to_string(timer.getDeltaTime()) << std::endl;
 
-    auto grayScaleFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    ImageFT grayScaleFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
     {
         for(int y = fromY; y < toY; y++)
         {
@@ -156,7 +160,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
             }
         }
     };
-    auto twoColorFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    ImageFT twoColorFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
     {
         for(int y = fromY; y < toY; y++)
         {
@@ -167,7 +171,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
             }
         }
     };
-    auto rgbFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    ImageFT rgbFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
     {
         for(int y = fromY; y < toY; y++)
         {
@@ -179,7 +183,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
             }
         }
     };
-    auto rgbaFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
+    ImageFT rgbaFunction = [](Image* p_in, Image* p_out, int fromX, int toX, int fromY, int toY, image_ft func)
     {
         for(int y = fromY; y < toY; y++)
         {
@@ -194,7 +198,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
     };
 
     // function executed by every thread
-    auto threadFunction = ( channelNumber == 4) ? rgbaFunction :
+    ImageFT threadFunction = ( channelNumber == 4) ? rgbaFunction :
                           ((channelNumber == 3) ? rgbFunction :
                           ((channelNumber == 2) ? twoColorFunction :
                                                   grayScaleFunction));
@@ -202,7 +206,7 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
     // init threads
     int chunkSizeX = (int)std::ceil((float)this->getWidth() / 2);
     int chunkSizeY = (int)std::ceil((float)this->getHeight() / 2);
-    std::vector<std::thread*> threads;
+    std::vector<std::thread> threads;
     for(int y = 0; y < 2; y++)
     {
         for(int x = 0; x < 2; x++)
@@ -211,14 +215,15 @@ void Image::parallel(std::function<float(Image* img, int x, int y, int c)> proce
             int toX = std::min((y+1)*chunkSizeX, this->getWidth());
             int fromY = x*chunkSizeY;
             int toY = std::min((x+1)*chunkSizeY, this->getHeight());
-            threads.push_back(new std::thread(threadFunction, this, temp, fromX, toX,
-                                              fromY, toY, processingFunction));
+            threads.emplace_back([&, this]() {
+              threadFunction(this, temp, fromX, toX, fromY, toY, processingFunction);
+            });
         }
     }
 
     // wait for threads to finish
     for (auto& th : threads)
-        th->join();
+        th.join();
     std::cout << "processing: " << std::to_string(timer.getDeltaTime()) << std::endl;
 
     // copy back results

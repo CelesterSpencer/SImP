@@ -2,7 +2,7 @@
 #define SRCCMAKE_SYSTEMFILES_H
 
 // lib
-#include <GL/gl3w.h>
+#include <glad/glad.h>
 
 // project
 #include "core/util/Singleton.h"

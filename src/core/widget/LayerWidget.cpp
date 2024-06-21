@@ -110,11 +110,13 @@ bool LayerWidget::draw(int width, int height, float deltaTime)
 
         // layer name
         int pos = 0;
-        ImGui::AlignFirstTextHeightToWidgets();
+        ImGui::AlignTextToFramePadding();
         if(currentLayer->hasImage())
         {
             std::string fileName = currentLayer->getImage()->getFileName();
-            int bufferSize = std::max(200, (int)fileName.size()+1);
+//            int bufferSize = std::max(200, (int)fileName.size()+1);
+            const int bufferSize = 200;
+//            char buffer[bufferSize];
             char buffer[bufferSize];
             for(int strIdx = 0; strIdx < fileName.size(); strIdx++)
             {
@@ -124,7 +126,7 @@ bool LayerWidget::draw(int width, int height, float deltaTime)
             ImGui::PushItemWidth(73);
             ImGui::InputText(("##Layer " + std::to_string(i)).c_str(),
                  buffer, bufferSize, ImGuiInputTextFlags_CallbackCharFilter,
-                 [](ImGuiTextEditCallbackData* data)
+                 [](ImGuiInputTextCallbackData* data)
                  {
                      ImWchar c = data->EventChar;
                      if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' '))

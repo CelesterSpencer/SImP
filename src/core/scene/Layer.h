@@ -2,7 +2,7 @@
 #define SRCCMAKE_LAYER_H
 
 // lib
-#include <GL/gl3w.h>
+#include <glad/glad.h>
 
 // project
 #include "core/rendering/ShaderProgram.h"

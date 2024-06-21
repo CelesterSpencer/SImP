@@ -7,7 +7,7 @@
 #include <iostream>
 
 // lib
-#include <GL/gl3w.h>
+#include <glad/glad.h>
 
 // project
 #include "core/util/Types.h"

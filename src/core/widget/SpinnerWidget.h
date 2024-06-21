@@ -2,8 +2,8 @@
 #define SRCCMAKE_SPINNERWIDGET_H
 
 // lib
-#include <GL/gl3w.h>
-#include <glm.hpp>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <imgui.h>
 
 // project

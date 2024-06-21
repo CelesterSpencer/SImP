@@ -4,6 +4,8 @@
 
 #include "FileHandler.h"
 
+#include <filesystem>
+
 int FileHandler::openFilePathDialog(std::string& filePath)
 {
     char filename[ MAX_PATH ];
@@ -57,5 +59,5 @@ int FileHandler::openFilePathDialog(std::string& filePath)
 
 bool FileHandler::exists(std::string path)
 {
-    return PathFileExists(path.c_str());
+    return std::filesystem::exists(path);
 }

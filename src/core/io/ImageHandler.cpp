@@ -48,7 +48,8 @@ bool ImageHandler::saveImage(std::string filePath, Image* p_image)
     std::vector<unsigned char> outData;
     for(int i = 0; i < p_image->m_width*p_image->m_height*p_image->m_channelNumber; i++)
         outData.push_back(p_image->m_data[i]*255);
-    stbi_write_png(filePath.c_str(), p_image->m_width, p_image->m_height, p_image->m_channelNumber, outData.data(), 0);
+    int result = stbi_write_png(filePath.c_str(), p_image->m_width, p_image->m_height, p_image->m_channelNumber, outData.data(), 0);
+    return !(result == 0);
 }
 
 void ImageHandler::replaceImageWithoutChangeOnGpu(GLuint* imageHandleGpu, float* data, int width, int height, int channelNumber)

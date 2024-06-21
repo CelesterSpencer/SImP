@@ -3,10 +3,10 @@
 
 // std
 #include <functional>
-#include <thread.h>
+#include <thread>
 
 // lib
-#include <GL/gl3w.h>
+#include <glad/glad.h>
 #include <vector>
 #include <iostream>
 

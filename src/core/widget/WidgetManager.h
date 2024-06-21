@@ -10,7 +10,7 @@
 #include <map>
 
 // lib
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <imgui.h>
 
 // project

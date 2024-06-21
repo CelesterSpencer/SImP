@@ -1,103 +1,128 @@
-project(srccmake)
-cmake_minimum_required(VERSION 2.8)
-
-# set flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake CACHE PATH "Project specific path. Set manually if it was not found.")
-SET(BUILD_SHARED_LIBRARIES OFF)
-SET(CMAKE_EXE_LINKER_FLAGS "-static")
-
-# Compiler flags release mode
-IF(CMAKE_BUILD_TYPE MATCHES RELEASE)
-    message("release mode")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
-ENDIF(CMAKE_BUILD_TYPE MATCHES RELEASE)
-
-## Compiler flags gcc
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")        ## Optimize
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s")  ## Strip binary
-endif()
+cmake_minimum_required(VERSION 3.14)
+project(MyProject)
 
 # set paths
 set(PROJECT_SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps)
-#set(SHADERS_PATH ${CMAKE_SOURCE_DIR}/shader)
-#set(RESOURCES_PATH ${CMAKE_SOURCE_DIR}/resources)
 
 # add defines
 add_definitions(-DSHADERS_PATH="${SHADERS_PATH}")
 add_definitions(-DRESOURCES_PATH="${RESOURCES_PATH}")
 add_definitions(-DDEPENDENCIES_PATH="${EXTERNAL_PATH}")
 
-# find dependencies
-find_package(GLFW3 REQUIRED)
-find_package(GLM REQUIRED)
+# Specify the C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+#SET(BUILD_SHARED_LIBRARIES OFF)
+#SET(CMAKE_EXE_LINKER_FLAGS "-static")
 
-# set includes
-include_directories(
+# Define the project source directory
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+
+# Enable FetchContent module
+include(FetchContent)
+
+# Fetch glfw
+FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG        3.3.4
+)
+FetchContent_MakeAvailable(glfw)
+
+# Fetch glad
+FetchContent_Declare(
+        glad
+        GIT_REPOSITORY https://github.com/Dav1dde/glad.git
+        GIT_TAG        v0.1.34
+)
+FetchContent_MakeAvailable(glad)
+
+# Fetch glm
+FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG        0.9.9.8
+)
+FetchContent_MakeAvailable(glm)
+
+# Fetch stb_image
+FetchContent_Declare(
+        stb_image
+        GIT_REPOSITORY https://github.com/nothings/stb.git
+        GIT_TAG        master
+)
+FetchContent_GetProperties(stb_image)
+if(NOT stb_image_POPULATED)
+    FetchContent_Populate(stb_image)
+    add_library(stb_image INTERFACE)
+    target_include_directories(stb_image INTERFACE ${stb_image_SOURCE_DIR})
+endif()
+
+# Fetch imgui
+FetchContent_Declare(
+        imgui
+        GIT_REPOSITORY https://github.com/ocornut/imgui.git
+        GIT_TAG        v1.89.3
+)
+FetchContent_MakeAvailable(imgui)
+file(GLOB imgui_SRC ${imgui_SOURCE_DIR}/*.cpp ${imgui_SOURCE_DIR}/*.h)
+add_library(
+        imgui
+        ${imgui_SRC}
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.h
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.h
+)
+
+target_link_libraries(imgui PUBLIC glad)
+if (NOT EMSCRIPTEN)
+    target_link_libraries(imgui PUBLIC glfw)
+endif ()
+target_include_directories(
+        imgui
+        PUBLIC
+        ${imgui_SOURCE_DIR}
+        ${imgui_SOURCE_DIR}/backends
+)
+
+# Add the executable
+file(GLOB_RECURSE SRC_FILES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h")
+add_executable(MyProject ${SRC_FILES})
+
+# Include directories
+target_include_directories(MyProject PRIVATE
         ${PROJECT_SRC}
-        ${GLFW3_INCLUDE_PATH}
-        ${GLM_INCLUDE_PATH}
-        ${EXTERNAL_DIR}/gl3w/include
-        ${EXTERNAL_DIR}/imgui
-        ${EXTERNAL_DIR}/stb
-        ${EXTERNAL_DIR}/mingw_thread
+        ${glfw_SOURCE_DIR}/include
+        ${glad_SOURCE_DIR}/include
+        ${glm_SOURCE_DIR}
+        ${stb_image_SOURCE_DIR}
+        ${imgui_SOURCE_DIR}
 )
 
-# copy dlls
-set(DLLS
-        ${GLFW3_DLL}
-)
-file(COPY ${DLLS} DESTINATION /)
-
-# copy other files
-file(COPY shader DESTINATION /)
-
-# add source files
-file(GLOB_RECURSE SOURCE_FILES
-        "${PROJECT_SRC}/*.cpp"
+# Link libraries
+target_link_libraries(MyProject PRIVATE
+        glfw
+        glad
+        glm
+        stb_image
+        imgui
 )
 
-# add gl3w
-file(GLOB_RECURSE GL3W
-        "${EXTERNAL_DIR}/gl3w/src/*.c"
-)
-
-# add stb_image
-file(GLOB_RECURSE STB
-        "${EXTERNAL_DIR}/stb/*.h"
-        "${EXTERNAL_DIR}/stb/*.c"
-)
-
-# add imgui
-file(GLOB_RECURSE IMGUI
-        "${EXTERNAL_DIR}/imgui/*.h"
-        "${EXTERNAL_DIR}/imgui/*.cpp"
-)
-
-# add dependencies and source files to the project
-add_executable(SImP
-        ${SOURCE_FILES}
-        ${GL3W}
-        ${STB}
-        ${IMGUI}
-)
-
-# link all libraries
-target_link_libraries(SImP
-        opengl32.lib
-        ${GLFW3_LIBRARY}
-		# libs required on windows for window management
-		# and graphics programming
-        ole32.lib
-        oleaut32.lib
-        version.lib
-        imm32.lib
-        winmm.lib
-        Shlwapi.lib
-        #-mwindows
-)
+# Link system libraries
+if(WIN32)
+    target_link_libraries(MyProject PRIVATE opengl32)
+elseif(APPLE)
+    find_library(COCOA_LIBRARY Cocoa REQUIRED)
+    find_library(OpenGL_LIBRARY OpenGL REQUIRED)
+    find_library(IOKit_LIBRARY IOKit REQUIRED)
+    find_library(CoreVideo_LIBRARY CoreVideo REQUIRED)
+    target_link_libraries(MyProject PRIVATE ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${IOKit_LIBRARY} ${CoreVideo_LIBRARY})
+else()
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(MyProject PRIVATE ${OPENGL_LIBRARIES})
+endif()
 
 # copy shader files every time the project is built
 add_custom_target(copy_shaders ALL
@@ -112,3 +137,4 @@ add_custom_target(copy_images ALL
         "${CMAKE_SOURCE_DIR}/resources" "${CMAKE_BINARY_DIR}/resources"
         COMMENT "Copied resources from ${CMAKE_SOURCE_DIR}/resources to ${CMAKE_BINARY_DIR}/resources" VERBATIM
 )
+add_dependencies(MyProject copy_shaders copy_images)

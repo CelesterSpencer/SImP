@@ -7,8 +7,8 @@
 #include <string>
 
 // lib
-#include <glm.hpp>
-#include <GL/gl3w.h>
+#include <glm/glm.hpp>
+#include <glad/glad.h>
 
 // project
 #include "Shader.h"
